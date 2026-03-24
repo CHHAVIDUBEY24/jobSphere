@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/companies/{companyId}")
+//@CrossOrigin(origins = "*")
 public class ReviewController {
     private ReviewService reviewService;
 

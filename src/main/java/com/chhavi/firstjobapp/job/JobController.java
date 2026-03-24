@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/jobs")
+//@CrossOrigin(origins = "*")
 public class JobController {
     private JobService jobService;
 
