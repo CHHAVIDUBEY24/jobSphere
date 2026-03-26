@@ -1,56 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>JobSphere — Find Your Next Role</title>
+    <title>JobSphere</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <style>
         :root {
-          --bg: #0a0a0f;
-          --surface: #13131a;
-          --surface2: #1c1c28;
-          --border: #2a2a3d;
-          --accent: #e8c468;
-          --accent2: #c084fc;
-          --accent3: #38bdf8;
-          --text: #f0eff6;
-          --muted: #7c7a99;
-          --danger: #f87171;
-          --success: #4ade80;
-          --radius: 14px;
-          --font-display: 'Playfair Display', serif;
-          --font-body: 'DM Sans', sans-serif;
+          --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28; --border: #2a2a3d;
+          --accent: #e8c468; --accent2: #c084fc; --accent3: #38bdf8;
+          --text: #f0eff6; --muted: #7c7a99; --danger: #f87171; --success: #4ade80;
+          --radius: 14px; --font-display: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
         body::before {
           content: ''; position: fixed; inset: 0; z-index: 0;
           background:
-            radial-gradient(ellipse 60% 40% at 80% 10%, rgba(192,132,252,.12) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 30% at 10% 80%, rgba(56,189,248,.10) 0%, transparent 60%),
-            radial-gradient(ellipse 40% 50% at 50% 50%, rgba(232,196,104,.06) 0%, transparent 70%);
+            radial-gradient(ellipse 60% 40% at 80% 10%, rgba(192,132,252,.15) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 30% at 10% 80%, rgba(56,189,248,.12) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 50% at 50% 50%, rgba(232,196,104,.08) 0%, transparent 70%);
           pointer-events: none;
         }
+
+        /* ── AUTH ── */
+        .auth-screen {
+          position: fixed; inset: 0; z-index: 200;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .auth-screen.hidden { display: none; }
+        .auth-box {
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: 24px; padding: 44px 40px; width: 100%; max-width: 440px;
+          position: relative; z-index: 1;
+          box-shadow: 0 24px 80px rgba(0,0,0,.5);
+          animation: fadeUp .45s ease both;
+        }
+        .auth-logo { text-align: center; margin-bottom: 36px; }
+        .auth-logo h1 { font-family: var(--font-display); font-size: 2.4rem; font-weight: 900; letter-spacing: -.03em; }
+        .auth-logo h1 span { color: var(--accent); }
+        .auth-logo p { color: var(--muted); font-size: .78rem; margin-top: 6px; letter-spacing: .12em; text-transform: uppercase; }
+        .auth-tabs { display: flex; background: var(--surface2); border-radius: 12px; padding: 4px; margin-bottom: 32px; border: 1px solid var(--border); }
+        .auth-tab { flex: 1; padding: 9px; border: none; background: transparent; color: var(--muted); font-family: var(--font-body); font-size: .85rem; font-weight: 600; border-radius: 9px; cursor: pointer; transition: background .2s, color .2s; }
+        .auth-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; animation: fadeUp .3s ease both; }
+        .form-group { margin-bottom: 18px; }
+        .form-label { display: block; font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 11px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: var(--font-body); font-size: .9rem; outline: none; transition: border-color .2s, box-shadow .2s; }
+        .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,196,104,.12); }
+        .form-input::placeholder { color: var(--muted); }
+        .auth-error { background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); color: var(--danger); border-radius: 10px; padding: 11px 14px; font-size: .82rem; margin-bottom: 18px; display: none; line-height: 1.5; }
+        .auth-error.show { display: block; animation: fadeUp .2s ease both; }
+        .auth-note { font-size: .78rem; color: var(--accent3); margin-bottom: 18px; line-height: 1.6; background: rgba(56,189,248,.07); border: 1px solid rgba(56,189,248,.2); border-radius: 10px; padding: 11px 14px; }
+        .btn-auth { width: 100%; padding: 13px; background: var(--accent); color: #0a0a0f; border: none; border-radius: 12px; font-family: var(--font-body); font-size: .95rem; font-weight: 700; cursor: pointer; transition: background .2s, transform .15s; margin-top: 6px; letter-spacing: .02em; }
+        .btn-auth:hover { background: #f0d080; transform: translateY(-1px); }
+        .btn-auth:active { transform: translateY(0); }
+
+        /* ── APP ── */
         .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
-        .sidebar { width: 240px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 32px 0; position: sticky; top: 0; height: 100vh; overflow: hidden; }
-        .logo { padding: 0 24px 32px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
-        .logo h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1; }
+        .app.hidden { display: none; }
+        .sidebar { width: 240px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 32px 0; position: sticky; top: 0; height: 100vh; }
+        .logo { padding: 0 24px 28px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+        .logo h1 { font-family: var(--font-display); font-size: 1.55rem; font-weight: 900; letter-spacing: -0.02em; }
         .logo h1 span { color: var(--accent); }
-        .logo p { font-size: .72rem; color: var(--muted); margin-top: 4px; letter-spacing: .08em; text-transform: uppercase; }
-        .nav-section { padding: 0 12px; margin-bottom: 8px; }
-        .nav-label { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; padding: 0 12px; margin-bottom: 6px; }
+        .logo p { font-size: .68rem; color: var(--muted); margin-top: 4px; letter-spacing: .1em; text-transform: uppercase; }
+        .nav-section { padding: 0 12px; flex: 1; }
+        .nav-label { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; padding: 0 12px; margin-bottom: 6px; }
         .nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border: none; background: transparent; color: var(--muted); font-family: var(--font-body); font-size: .85rem; font-weight: 500; border-radius: 8px; cursor: pointer; transition: background .2s, color .2s; text-align: left; }
         .nav-btn:hover { background: var(--surface2); color: var(--text); }
         .nav-btn.active { background: var(--surface2); color: var(--accent); }
         .nav-btn .icon { font-size: 1.1rem; width: 20px; text-align: center; }
+        .sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border); margin-top: auto; }
+        .user-pill { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--surface2); margin-bottom: 8px; border: 1px solid var(--border); }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; color: #0a0a0f; flex-shrink: 0; }
+        .user-name { font-size: .82rem; font-weight: 600; }
+        .btn-logout { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; border: none; background: transparent; color: var(--danger); font-family: var(--font-body); font-size: .8rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background .2s; }
+        .btn-logout:hover { background: rgba(248,113,113,.1); }
         .main { flex: 1; padding: 40px 48px; max-width: 1100px; }
         .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 36px; animation: fadeUp .4s ease both; }
         .page-header h2 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; letter-spacing: -.03em; line-height: 1.1; }
         .page-header h2 span { color: var(--accent); }
         .page-header p { color: var(--muted); font-size: .9rem; margin-top: 6px; }
-        .stats-bar { display: flex; gap: 16px; margin-bottom: 32px; animation: fadeUp .4s .1s ease both; }
+        .stats-bar { display: flex; gap: 16px; margin-bottom: 32px; }
         .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; flex: 1; transition: border-color .2s, transform .2s; }
         .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
         .stat-card .label { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 6px; }
@@ -58,49 +90,43 @@
         .stat-card.jobs .value { color: var(--accent); }
         .stat-card.companies .value { color: var(--accent2); }
         .stat-card.reviews .value { color: var(--accent3); }
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; animation: fadeUp .4s .15s ease both; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
         .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color .25s, transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: 0; transition: opacity .25s; }
         .card:hover { border-color: rgba(232,196,104,.4); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,.3); }
         .card:hover::before { opacity: 1; }
         .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
         .card-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; line-height: 1.3; }
-        .card-badge { font-size: .65rem; padding: 3px 8px; border-radius: 20px; font-weight: 600; letter-spacing: .05em; white-space: nowrap; background: rgba(232,196,104,.15); color: var(--accent); border: 1px solid rgba(232,196,104,.3); }
-        .card-company { font-size: .78rem; color: var(--accent2); font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+        .card-badge { font-size: .65rem; padding: 3px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; background: rgba(232,196,104,.15); color: var(--accent); border: 1px solid rgba(232,196,104,.3); }
+        .card-company { font-size: .78rem; color: var(--accent2); font-weight: 600; margin-bottom: 8px; }
         .card-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
         .card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
         .meta-tag { font-size: .72rem; padding: 4px 10px; border-radius: 20px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
         .meta-tag.salary { color: var(--success); border-color: rgba(74,222,128,.2); background: rgba(74,222,128,.08); }
         .meta-tag.location { color: var(--accent3); border-color: rgba(56,189,248,.2); background: rgba(56,189,248,.08); }
-        .meta-tag.company { color: var(--accent2); border-color: rgba(192,132,252,.2); background: rgba(192,132,252,.08); }
         .card-actions { display: flex; gap: 8px; }
-        .btn { font-family: var(--font-body); font-size: .78rem; font-weight: 600; padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer; transition: background .2s, transform .15s; letter-spacing: .02em; }
+        .btn { font-family: var(--font-body); font-size: .78rem; font-weight: 600; padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer; transition: background .2s, transform .15s; }
         .btn:hover { transform: translateY(-1px); }
-        .btn:active { transform: translateY(0); }
         .btn-primary { background: var(--accent); color: #0a0a0f; }
         .btn-primary:hover { background: #f0d080; }
         .btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
         .btn-outline:hover { color: var(--text); border-color: var(--text); }
         .btn-danger { background: rgba(248,113,113,.1); color: var(--danger); border: 1px solid rgba(248,113,113,.2); }
         .btn-danger:hover { background: rgba(248,113,113,.2); }
-        .btn-icon { background: var(--accent); color: #0a0a0f; font-size: .9rem; padding: 9px 18px; border-radius: 10px; font-weight: 700; }
-        .modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.7); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
+        .btn-icon { background: var(--accent); color: #0a0a0f; padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: .85rem; }
+        .modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
         .modal-overlay.open { opacity: 1; pointer-events: all; }
         .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 32px; width: 100%; max-width: 500px; transform: translateY(20px) scale(.97); transition: transform .25s; max-height: 90vh; overflow-y: auto; }
         .modal-overlay.open .modal { transform: translateY(0) scale(1); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .modal-header h3 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; }
-        .modal-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: background .2s; }
+        .modal-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
         .modal-close:hover { background: var(--surface2); color: var(--text); }
-        .form-group { margin-bottom: 18px; }
-        .form-label { display: block; font-size: .78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 7px; }
-        .form-input { width: 100%; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: .9rem; transition: border-color .2s, box-shadow .2s; outline: none; }
-        .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,196,104,.12); }
-        .form-input::placeholder { color: var(--muted); }
-        textarea.form-input { resize: vertical; min-height: 80px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
-        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 200; display: flex; flex-direction: column; gap: 8px; }
+        textarea.form-input { resize: vertical; min-height: 80px; }
+        select.form-input { appearance: none; cursor: pointer; }
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
         .toast { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; font-size: .83rem; font-weight: 500; display: flex; align-items: center; gap: 10px; animation: slideIn .3s ease; max-width: 320px; }
         .toast.success { border-color: rgba(74,222,128,.4); }
         .toast.error { border-color: rgba(248,113,113,.4); }
@@ -109,7 +135,6 @@
         .toast.error .dot { background: var(--danger); }
         .empty { text-align: center; padding: 60px 20px; color: var(--muted); grid-column: 1/-1; }
         .empty .icon { font-size: 3rem; margin-bottom: 12px; }
-        .empty p { font-size: .9rem; }
         .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
         .section-header h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; }
         .review-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; transition: border-color .2s; }
@@ -118,27 +143,18 @@
         .review-title { font-weight: 600; font-size: .95rem; }
         .review-rating { background: rgba(232,196,104,.12); color: var(--accent); border: 1px solid rgba(232,196,104,.25); padding: 3px 10px; border-radius: 20px; font-size: .78rem; font-weight: 700; }
         .review-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; }
-        .page { display: none; }
-        .page.active { display: block; }
-        /* Company detail view */
-        .company-detail-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
-        .company-detail-icon { width: 52px; height: 52px; border-radius: 12px; background: rgba(192,132,252,.15); border: 1px solid rgba(192,132,252,.3); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
-        .company-detail-info h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; }
-        .company-detail-info p { color: var(--muted); font-size: .85rem; margin-top: 3px; }
         .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface2); border-radius: 10px; padding: 4px; width: fit-content; }
         .tab-btn { padding: 7px 18px; border: none; background: transparent; color: var(--muted); font-family: var(--font-body); font-size: .82rem; font-weight: 600; border-radius: 7px; cursor: pointer; transition: background .2s, color .2s; }
         .tab-btn.active { background: var(--surface); color: var(--text); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        select.form-input { appearance: none; cursor: pointer; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeUp .35s ease both; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
         @media (max-width: 768px) {
-          .sidebar { width: 64px; padding: 20px 0; }
-          .logo { padding: 0 0 20px; text-align: center; }
-          .logo h1 { font-size: 1rem; }
-          .logo p, .nav-label { display: none; }
-          .nav-btn span:not(.icon) { display: none; }
+          .sidebar { width: 64px; }
+          .logo p, .nav-label, .nav-btn span:not(.icon), .user-name { display: none; }
           .nav-btn { justify-content: center; padding: 10px; }
           .main { padding: 24px 16px; }
           .form-row { grid-template-columns: 1fr; }
@@ -148,12 +164,57 @@
 </head>
 <body>
 
-<div class="app">
-    <aside class="sidebar">
-        <div class="logo">
+<!-- ══ AUTH SCREEN ══ -->
+<div class="auth-screen" id="auth-screen">
+    <div class="auth-box">
+        <div class="auth-logo">
             <h1>Job<span>Sphere</span></h1>
             <p>Career Platform</p>
         </div>
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+            <button class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
+        </div>
+
+        <!-- LOGIN -->
+        <div class="auth-form active" id="auth-login">
+            <div class="auth-error" id="login-error"></div>
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input class="form-input" id="login-username" placeholder="Enter your username"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-input" type="password" id="login-password" placeholder="Enter your password"/>
+            </div>
+            <button class="btn-auth" onclick="doLogin()">Sign In →</button>
+        </div>
+
+        <!-- REGISTER -->
+        <div class="auth-form" id="auth-register">
+            <div class="auth-note">🔞 You must be <strong>18 years or older</strong> to create an account.</div>
+            <div class="auth-error" id="register-error"></div>
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input class="form-input" id="register-username" placeholder="Choose a username"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input class="form-input" type="password" id="register-password" placeholder="Choose a password"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input class="form-input" type="date" id="register-dob"/>
+            </div>
+            <button class="btn-auth" onclick="doRegister()">Create Account →</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ MAIN APP ══ -->
+<div class="app hidden" id="main-app">
+    <aside class="sidebar">
+        <div class="logo"><h1>Job<span>Sphere</span></h1><p>Career Platform</p></div>
         <nav class="nav-section">
             <div class="nav-label">Menu</div>
             <button class="nav-btn active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="icon">⬡</span><span>Dashboard</span></button>
@@ -161,15 +222,19 @@
             <button class="nav-btn" onclick="showPage('companies')" id="nav-companies"><span class="icon">🏢</span><span>Companies</span></button>
             <button class="nav-btn" onclick="showPage('reviews')" id="nav-reviews"><span class="icon">★</span><span>Reviews</span></button>
         </nav>
+        <div class="sidebar-footer">
+            <div class="user-pill">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <span class="user-name" id="user-display-name">User</span>
+            </div>
+            <button class="btn-logout" onclick="doLogout()">⎋ &nbsp;Sign Out</button>
+        </div>
     </aside>
 
     <main class="main">
-
         <!-- DASHBOARD -->
         <div class="page active" id="page-dashboard">
-            <div class="page-header">
-                <div><h2>Good morning, <span>Explorer</span></h2><p>Here's what's happening on the platform today</p></div>
-            </div>
+            <div class="page-header"><div><h2>Welcome, <span id="greeting-name">Explorer</span></h2><p>Here's what's happening on the platform today</p></div></div>
             <div class="stats-bar">
                 <div class="stat-card jobs"><div class="label">Open Jobs</div><div class="value" id="stat-jobs">—</div></div>
                 <div class="stat-card companies"><div class="label">Companies</div><div class="value" id="stat-companies">—</div></div>
@@ -183,206 +248,227 @@
 
         <!-- JOBS -->
         <div class="page" id="page-jobs">
-            <div class="page-header">
-                <div><h2>Open <span>Positions</span></h2><p>Browse and manage job listings</p></div>
-                <button class="btn btn-icon" onclick="openJobModal()">+ Add Job</button>
-            </div>
+            <div class="page-header"><div><h2>Open <span>Positions</span></h2><p>Browse and manage job listings</p></div><button class="btn btn-icon" onclick="openJobModal()">+ Add Job</button></div>
             <div class="cards-grid" id="jobs-grid"></div>
         </div>
 
         <!-- COMPANIES -->
         <div class="page" id="page-companies">
-            <div class="page-header">
-                <div><h2>All <span>Companies</span></h2><p>Manage company profiles and details</p></div>
-                <button class="btn btn-icon" onclick="openModal('company-modal')">+ Add Company</button>
-            </div>
+            <div class="page-header"><div><h2>All <span>Companies</span></h2><p>Manage company profiles</p></div><button class="btn btn-icon" onclick="openModal('company-modal')">+ Add Company</button></div>
             <div class="cards-grid" id="companies-grid"></div>
         </div>
 
         <!-- COMPANY DETAIL -->
         <div class="page" id="page-company-detail">
-            <button class="btn btn-outline" style="margin-bottom:24px;" onclick="showPage('companies')">← Back to Companies</button>
-            <div class="company-detail-header">
-                <div class="company-detail-icon">🏢</div>
-                <div class="company-detail-info">
-                    <h3 id="cd-name"></h3>
-                    <p id="cd-desc"></p>
-                </div>
+            <button class="btn btn-outline" style="margin-bottom:24px;" onclick="showPage('companies')">← Back</button>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;">
+                <div style="width:52px;height:52px;border-radius:12px;background:rgba(192,132,252,.15);border:1px solid rgba(192,132,252,.3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🏢</div>
+                <div><h3 id="cd-name" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;"></h3><p id="cd-desc" style="color:var(--muted);font-size:.85rem;margin-top:3px;"></p></div>
             </div>
             <div class="tab-bar">
-                <button class="tab-btn active" onclick="switchTab('tab-jobs')">Jobs</button>
-                <button class="tab-btn" onclick="switchTab('tab-reviews')">Reviews</button>
+                <button class="tab-btn active" onclick="switchTab(event,'tab-jobs')">Jobs</button>
+                <button class="tab-btn" onclick="switchTab(event,'tab-reviews')">Reviews</button>
             </div>
             <div class="tab-content active" id="tab-jobs">
-                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
-                    <button class="btn btn-icon" onclick="openJobModalForCompany()">+ Add Job</button>
-                </div>
+                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;"><button class="btn btn-icon" onclick="openJobModalForCompany()">+ Add Job</button></div>
                 <div class="cards-grid" id="cd-jobs-grid"></div>
             </div>
             <div class="tab-content" id="tab-reviews">
-                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
-                    <button class="btn btn-icon" onclick="openAddReviewForCurrentCompany()">+ Add Review</button>
-                </div>
+                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;"><button class="btn btn-icon" onclick="openAddReviewForCurrentCompany()">+ Add Review</button></div>
                 <div class="cards-grid" id="cd-reviews-grid"></div>
             </div>
         </div>
 
         <!-- REVIEWS -->
         <div class="page" id="page-reviews">
-            <div class="page-header">
-                <div><h2>Company <span>Reviews</span></h2><p>Explore what employees say</p></div>
-                <button class="btn btn-icon" onclick="openAddReviewFlow()">+ Add Review</button>
-            </div>
+            <div class="page-header"><div><h2>Company <span>Reviews</span></h2><p>Explore what employees say</p></div><button class="btn btn-icon" onclick="openAddReviewFlow()">+ Add Review</button></div>
             <div id="reviews-list" class="cards-grid"></div>
         </div>
-
     </main>
 </div>
 
 <!-- Job Modal -->
 <div class="modal-overlay" id="job-modal">
     <div class="modal">
-        <div class="modal-header">
-            <h3 id="job-modal-title">New Job</h3>
-            <button class="modal-close" onclick="closeModal('job-modal')">✕</button>
-        </div>
+        <div class="modal-header"><h3 id="job-modal-title">New Job</h3><button class="modal-close" onclick="closeModal('job-modal')">✕</button></div>
         <input type="hidden" id="job-id"/>
-        <div class="form-group">
-            <label class="form-label">Company <span style="color:var(--danger)">*</span></label>
-            <select class="form-input" id="job-company-select">
-                <option value="">— Select a company —</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="form-label">Job Title</label>
-            <input class="form-input" id="job-title" placeholder="e.g. Senior Backend Engineer"/>
-        </div>
-        <div class="form-group">
-            <label class="form-label">Description</label>
-            <textarea class="form-input" id="job-description" placeholder="Role responsibilities..."></textarea>
-        </div>
+        <div class="form-group"><label class="form-label">Company *</label><select class="form-input" id="job-company-select"><option value="">— Select a company —</option></select></div>
+        <div class="form-group"><label class="form-label">Job Title</label><input class="form-input" id="job-title" placeholder="e.g. Senior Backend Engineer"/></div>
+        <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="job-description" placeholder="Role responsibilities..."></textarea></div>
         <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">Min Salary</label>
-                <input class="form-input" id="job-minSalary" placeholder="₹8 LPA"/>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Max Salary</label>
-                <input class="form-input" id="job-maxSalary" placeholder="₹15 LPA"/>
-            </div>
+            <div class="form-group"><label class="form-label">Min Salary</label><input class="form-input" id="job-minSalary" placeholder="₹8 LPA"/></div>
+            <div class="form-group"><label class="form-label">Max Salary</label><input class="form-input" id="job-maxSalary" placeholder="₹15 LPA"/></div>
         </div>
-        <div class="form-group">
-            <label class="form-label">Location</label>
-            <input class="form-input" id="job-location" placeholder="Bangalore, India"/>
-        </div>
-        <div class="form-actions">
-            <button class="btn btn-outline" onclick="closeModal('job-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="saveJob()">Save Job</button>
-        </div>
+        <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="job-location" placeholder="Bangalore, India"/></div>
+        <div class="form-actions"><button class="btn btn-outline" onclick="closeModal('job-modal')">Cancel</button><button class="btn btn-primary" onclick="saveJob()">Save Job</button></div>
     </div>
 </div>
 
 <!-- Company Modal -->
 <div class="modal-overlay" id="company-modal">
     <div class="modal">
-        <div class="modal-header">
-            <h3 id="company-modal-title">New Company</h3>
-            <button class="modal-close" onclick="closeModal('company-modal')">✕</button>
-        </div>
+        <div class="modal-header"><h3 id="company-modal-title">New Company</h3><button class="modal-close" onclick="closeModal('company-modal')">✕</button></div>
         <input type="hidden" id="company-id"/>
-        <div class="form-group">
-            <label class="form-label">Company Name</label>
-            <input class="form-input" id="company-name" placeholder="e.g. Acme Corp"/>
-        </div>
-        <div class="form-group">
-            <label class="form-label">Description</label>
-            <textarea class="form-input" id="company-description" placeholder="What does this company do?"></textarea>
-        </div>
-        <div class="form-actions">
-            <button class="btn btn-outline" onclick="closeModal('company-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="saveCompany()">Save Company</button>
-        </div>
+        <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" id="company-name" placeholder="e.g. Acme Corp"/></div>
+        <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="company-description" placeholder="What does this company do?"></textarea></div>
+        <div class="form-actions"><button class="btn btn-outline" onclick="closeModal('company-modal')">Cancel</button><button class="btn btn-primary" onclick="saveCompany()">Save Company</button></div>
     </div>
 </div>
 
 <!-- Review Modal -->
 <div class="modal-overlay" id="review-modal">
     <div class="modal">
-        <div class="modal-header">
-            <h3 id="review-modal-title">New Review</h3>
-            <button class="modal-close" onclick="closeModal('review-modal')">✕</button>
-        </div>
+        <div class="modal-header"><h3 id="review-modal-title">New Review</h3><button class="modal-close" onclick="closeModal('review-modal')">✕</button></div>
         <input type="hidden" id="review-id"/>
         <input type="hidden" id="review-company-id"/>
-        <div class="form-group">
-            <label class="form-label">Company</label>
-            <select class="form-input" id="review-company-select"></select>
-        </div>
-        <div class="form-group">
-            <label class="form-label">Title</label>
-            <input class="form-input" id="review-title" placeholder="e.g. Great culture"/>
-        </div>
-        <div class="form-group">
-            <label class="form-label">Description</label>
-            <textarea class="form-input" id="review-description" placeholder="Share your experience..."></textarea>
-        </div>
-        <div class="form-group">
-            <label class="form-label">Rating (1–5)</label>
-            <input class="form-input" id="review-rating" type="number" min="1" max="5" placeholder="4"/>
-        </div>
-        <div class="form-actions">
-            <button class="btn btn-outline" onclick="closeModal('review-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="saveReview()">Save Review</button>
-        </div>
+        <div class="form-group"><label class="form-label">Company</label><select class="form-input" id="review-company-select"></select></div>
+        <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="review-title" placeholder="e.g. Great culture"/></div>
+        <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="review-description" placeholder="Share your experience..."></textarea></div>
+        <div class="form-group"><label class="form-label">Rating (1–5)</label><input class="form-input" id="review-rating" type="number" min="1" max="5" placeholder="4"/></div>
+        <div class="form-actions"><button class="btn btn-outline" onclick="closeModal('review-modal')">Cancel</button><button class="btn btn-primary" onclick="saveReview()">Save Review</button></div>
     </div>
 </div>
 
 <div class="toast-container" id="toasts"></div>
 
 <script>
-    const BASE = 'http://localhost:8080';
-    let allCompanies = [];
+    const BASE = '';  // empty = same origin since index.html is served by Spring Boot
     let currentCompanyId = null;
 
-    // ── NAVIGATION ──
-    function showPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('page-' + page).classList.add('active');
-      const navBtn = document.getElementById('nav-' + page);
-      if(navBtn) navBtn.classList.add('active');
-      if(page === 'dashboard') loadDashboard();
-      if(page === 'jobs') loadJobs();
-      if(page === 'companies') loadCompanies();
-      if(page === 'reviews') loadAllReviews();
+    // ── TOKEN ──
+    function getToken() { return localStorage.getItem('jwtToken'); }
+    function setToken(t) { localStorage.setItem('jwtToken', t); }
+    function getUsername() { return localStorage.getItem('jwtUsername'); }
+    function setUsername(u) { localStorage.setItem('jwtUsername', u); }
+    function clearAuth() { localStorage.removeItem('jwtToken'); localStorage.removeItem('jwtUsername'); }
+
+    // ── BOOT: always show login first, check token after ──
+    window.onload = () => {
+      const token = getToken();
+      if (token) {
+        showApp();
+      } else {
+        showAuthScreen();
+      }
+    };
+
+    function showApp() {
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('main-app').classList.remove('hidden');
+      const uname = getUsername() || 'User';
+      document.getElementById('user-display-name').textContent = uname;
+      document.getElementById('user-avatar').textContent = uname[0].toUpperCase();
+      document.getElementById('greeting-name').textContent = uname;
+      loadDashboard();
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
+    function showAuthScreen() {
+      document.getElementById('auth-screen').classList.remove('hidden');
+      document.getElementById('main-app').classList.add('hidden');
+    }
+
+    // ── AUTH TABS ──
+    function switchAuthTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach((b, i) =>
+        b.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register')));
+      document.getElementById('auth-login').classList.toggle('active', tab === 'login');
+      document.getElementById('auth-register').classList.toggle('active', tab === 'register');
+      document.getElementById('login-error').classList.remove('show');
+      document.getElementById('register-error').classList.remove('show');
+    }
+
+    function showAuthError(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.add('show');
+    }
+
+    // ── LOGIN ──
+    async function doLogin() {
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!username || !password) { showAuthError('login-error', 'Please fill in all fields.'); return; }
+      try {
+        const res = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) { showAuthError('login-error', data.message || 'Login failed.'); return; }
+        setToken(data.token);
+        setUsername(username);
+        showApp();
+        toast('Welcome back, ' + username + '!');
+      } catch (e) {
+        showAuthError('login-error', 'Could not connect to server. Is Spring Boot running?');
+      }
+    }
+
+    // ── REGISTER ──
+    async function doRegister() {
+      const username = document.getElementById('register-username').value.trim();
+      const password = document.getElementById('register-password').value;
+      const dob = document.getElementById('register-dob').value;
+      if (!username || !password || !dob) { showAuthError('register-error', 'Please fill in all fields.'); return; }
+      const age = Math.floor((new Date() - new Date(dob)) / (365.25 * 24 * 60 * 60 * 1000));
+      if (age < 18) { showAuthError('register-error', '🔞 You must be 18 or older to register.'); return; }
+      try {
+        const res = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, dateOfBirth: dob })
+        });
+        const data = await res.json();
+        if (!res.ok) { showAuthError('register-error', data.message || 'Registration failed.'); return; }
+        setToken(data.token);
+        setUsername(username);
+        showApp();
+        toast('Welcome to JobSphere, ' + username + '!');
+      } catch (e) {
+        showAuthError('register-error', 'Could not connect to server. Is Spring Boot running?');
+      }
+    }
+
+    // ── LOGOUT ──
+    function doLogout() {
+      clearAuth();
+      showAuthScreen();
+      // clear form fields
+      document.getElementById('login-username').value = '';
+      document.getElementById('login-password').value = '';
+      switchAuthTab('login');
+      toast('Signed out successfully.');
     }
 
     // ── API ──
     async function api(method, path, body) {
       try {
-        const r = await fetch(BASE + path, {
+        const r = await fetch(path, {
           method,
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getToken()
+          },
           body: body ? JSON.stringify(body) : undefined
         });
+        if (r.status === 401 || r.status === 403) {
+          clearAuth();
+          showAuthScreen();
+          toast('Session expired. Please sign in again.', 'error');
+          return null;
+        }
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const ct = r.headers.get('content-type') || '';
         return ct.includes('json') ? r.json() : r.text();
-      } catch(e) {
+      } catch (e) {
         toast('Request failed: ' + e.message, 'error');
-        throw e;
+        return null;
       }
     }
 
     // ── TOAST ──
-    function toast(msg, type='success') {
+    function toast(msg, type = 'success') {
       const el = document.createElement('div');
       el.className = 'toast ' + type;
       el.innerHTML = `<div class="dot"></div>${msg}`;
@@ -393,62 +479,71 @@
     function openModal(id) { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
+    // ── NAV ──
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      const nb = document.getElementById('nav-' + page);
+      if (nb) nb.classList.add('active');
+      if (page === 'dashboard') loadDashboard();
+      if (page === 'jobs') loadJobs();
+      if (page === 'companies') loadCompanies();
+      if (page === 'reviews') loadAllReviews();
+    }
+
+    function switchTab(e, tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      e.target.classList.add('active');
+    }
+
     // ── DASHBOARD ──
     async function loadDashboard() {
-      const [jobs, companies] = await Promise.all([api('GET','/jobs'), api('GET','/companies')]);
-      allCompanies = companies;
+      const [jobs, companies] = await Promise.all([api('GET', '/jobs'), api('GET', '/companies')]);
+      if (!jobs || !companies) return;
       document.getElementById('stat-jobs').textContent = jobs.length;
       document.getElementById('stat-companies').textContent = companies.length;
-      let reviewCount = 0;
-      for(const c of companies) {
-        try { const revs = await api('GET', `/companies/${c.id}/reviews`); reviewCount += revs.length; } catch(_) {}
+      let rc = 0;
+      for (const c of companies) {
+        try { const r = await api('GET', `/companies/${c.id}/reviews`); if (r) rc += r.length; } catch (_) {}
       }
-      document.getElementById('stat-reviews').textContent = reviewCount;
-      renderJobCards(jobs.slice(0,3), 'dashboard-jobs');
-      renderCompanyCards(companies.slice(0,3), 'dashboard-companies', false);
+      document.getElementById('stat-reviews').textContent = rc;
+      renderJobCards(jobs.slice(0, 3), 'dashboard-jobs');
+      renderCompanyCards(companies.slice(0, 3), 'dashboard-companies', false);
     }
 
     // ── JOBS ──
     async function loadJobs() {
-      const jobs = await api('GET','/jobs');
-      renderJobCards(jobs, 'jobs-grid');
+      const jobs = await api('GET', '/jobs');
+      if (jobs) renderJobCards(jobs, 'jobs-grid');
     }
 
     function renderJobCards(jobs, containerId) {
       const el = document.getElementById(containerId);
-      if(!jobs || !jobs.length) {
-        el.innerHTML = `<div class="empty"><div class="icon">💼</div><p>No jobs found. Add one!</p></div>`;
-        return;
-      }
+      if (!jobs || !jobs.length) { el.innerHTML = `<div class="empty"><div class="icon">💼</div><p>No jobs found.</p></div>`; return; }
       el.innerHTML = jobs.map(j => `
         <div class="card">
-          <div class="card-top">
-            <div class="card-title">${j.title || 'Untitled'}</div>
-            <span class="card-badge">Open</span>
-          </div>
+          <div class="card-top"><div class="card-title">${j.title || 'Untitled'}</div><span class="card-badge">Open</span></div>
           ${j.company ? `<div class="card-company">🏢 ${j.company.name}</div>` : ''}
-          <div class="card-desc">${j.description || 'No description provided.'}</div>
+          <div class="card-desc">${j.description || 'No description.'}</div>
           <div class="card-meta">
             ${j.minSalary ? `<span class="meta-tag salary">₹ ${j.minSalary} – ${j.maxSalary}</span>` : ''}
             ${j.location ? `<span class="meta-tag location">📍 ${j.location}</span>` : ''}
           </div>
           <div class="card-actions">
             <button class="btn btn-outline" onclick="editJob(${j.id})">Edit</button>
-            <button class="btn btn-danger" onclick="deleteJob(${j.id}, '${containerId}')">Delete</button>
+            <button class="btn btn-danger" onclick="deleteJob(${j.id})">Delete</button>
           </div>
-        </div>
-      `).join('');
+        </div>`).join('');
     }
 
     async function openJobModal() {
       await populateCompanySelect('job-company-select');
       document.getElementById('job-id').value = '';
       document.getElementById('job-modal-title').textContent = 'New Job';
-      document.getElementById('job-title').value = '';
-      document.getElementById('job-description').value = '';
-      document.getElementById('job-minSalary').value = '';
-      document.getElementById('job-maxSalary').value = '';
-      document.getElementById('job-location').value = '';
+      ['job-title', 'job-description', 'job-minSalary', 'job-maxSalary', 'job-location'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('job-company-select').disabled = false;
       openModal('job-modal');
     }
@@ -457,20 +552,16 @@
       await populateCompanySelect('job-company-select', currentCompanyId);
       document.getElementById('job-id').value = '';
       document.getElementById('job-modal-title').textContent = 'New Job';
-      document.getElementById('job-title').value = '';
-      document.getElementById('job-description').value = '';
-      document.getElementById('job-minSalary').value = '';
-      document.getElementById('job-maxSalary').value = '';
-      document.getElementById('job-location').value = '';
-      document.getElementById('job-company-select').disabled = true; // locked to current company
+      ['job-title', 'job-description', 'job-minSalary', 'job-maxSalary', 'job-location'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('job-company-select').disabled = true;
       openModal('job-modal');
     }
 
     async function populateCompanySelect(selectId, selectedId = null) {
       const companies = await api('GET', '/companies');
-      allCompanies = companies;
-      const sel = document.getElementById(selectId);
-      sel.innerHTML = `<option value="">— Select a company —</option>` +
+      if (!companies) return;
+      document.getElementById(selectId).innerHTML =
+        `<option value="">— Select a company —</option>` +
         companies.map(c => `<option value="${c.id}" ${c.id == selectedId ? 'selected' : ''}>${c.name}</option>`).join('');
     }
 
@@ -485,20 +576,17 @@
         location: document.getElementById('job-location').value,
         company: companyId ? { id: parseInt(companyId) } : null
       };
-      if(id) { await api('PUT', `/jobs/${id}`, body); toast('Job updated successfully'); }
-      else { await api('POST', '/jobs', body); toast('Job created successfully'); }
+      if (id) { await api('PUT', `/jobs/${id}`, body); toast('Job updated'); }
+      else { await api('POST', '/jobs', body); toast('Job created'); }
       closeModal('job-modal');
-      // refresh whichever view is active
-      if(currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) {
-        loadCompanyDetail(currentCompanyId);
-      } else {
-        loadJobs();
-      }
+      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
+      else loadJobs();
     }
 
     async function editJob(id) {
       const job = await api('GET', `/jobs/${id}`);
-      await populateCompanySelect('job-company-select', job.company ? job.company.id : null);
+      if (!job) return;
+      await populateCompanySelect('job-company-select', job.company?.id);
       document.getElementById('job-id').value = id;
       document.getElementById('job-modal-title').textContent = 'Edit Job';
       document.getElementById('job-title').value = job.title || '';
@@ -510,59 +598,44 @@
       openModal('job-modal');
     }
 
-    async function deleteJob(id, sourceGrid) {
-      if(!confirm('Delete this job?')) return;
+    async function deleteJob(id) {
+      if (!confirm('Delete this job?')) return;
       await api('DELETE', `/jobs/${id}`);
       toast('Job deleted');
-      if(currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) {
-        loadCompanyDetail(currentCompanyId);
-      } else {
-        loadJobs();
-      }
+      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
+      else loadJobs();
     }
 
-    document.getElementById('job-modal').addEventListener('click', e => {
-      if(e.target === e.currentTarget) closeModal('job-modal');
-    });
+    document.getElementById('job-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('job-modal'); });
 
     // ── COMPANIES ──
     async function loadCompanies() {
       const companies = await api('GET', '/companies');
-      allCompanies = companies;
-      renderCompanyCards(companies, 'companies-grid', true);
+      if (companies) renderCompanyCards(companies, 'companies-grid', true);
     }
 
     function renderCompanyCards(companies, containerId, showDetail = true) {
       const el = document.getElementById(containerId);
-      if(!companies || !companies.length) {
-        el.innerHTML = `<div class="empty"><div class="icon">🏢</div><p>No companies yet. Add one!</p></div>`;
-        return;
-      }
+      if (!companies || !companies.length) { el.innerHTML = `<div class="empty"><div class="icon">🏢</div><p>No companies yet.</p></div>`; return; }
       el.innerHTML = companies.map(c => `
         <div class="card">
-          <div class="card-top">
-            <div class="card-title">${c.name || 'Unnamed'}</div>
-            <span class="card-badge" style="background:rgba(192,132,252,.12);color:var(--accent2);border-color:rgba(192,132,252,.3);">Company</span>
-          </div>
-          <div class="card-desc">${c.description || 'No description available.'}</div>
+          <div class="card-top"><div class="card-title">${c.name || 'Unnamed'}</div><span class="card-badge" style="background:rgba(192,132,252,.12);color:var(--accent2);border-color:rgba(192,132,252,.3);">Company</span></div>
+          <div class="card-desc">${c.description || 'No description.'}</div>
           <div class="card-actions">
             ${showDetail ? `<button class="btn btn-primary" onclick="openCompanyDetail(${c.id})">View Details</button>` : ''}
             <button class="btn btn-outline" onclick="editCompany(${c.id})">Edit</button>
             <button class="btn btn-danger" onclick="deleteCompany(${c.id})">Delete</button>
           </div>
-        </div>
-      `).join('');
+        </div>`).join('');
     }
 
     async function openCompanyDetail(companyId) {
       currentCompanyId = companyId;
       await loadCompanyDetail(companyId);
-      // reset tabs
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('tab-jobs').classList.add('active');
       document.querySelectorAll('.tab-btn')[0].classList.add('active');
-      // show page
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('page-company-detail').classList.add('active');
@@ -571,144 +644,114 @@
 
     async function loadCompanyDetail(companyId) {
       const company = await api('GET', `/companies/${companyId}`);
+      if (!company) return;
       document.getElementById('cd-name').textContent = company.name;
       document.getElementById('cd-desc').textContent = company.description || 'No description.';
-
-      // Load jobs for this company via /jobs filtered — since your API returns all jobs,
-      // we filter client-side by company id from the jobs list
       const allJobs = await api('GET', '/jobs');
-      // Note: jobs won't have company due to @JsonBackReference — after your backend fix they will
-      // For now we use the company's jobs list if available, otherwise show all
-      const companyJobs = allJobs.filter(j => j.company && j.company.id === companyId);
+      const companyJobs = allJobs ? allJobs.filter(j => j.company && j.company.id === companyId) : [];
       renderJobCards(companyJobs, 'cd-jobs-grid');
-
-      // Load reviews
       const reviews = await api('GET', `/companies/${companyId}/reviews`);
-      renderReviewCards(reviews, 'cd-reviews-grid', companyId);
+      renderReviewCards(reviews || [], 'cd-reviews-grid', companyId);
     }
 
     async function saveCompany() {
       const id = document.getElementById('company-id').value;
-      const body = {
-        name: document.getElementById('company-name').value,
-        description: document.getElementById('company-description').value,
-      };
-      if(id) { await api('PUT', `/companies/${id}`, body); toast('Company updated'); }
+      const body = { name: document.getElementById('company-name').value, description: document.getElementById('company-description').value };
+      if (id) { await api('PUT', `/companies/${id}`, body); toast('Company updated'); }
       else { await api('POST', '/companies', body); toast('Company created'); }
       closeModal('company-modal');
       loadCompanies();
     }
 
     async function editCompany(id) {
-      const company = await api('GET', `/companies/${id}`);
+      const c = await api('GET', `/companies/${id}`);
+      if (!c) return;
       document.getElementById('company-id').value = id;
       document.getElementById('company-modal-title').textContent = 'Edit Company';
-      document.getElementById('company-name').value = company.name || '';
-      document.getElementById('company-description').value = company.description || '';
+      document.getElementById('company-name').value = c.name || '';
+      document.getElementById('company-description').value = c.description || '';
       openModal('company-modal');
     }
 
     async function deleteCompany(id) {
-      if(!confirm('Delete this company and all its data?')) return;
+      if (!confirm('Delete this company?')) return;
       await api('DELETE', `/companies/${id}`);
       toast('Company deleted');
       loadCompanies();
     }
 
-    document.getElementById('company-modal').addEventListener('click', e => {
-      if(e.target === e.currentTarget) closeModal('company-modal');
-    });
+    document.getElementById('company-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('company-modal'); });
 
     // ── REVIEWS ──
     function renderReviewCards(reviews, containerId, companyId) {
       const el = document.getElementById(containerId);
-      if(!reviews || !reviews.length) {
-        el.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`;
-        return;
-      }
+      if (!reviews || !reviews.length) { el.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`; return; }
       el.innerHTML = reviews.map(r => `
         <div class="review-card">
-          <div class="review-header">
-            <span class="review-title">${r.title || 'Review'}</span>
-            <span class="review-rating">★ ${r.rating || '—'}</span>
-          </div>
+          <div class="review-header"><span class="review-title">${r.title || 'Review'}</span><span class="review-rating">★ ${r.rating || '—'}</span></div>
           <div class="review-desc">${r.description || ''}</div>
           <div class="card-actions" style="margin-top:12px;">
             <button class="btn btn-outline" onclick="editReview(${companyId},${r.id})">Edit</button>
             <button class="btn btn-danger" onclick="deleteReview(${companyId},${r.id})">Delete</button>
           </div>
-        </div>
-      `).join('');
+        </div>`).join('');
     }
 
     async function loadAllReviews() {
       const companies = await api('GET', '/companies');
-      allCompanies = companies;
       const container = document.getElementById('reviews-list');
       container.innerHTML = '';
-      if(!companies.length) {
-        container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No companies to review yet.</p></div>`;
-        return;
-      }
-      let anyReview = false;
-      for(const c of companies) {
+      if (!companies || !companies.length) { container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No companies yet.</p></div>`; return; }
+      let any = false;
+      for (const c of companies) {
         try {
           const reviews = await api('GET', `/companies/${c.id}/reviews`);
-          if(reviews.length) {
-            anyReview = true;
+          if (reviews && reviews.length) {
+            any = true;
             const section = document.createElement('div');
-            section.style.cssText = 'grid-column:1/-1;margin-bottom:8px;';
-            const inner = document.createElement('div');
-            inner.innerHTML = `<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">${c.name}</div>`;
+            section.style.cssText = 'grid-column:1/-1;margin-bottom:16px;';
             const grid = document.createElement('div');
-            grid.className = 'cards-grid';
-            grid.style.margin = '0';
-            grid.id = `review-grid-${c.id}`;
-            inner.appendChild(grid);
-            section.appendChild(inner);
-            container.appendChild(section);
-            renderReviewCards(reviews, `review-grid-${c.id}`, c.id);
+            grid.className = 'cards-grid'; grid.style.margin = '0'; grid.id = `rg-${c.id}`;
+            section.innerHTML = `<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">${c.name}</div>`;
+            section.appendChild(grid); container.appendChild(section);
+            renderReviewCards(reviews, `rg-${c.id}`, c.id);
           }
-        } catch(_) {}
+        } catch (_) {}
       }
-      if(!anyReview) {
-        container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet. Add the first one!</p></div>`;
-      }
+      if (!any) container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`;
     }
 
     async function openAddReviewFlow() {
       const companies = await api('GET', '/companies');
-      allCompanies = companies;
+      if (!companies) return;
       const sel = document.getElementById('review-company-select');
       sel.innerHTML = companies.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
       sel.disabled = false;
       document.getElementById('review-id').value = '';
       document.getElementById('review-modal-title').textContent = 'New Review';
-      document.getElementById('review-title').value = '';
-      document.getElementById('review-description').value = '';
-      document.getElementById('review-rating').value = '';
+      ['review-title', 'review-description', 'review-rating'].forEach(id => document.getElementById(id).value = '');
       openModal('review-modal');
     }
 
     async function openAddReviewForCurrentCompany() {
       const companies = await api('GET', '/companies');
+      if (!companies) return;
       const sel = document.getElementById('review-company-select');
-      sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id==currentCompanyId?'selected':''}>${c.name}</option>`).join('');
+      sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id == currentCompanyId ? 'selected' : ''}>${c.name}</option>`).join('');
       sel.disabled = true;
       document.getElementById('review-id').value = '';
       document.getElementById('review-company-id').value = currentCompanyId;
       document.getElementById('review-modal-title').textContent = 'New Review';
-      document.getElementById('review-title').value = '';
-      document.getElementById('review-description').value = '';
-      document.getElementById('review-rating').value = '';
+      ['review-title', 'review-description', 'review-rating'].forEach(id => document.getElementById(id).value = '');
       openModal('review-modal');
     }
 
     async function editReview(companyId, reviewId) {
       const r = await api('GET', `/companies/${companyId}/reviews/${reviewId}`);
       const companies = await api('GET', '/companies');
+      if (!r || !companies) return;
       const sel = document.getElementById('review-company-select');
-      sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id==companyId?'selected':''}>${c.name}</option>`).join('');
+      sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id == companyId ? 'selected' : ''}>${c.name}</option>`).join('');
       sel.disabled = true;
       document.getElementById('review-id').value = reviewId;
       document.getElementById('review-company-id').value = companyId;
@@ -727,38 +770,32 @@
       const body = {
         title: document.getElementById('review-title').value,
         description: document.getElementById('review-description').value,
-        rating: document.getElementById('review-rating').value,
+        rating: document.getElementById('review-rating').value
       };
-      if(id) { await api('PUT', `/companies/${companyId}/reviews/${id}`, body); toast('Review updated'); }
+      if (id) { await api('PUT', `/companies/${companyId}/reviews/${id}`, body); toast('Review updated'); }
       else { await api('POST', `/companies/${companyId}/reviews`, body); toast('Review added'); }
       document.getElementById('review-company-select').disabled = false;
       closeModal('review-modal');
-      if(currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) {
-        loadCompanyDetail(currentCompanyId);
-      } else {
-        loadAllReviews();
-      }
+      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
+      else loadAllReviews();
     }
 
     async function deleteReview(companyId, reviewId) {
-      if(!confirm('Delete this review?')) return;
+      if (!confirm('Delete this review?')) return;
       await api('DELETE', `/companies/${companyId}/reviews/${reviewId}`);
       toast('Review deleted');
-      if(currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) {
-        loadCompanyDetail(currentCompanyId);
-      } else {
-        loadAllReviews();
-      }
+      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
+      else loadAllReviews();
     }
 
     document.getElementById('review-modal').addEventListener('click', e => {
-      if(e.target === e.currentTarget) {
-        document.getElementById('review-company-select').disabled = false;
-        closeModal('review-modal');
-      }
+      if (e.target === e.currentTarget) { document.getElementById('review-company-select').disabled = false; closeModal('review-modal'); }
     });
 
-    loadDashboard();
+    // Enter key support
+    document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    document.getElementById('register-dob').addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+    document.getElementById('login-username').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
 </script>
 </body>
 </html>
