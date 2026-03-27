@@ -22,18 +22,12 @@
             radial-gradient(ellipse 40% 50% at 50% 50%, rgba(232,196,104,.08) 0%, transparent 70%);
           pointer-events: none;
         }
-
-        /* ── AUTH ── */
-        .auth-screen {
-          position: fixed; inset: 0; z-index: 200;
-          display: flex; align-items: center; justify-content: center;
-        }
+        .auth-screen { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; }
         .auth-screen.hidden { display: none; }
         .auth-box {
           background: var(--surface); border: 1px solid var(--border);
           border-radius: 24px; padding: 44px 40px; width: 100%; max-width: 440px;
-          position: relative; z-index: 1;
-          box-shadow: 0 24px 80px rgba(0,0,0,.5);
+          position: relative; z-index: 1; box-shadow: 0 24px 80px rgba(0,0,0,.5);
           animation: fadeUp .45s ease both;
         }
         .auth-logo { text-align: center; margin-bottom: 36px; }
@@ -56,8 +50,6 @@
         .btn-auth { width: 100%; padding: 13px; background: var(--accent); color: #0a0a0f; border: none; border-radius: 12px; font-family: var(--font-body); font-size: .95rem; font-weight: 700; cursor: pointer; transition: background .2s, transform .15s; margin-top: 6px; letter-spacing: .02em; }
         .btn-auth:hover { background: #f0d080; transform: translateY(-1px); }
         .btn-auth:active { transform: translateY(0); }
-
-        /* ── APP ── */
         .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
         .app.hidden { display: none; }
         .sidebar { width: 240px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 32px 0; position: sticky; top: 0; height: 100vh; }
@@ -72,9 +64,11 @@
         .nav-btn.active { background: var(--surface2); color: var(--accent); }
         .nav-btn .icon { font-size: 1.1rem; width: 20px; text-align: center; }
         .sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border); margin-top: auto; }
-        .user-pill { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--surface2); margin-bottom: 8px; border: 1px solid var(--border); }
+        .user-pill { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--surface2); margin-bottom: 6px; border: 1px solid var(--border); }
         .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; color: #0a0a0f; flex-shrink: 0; }
-        .user-name { font-size: .82rem; font-weight: 600; }
+        .user-info { flex: 1; min-width: 0; }
+        .user-name { font-size: .82rem; font-weight: 600; display: block; }
+        .role-badge { font-size: .68rem; font-weight: 700; margin-top: 2px; display: block; }
         .btn-logout { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; border: none; background: transparent; color: var(--danger); font-family: var(--font-body); font-size: .8rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background .2s; }
         .btn-logout:hover { background: rgba(248,113,113,.1); }
         .main { flex: 1; padding: 40px 48px; max-width: 1100px; }
@@ -104,7 +98,7 @@
         .meta-tag { font-size: .72rem; padding: 4px 10px; border-radius: 20px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
         .meta-tag.salary { color: var(--success); border-color: rgba(74,222,128,.2); background: rgba(74,222,128,.08); }
         .meta-tag.location { color: var(--accent3); border-color: rgba(56,189,248,.2); background: rgba(56,189,248,.08); }
-        .card-actions { display: flex; gap: 8px; }
+        .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn { font-family: var(--font-body); font-size: .78rem; font-weight: 600; padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer; transition: background .2s, transform .15s; }
         .btn:hover { transform: translateY(-1px); }
         .btn-primary { background: var(--accent); color: #0a0a0f; }
@@ -150,11 +144,12 @@
         .tab-content.active { display: block; }
         .page { display: none; }
         .page.active { display: block; animation: fadeUp .35s ease both; }
+        .admin-only { display: none; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
         @media (max-width: 768px) {
           .sidebar { width: 64px; }
-          .logo p, .nav-label, .nav-btn span:not(.icon), .user-name { display: none; }
+          .logo p, .nav-label, .nav-btn span:not(.icon), .user-name, .role-badge { display: none; }
           .nav-btn { justify-content: center; padding: 10px; }
           .main { padding: 24px 16px; }
           .form-row { grid-template-columns: 1fr; }
@@ -175,8 +170,6 @@
             <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
             <button class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
         </div>
-
-        <!-- LOGIN -->
         <div class="auth-form active" id="auth-login">
             <div class="auth-error" id="login-error"></div>
             <div class="form-group">
@@ -189,8 +182,6 @@
             </div>
             <button class="btn-auth" onclick="doLogin()">Sign In →</button>
         </div>
-
-        <!-- REGISTER -->
         <div class="auth-form" id="auth-register">
             <div class="auth-note">🔞 You must be <strong>18 years or older</strong> to create an account.</div>
             <div class="auth-error" id="register-error"></div>
@@ -205,6 +196,13 @@
             <div class="form-group">
                 <label class="form-label">Date of Birth</label>
                 <input class="form-input" type="date" id="register-dob"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Account Type</label>
+                <select class="form-input" id="register-role">
+                    <option value="ROLE_USER">👤 User — Browse jobs & companies</option>
+                    <option value="ROLE_ADMIN">👑 Admin — Full access</option>
+                </select>
             </div>
             <button class="btn-auth" onclick="doRegister()">Create Account →</button>
         </div>
@@ -225,16 +223,20 @@
         <div class="sidebar-footer">
             <div class="user-pill">
                 <div class="user-avatar" id="user-avatar">?</div>
-                <span class="user-name" id="user-display-name">User</span>
+                <div class="user-info">
+                    <span class="user-name" id="user-display-name">User</span>
+                    <span class="role-badge" id="role-badge"></span>
+                </div>
             </div>
             <button class="btn-logout" onclick="doLogout()">⎋ &nbsp;Sign Out</button>
         </div>
     </aside>
 
     <main class="main">
-        <!-- DASHBOARD -->
         <div class="page active" id="page-dashboard">
-            <div class="page-header"><div><h2>Welcome, <span id="greeting-name">Explorer</span></h2><p>Here's what's happening on the platform today</p></div></div>
+            <div class="page-header">
+                <div><h2>Welcome, <span id="greeting-name">Explorer</span></h2><p>Here's what's happening on the platform today</p></div>
+            </div>
             <div class="stats-bar">
                 <div class="stat-card jobs"><div class="label">Open Jobs</div><div class="value" id="stat-jobs">—</div></div>
                 <div class="stat-card companies"><div class="label">Companies</div><div class="value" id="stat-companies">—</div></div>
@@ -246,19 +248,22 @@
             <div class="cards-grid" id="dashboard-companies"></div>
         </div>
 
-        <!-- JOBS -->
         <div class="page" id="page-jobs">
-            <div class="page-header"><div><h2>Open <span>Positions</span></h2><p>Browse and manage job listings</p></div><button class="btn btn-icon" onclick="openJobModal()">+ Add Job</button></div>
+            <div class="page-header">
+                <div><h2>Open <span>Positions</span></h2><p>Browse and manage job listings</p></div>
+                <button class="btn btn-icon admin-only" id="btn-add-job" onclick="openJobModal()">+ Add Job</button>
+            </div>
             <div class="cards-grid" id="jobs-grid"></div>
         </div>
 
-        <!-- COMPANIES -->
         <div class="page" id="page-companies">
-            <div class="page-header"><div><h2>All <span>Companies</span></h2><p>Manage company profiles</p></div><button class="btn btn-icon" onclick="openModal('company-modal')">+ Add Company</button></div>
+            <div class="page-header">
+                <div><h2>All <span>Companies</span></h2><p>Manage company profiles</p></div>
+                <button class="btn btn-icon admin-only" id="btn-add-company" onclick="openModal('company-modal')">+ Add Company</button>
+            </div>
             <div class="cards-grid" id="companies-grid"></div>
         </div>
 
-        <!-- COMPANY DETAIL -->
         <div class="page" id="page-company-detail">
             <button class="btn btn-outline" style="margin-bottom:24px;" onclick="showPage('companies')">← Back</button>
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;">
@@ -270,18 +275,24 @@
                 <button class="tab-btn" onclick="switchTab(event,'tab-reviews')">Reviews</button>
             </div>
             <div class="tab-content active" id="tab-jobs">
-                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;"><button class="btn btn-icon" onclick="openJobModalForCompany()">+ Add Job</button></div>
+                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+                    <button class="btn btn-icon admin-only" id="cd-add-job-btn" onclick="openJobModalForCompany()">+ Add Job</button>
+                </div>
                 <div class="cards-grid" id="cd-jobs-grid"></div>
             </div>
             <div class="tab-content" id="tab-reviews">
-                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;"><button class="btn btn-icon" onclick="openAddReviewForCurrentCompany()">+ Add Review</button></div>
+                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+                    <button class="btn btn-icon" id="cd-add-rev-btn" onclick="openAddReviewForCurrentCompany()">+ Add Review</button>
+                </div>
                 <div class="cards-grid" id="cd-reviews-grid"></div>
             </div>
         </div>
 
-        <!-- REVIEWS -->
         <div class="page" id="page-reviews">
-            <div class="page-header"><div><h2>Company <span>Reviews</span></h2><p>Explore what employees say</p></div><button class="btn btn-icon" onclick="openAddReviewFlow()">+ Add Review</button></div>
+            <div class="page-header">
+                <div><h2>Company <span>Reviews</span></h2><p>Explore what employees say</p></div>
+                <button class="btn btn-icon" onclick="openAddReviewFlow()">+ Add Review</button>
+            </div>
             <div id="reviews-list" class="cards-grid"></div>
         </div>
     </main>
@@ -332,470 +343,495 @@
 <div class="toast-container" id="toasts"></div>
 
 <script>
-    const BASE = '';  // empty = same origin since index.html is served by Spring Boot
     let currentCompanyId = null;
 
-    // ── TOKEN ──
-    function getToken() { return localStorage.getItem('jwtToken'); }
-    function setToken(t) { localStorage.setItem('jwtToken', t); }
+    function getToken()    { return localStorage.getItem('jwtToken'); }
+    function setToken(t)   { localStorage.setItem('jwtToken', t); }
     function getUsername() { return localStorage.getItem('jwtUsername'); }
-    function setUsername(u) { localStorage.setItem('jwtUsername', u); }
-    function clearAuth() { localStorage.removeItem('jwtToken'); localStorage.removeItem('jwtUsername'); }
+    function setUsername(u){ localStorage.setItem('jwtUsername', u); }
+    function getRole()     { return localStorage.getItem('jwtRole'); }
+    function setRole(r)    { localStorage.setItem('jwtRole', r); }
+    function isAdmin()     { return getRole() === 'ROLE_ADMIN'; }
+    function clearAuth()   {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('jwtUsername');
+        localStorage.removeItem('jwtRole');
+    }
 
-    // ── BOOT: always show login first, check token after ──
     window.onload = () => {
-      const token = getToken();
-      if (token) {
-        showApp();
-      } else {
-        showAuthScreen();
-      }
+        if (getToken()) showApp();
+        else showAuthScreen();
     };
 
+    function applyRoleUI() {
+        document.querySelectorAll('.admin-only').forEach(el => {
+            el.style.display = isAdmin() ? 'inline-flex' : 'none';
+        });
+        const badge = document.getElementById('role-badge');
+        if (isAdmin()) { badge.textContent = '👑 Admin'; badge.style.color = 'var(--accent)'; }
+        else           { badge.textContent = '👤 User';  badge.style.color = 'var(--muted)'; }
+    }
+
     function showApp() {
-      document.getElementById('auth-screen').classList.add('hidden');
-      document.getElementById('main-app').classList.remove('hidden');
-      const uname = getUsername() || 'User';
-      document.getElementById('user-display-name').textContent = uname;
-      document.getElementById('user-avatar').textContent = uname[0].toUpperCase();
-      document.getElementById('greeting-name').textContent = uname;
-      loadDashboard();
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
+        const uname = getUsername() || 'User';
+        document.getElementById('user-display-name').textContent = uname;
+        document.getElementById('user-avatar').textContent = uname[0].toUpperCase();
+        document.getElementById('greeting-name').textContent = uname;
+        applyRoleUI();
+        loadDashboard();
     }
 
     function showAuthScreen() {
-      document.getElementById('auth-screen').classList.remove('hidden');
-      document.getElementById('main-app').classList.add('hidden');
+        document.getElementById('auth-screen').classList.remove('hidden');
+        document.getElementById('main-app').classList.add('hidden');
     }
 
-    // ── AUTH TABS ──
     function switchAuthTab(tab) {
-      document.querySelectorAll('.auth-tab').forEach((b, i) =>
-        b.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register')));
-      document.getElementById('auth-login').classList.toggle('active', tab === 'login');
-      document.getElementById('auth-register').classList.toggle('active', tab === 'register');
-      document.getElementById('login-error').classList.remove('show');
-      document.getElementById('register-error').classList.remove('show');
+        document.querySelectorAll('.auth-tab').forEach((b, i) =>
+            b.classList.toggle('active', (i===0 && tab==='login') || (i===1 && tab==='register')));
+        document.getElementById('auth-login').classList.toggle('active', tab==='login');
+        document.getElementById('auth-register').classList.toggle('active', tab==='register');
+        document.getElementById('login-error').classList.remove('show');
+        document.getElementById('register-error').classList.remove('show');
     }
 
     function showAuthError(id, msg) {
-      const el = document.getElementById(id);
-      el.textContent = msg;
-      el.classList.add('show');
+        const el = document.getElementById(id);
+        el.textContent = msg; el.classList.add('show');
     }
 
-    // ── LOGIN ──
     async function doLogin() {
-      const username = document.getElementById('login-username').value.trim();
-      const password = document.getElementById('login-password').value;
-      if (!username || !password) { showAuthError('login-error', 'Please fill in all fields.'); return; }
-      try {
-        const res = await fetch('/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-        const data = await res.json();
-        if (!res.ok) { showAuthError('login-error', data.message || 'Login failed.'); return; }
-        setToken(data.token);
-        setUsername(username);
-        showApp();
-        toast('Welcome back, ' + username + '!');
-      } catch (e) {
-        showAuthError('login-error', 'Could not connect to server. Is Spring Boot running?');
-      }
-    }
-
-    // ── REGISTER ──
-    async function doRegister() {
-      const username = document.getElementById('register-username').value.trim();
-      const password = document.getElementById('register-password').value;
-      const dob = document.getElementById('register-dob').value;
-      if (!username || !password || !dob) { showAuthError('register-error', 'Please fill in all fields.'); return; }
-      const age = Math.floor((new Date() - new Date(dob)) / (365.25 * 24 * 60 * 60 * 1000));
-      if (age < 18) { showAuthError('register-error', '🔞 You must be 18 or older to register.'); return; }
-      try {
-        const res = await fetch('/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password, dateOfBirth: dob })
-        });
-        const data = await res.json();
-        if (!res.ok) { showAuthError('register-error', data.message || 'Registration failed.'); return; }
-        setToken(data.token);
-        setUsername(username);
-        showApp();
-        toast('Welcome to JobSphere, ' + username + '!');
-      } catch (e) {
-        showAuthError('register-error', 'Could not connect to server. Is Spring Boot running?');
-      }
-    }
-
-    // ── LOGOUT ──
-    function doLogout() {
-      clearAuth();
-      showAuthScreen();
-      // clear form fields
-      document.getElementById('login-username').value = '';
-      document.getElementById('login-password').value = '';
-      switchAuthTab('login');
-      toast('Signed out successfully.');
-    }
-
-    // ── API ──
-    async function api(method, path, body) {
-      try {
-        const r = await fetch(path, {
-          method,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getToken()
-          },
-          body: body ? JSON.stringify(body) : undefined
-        });
-        if (r.status === 401 || r.status === 403) {
-          clearAuth();
-          showAuthScreen();
-          toast('Session expired. Please sign in again.', 'error');
-          return null;
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value;
+        if (!username || !password) { showAuthError('login-error', 'Please fill in all fields.'); return; }
+        try {
+            const res = await fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if (!res.ok) { showAuthError('login-error', data.message || 'Login failed.'); return; }
+            setToken(data.token); setUsername(username); setRole(data.role);
+            showApp();
+            toast('Welcome back, ' + username + '! (' + (data.role === 'ROLE_ADMIN' ? '👑 Admin' : '👤 User') + ')');
+        } catch (e) {
+            showAuthError('login-error', 'Could not connect to server.');
         }
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const ct = r.headers.get('content-type') || '';
-        return ct.includes('json') ? r.json() : r.text();
-      } catch (e) {
-        toast('Request failed: ' + e.message, 'error');
-        return null;
-      }
     }
 
-    // ── TOAST ──
+    async function doRegister() {
+        const username = document.getElementById('register-username').value.trim();
+        const password = document.getElementById('register-password').value;
+        const dob      = document.getElementById('register-dob').value;
+        const role     = document.getElementById('register-role').value;
+        if (!username || !password || !dob) { showAuthError('register-error', 'Please fill in all fields.'); return; }
+        const age = Math.floor((new Date() - new Date(dob)) / (365.25 * 24 * 60 * 60 * 1000));
+        if (age < 18) { showAuthError('register-error', '🔞 You must be 18 or older to register.'); return; }
+        try {
+            const res = await fetch('/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, dateOfBirth: dob, role })
+            });
+            const data = await res.json();
+            if (!res.ok) { showAuthError('register-error', data.message || 'Registration failed.'); return; }
+            setToken(data.token); setUsername(username); setRole(data.role);
+            showApp();
+            toast('Welcome, ' + username + '! Registered as ' + (data.role === 'ROLE_ADMIN' ? '👑 Admin' : '👤 User'));
+        } catch (e) {
+            showAuthError('register-error', 'Could not connect to server.');
+        }
+    }
+
+    function doLogout() {
+        clearAuth(); showAuthScreen();
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        switchAuthTab('login');
+        toast('Signed out successfully.');
+    }
+
+    // ── API — key fix: only show "admin required" for non-GET 403s ──
+    async function api(method, path, body) {
+        try {
+            const r = await fetch(path, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getToken()
+                },
+                body: body ? JSON.stringify(body) : undefined
+            });
+            if (r.status === 401) {
+                clearAuth(); showAuthScreen();
+                toast('Session expired. Please sign in again.', 'error');
+                return null;
+            }
+            if (r.status === 403) {
+                // Only show error for write operations — GET 403 means backend config issue, show clearer message
+                if (method !== 'GET') {
+                    toast('Access denied. Admin permission required for this action.', 'error');
+                } else {
+                    toast('Access denied fetching data. Please check server config.', 'error');
+                }
+                return null;
+            }
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            const ct = r.headers.get('content-type') || '';
+            return ct.includes('json') ? r.json() : r.text();
+        } catch (e) {
+            toast('Request failed: ' + e.message, 'error');
+            return null;
+        }
+    }
+
     function toast(msg, type = 'success') {
-      const el = document.createElement('div');
-      el.className = 'toast ' + type;
-      el.innerHTML = `<div class="dot"></div>${msg}`;
-      document.getElementById('toasts').appendChild(el);
-      setTimeout(() => el.remove(), 3200);
+        const el = document.createElement('div');
+        el.className = 'toast ' + type;
+        el.innerHTML = `<div class="dot"></div>${msg}`;
+        document.getElementById('toasts').appendChild(el);
+        setTimeout(() => el.remove(), 3500);
     }
 
-    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function openModal(id)  { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-    // ── NAV ──
     function showPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('page-' + page).classList.add('active');
-      const nb = document.getElementById('nav-' + page);
-      if (nb) nb.classList.add('active');
-      if (page === 'dashboard') loadDashboard();
-      if (page === 'jobs') loadJobs();
-      if (page === 'companies') loadCompanies();
-      if (page === 'reviews') loadAllReviews();
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('page-' + page).classList.add('active');
+        const nb = document.getElementById('nav-' + page);
+        if (nb) nb.classList.add('active');
+        if (page === 'dashboard') loadDashboard();
+        if (page === 'jobs')      loadJobs();
+        if (page === 'companies') loadCompanies();
+        if (page === 'reviews')   loadAllReviews();
     }
 
     function switchTab(e, tabId) {
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      e.target.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        e.target.classList.add('active');
     }
 
-    // ── DASHBOARD ──
     async function loadDashboard() {
-      const [jobs, companies] = await Promise.all([api('GET', '/jobs'), api('GET', '/companies')]);
-      if (!jobs || !companies) return;
-      document.getElementById('stat-jobs').textContent = jobs.length;
-      document.getElementById('stat-companies').textContent = companies.length;
-      let rc = 0;
-      for (const c of companies) {
-        try { const r = await api('GET', `/companies/${c.id}/reviews`); if (r) rc += r.length; } catch (_) {}
-      }
-      document.getElementById('stat-reviews').textContent = rc;
-      renderJobCards(jobs.slice(0, 3), 'dashboard-jobs');
-      renderCompanyCards(companies.slice(0, 3), 'dashboard-companies', false);
+        const [jobs, companies] = await Promise.all([api('GET', '/jobs'), api('GET', '/companies')]);
+        if (!jobs || !companies) return;
+        document.getElementById('stat-jobs').textContent = jobs.length;
+        document.getElementById('stat-companies').textContent = companies.length;
+        let rc = 0;
+        for (const c of companies) {
+            try { const r = await api('GET', `/companies/${c.id}/reviews`); if (r) rc += r.length; } catch (_) {}
+        }
+        document.getElementById('stat-reviews').textContent = rc;
+        renderJobCards(jobs.slice(0, 3), 'dashboard-jobs');
+        renderCompanyCards(companies.slice(0, 3), 'dashboard-companies', false);
     }
 
-    // ── JOBS ──
     async function loadJobs() {
-      const jobs = await api('GET', '/jobs');
-      if (jobs) renderJobCards(jobs, 'jobs-grid');
+        const jobs = await api('GET', '/jobs');
+        if (jobs) renderJobCards(jobs, 'jobs-grid');
     }
 
     function renderJobCards(jobs, containerId) {
-      const el = document.getElementById(containerId);
-      if (!jobs || !jobs.length) { el.innerHTML = `<div class="empty"><div class="icon">💼</div><p>No jobs found.</p></div>`; return; }
-      el.innerHTML = jobs.map(j => `
-        <div class="card">
-          <div class="card-top"><div class="card-title">${j.title || 'Untitled'}</div><span class="card-badge">Open</span></div>
-          ${j.company ? `<div class="card-company">🏢 ${j.company.name}</div>` : ''}
-          <div class="card-desc">${j.description || 'No description.'}</div>
-          <div class="card-meta">
-            ${j.minSalary ? `<span class="meta-tag salary">₹ ${j.minSalary} – ${j.maxSalary}</span>` : ''}
-            ${j.location ? `<span class="meta-tag location">📍 ${j.location}</span>` : ''}
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-outline" onclick="editJob(${j.id})">Edit</button>
-            <button class="btn btn-danger" onclick="deleteJob(${j.id})">Delete</button>
-          </div>
-        </div>`).join('');
+        const el = document.getElementById(containerId);
+        if (!jobs || !jobs.length) { el.innerHTML = `<div class="empty"><div class="icon">💼</div><p>No jobs found.</p></div>`; return; }
+        el.innerHTML = jobs.map(j => `
+            <div class="card">
+                <div class="card-top">
+                    <div class="card-title">${j.title || 'Untitled'}</div>
+                    <span class="card-badge">Open</span>
+                </div>
+                ${j.company ? `<div class="card-company">🏢 ${j.company.name}</div>` : ''}
+                <div class="card-desc">${j.description || 'No description.'}</div>
+                <div class="card-meta">
+                    ${j.minSalary ? `<span class="meta-tag salary">₹ ${j.minSalary} – ${j.maxSalary}</span>` : ''}
+                    ${j.location  ? `<span class="meta-tag location">📍 ${j.location}</span>` : ''}
+                </div>
+                ${isAdmin() ? `
+                <div class="card-actions">
+                    <button class="btn btn-outline" onclick="editJob(${j.id})">Edit</button>
+                    <button class="btn btn-danger"  onclick="deleteJob(${j.id})">Delete</button>
+                </div>` : ''}
+            </div>`).join('');
     }
 
     async function openJobModal() {
-      await populateCompanySelect('job-company-select');
-      document.getElementById('job-id').value = '';
-      document.getElementById('job-modal-title').textContent = 'New Job';
-      ['job-title', 'job-description', 'job-minSalary', 'job-maxSalary', 'job-location'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('job-company-select').disabled = false;
-      openModal('job-modal');
+        await populateCompanySelect('job-company-select');
+        document.getElementById('job-id').value = '';
+        document.getElementById('job-modal-title').textContent = 'New Job';
+        ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('job-company-select').disabled = false;
+        openModal('job-modal');
     }
 
     async function openJobModalForCompany() {
-      await populateCompanySelect('job-company-select', currentCompanyId);
-      document.getElementById('job-id').value = '';
-      document.getElementById('job-modal-title').textContent = 'New Job';
-      ['job-title', 'job-description', 'job-minSalary', 'job-maxSalary', 'job-location'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('job-company-select').disabled = true;
-      openModal('job-modal');
+        await populateCompanySelect('job-company-select', currentCompanyId);
+        document.getElementById('job-id').value = '';
+        document.getElementById('job-modal-title').textContent = 'New Job';
+        ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('job-company-select').disabled = true;
+        openModal('job-modal');
     }
 
     async function populateCompanySelect(selectId, selectedId = null) {
-      const companies = await api('GET', '/companies');
-      if (!companies) return;
-      document.getElementById(selectId).innerHTML =
-        `<option value="">— Select a company —</option>` +
-        companies.map(c => `<option value="${c.id}" ${c.id == selectedId ? 'selected' : ''}>${c.name}</option>`).join('');
+        const companies = await api('GET', '/companies');
+        if (!companies) return;
+        document.getElementById(selectId).innerHTML =
+            `<option value="">— Select a company —</option>` +
+            companies.map(c => `<option value="${c.id}" ${c.id == selectedId ? 'selected' : ''}>${c.name}</option>`).join('');
     }
 
     async function saveJob() {
-      const id = document.getElementById('job-id').value;
-      const companyId = document.getElementById('job-company-select').value;
-      const body = {
-        title: document.getElementById('job-title').value,
-        description: document.getElementById('job-description').value,
-        minSalary: document.getElementById('job-minSalary').value,
-        maxSalary: document.getElementById('job-maxSalary').value,
-        location: document.getElementById('job-location').value,
-        company: companyId ? { id: parseInt(companyId) } : null
-      };
-      if (id) { await api('PUT', `/jobs/${id}`, body); toast('Job updated'); }
-      else { await api('POST', '/jobs', body); toast('Job created'); }
-      closeModal('job-modal');
-      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-      else loadJobs();
+        const id = document.getElementById('job-id').value;
+        const companyId = document.getElementById('job-company-select').value;
+        const body = {
+            title: document.getElementById('job-title').value,
+            description: document.getElementById('job-description').value,
+            minSalary: document.getElementById('job-minSalary').value,
+            maxSalary: document.getElementById('job-maxSalary').value,
+            location: document.getElementById('job-location').value,
+            company: companyId ? { id: parseInt(companyId) } : null
+        };
+        if (id) { await api('PUT', `/jobs/${id}`, body); toast('Job updated'); }
+        else    { await api('POST', '/jobs', body);       toast('Job created'); }
+        closeModal('job-modal');
+        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active'))
+            loadCompanyDetail(currentCompanyId);
+        else loadJobs();
     }
 
     async function editJob(id) {
-      const job = await api('GET', `/jobs/${id}`);
-      if (!job) return;
-      await populateCompanySelect('job-company-select', job.company?.id);
-      document.getElementById('job-id').value = id;
-      document.getElementById('job-modal-title').textContent = 'Edit Job';
-      document.getElementById('job-title').value = job.title || '';
-      document.getElementById('job-description').value = job.description || '';
-      document.getElementById('job-minSalary').value = job.minSalary || '';
-      document.getElementById('job-maxSalary').value = job.maxSalary || '';
-      document.getElementById('job-location').value = job.location || '';
-      document.getElementById('job-company-select').disabled = false;
-      openModal('job-modal');
+        const job = await api('GET', `/jobs/${id}`);
+        if (!job) return;
+        await populateCompanySelect('job-company-select', job.company?.id);
+        document.getElementById('job-id').value = id;
+        document.getElementById('job-modal-title').textContent = 'Edit Job';
+        document.getElementById('job-title').value = job.title || '';
+        document.getElementById('job-description').value = job.description || '';
+        document.getElementById('job-minSalary').value = job.minSalary || '';
+        document.getElementById('job-maxSalary').value = job.maxSalary || '';
+        document.getElementById('job-location').value = job.location || '';
+        document.getElementById('job-company-select').disabled = false;
+        openModal('job-modal');
     }
 
     async function deleteJob(id) {
-      if (!confirm('Delete this job?')) return;
-      await api('DELETE', `/jobs/${id}`);
-      toast('Job deleted');
-      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-      else loadJobs();
+        if (!confirm('Delete this job?')) return;
+        await api('DELETE', `/jobs/${id}`);
+        toast('Job deleted');
+        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active'))
+            loadCompanyDetail(currentCompanyId);
+        else loadJobs();
     }
 
     document.getElementById('job-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('job-modal'); });
 
-    // ── COMPANIES ──
     async function loadCompanies() {
-      const companies = await api('GET', '/companies');
-      if (companies) renderCompanyCards(companies, 'companies-grid', true);
+        const companies = await api('GET', '/companies');
+        if (companies) renderCompanyCards(companies, 'companies-grid', true);
     }
 
     function renderCompanyCards(companies, containerId, showDetail = true) {
-      const el = document.getElementById(containerId);
-      if (!companies || !companies.length) { el.innerHTML = `<div class="empty"><div class="icon">🏢</div><p>No companies yet.</p></div>`; return; }
-      el.innerHTML = companies.map(c => `
-        <div class="card">
-          <div class="card-top"><div class="card-title">${c.name || 'Unnamed'}</div><span class="card-badge" style="background:rgba(192,132,252,.12);color:var(--accent2);border-color:rgba(192,132,252,.3);">Company</span></div>
-          <div class="card-desc">${c.description || 'No description.'}</div>
-          <div class="card-actions">
-            ${showDetail ? `<button class="btn btn-primary" onclick="openCompanyDetail(${c.id})">View Details</button>` : ''}
-            <button class="btn btn-outline" onclick="editCompany(${c.id})">Edit</button>
-            <button class="btn btn-danger" onclick="deleteCompany(${c.id})">Delete</button>
-          </div>
-        </div>`).join('');
+        const el = document.getElementById(containerId);
+        if (!companies || !companies.length) { el.innerHTML = `<div class="empty"><div class="icon">🏢</div><p>No companies yet.</p></div>`; return; }
+        el.innerHTML = companies.map(c => `
+            <div class="card">
+                <div class="card-top">
+                    <div class="card-title">${c.name || 'Unnamed'}</div>
+                    <span class="card-badge" style="background:rgba(192,132,252,.12);color:var(--accent2);border-color:rgba(192,132,252,.3);">Company</span>
+                </div>
+                <div class="card-desc">${c.description || 'No description.'}</div>
+                <div class="card-actions">
+                    ${showDetail ? `<button class="btn btn-primary" onclick="openCompanyDetail(${c.id})">View Details</button>` : ''}
+                    ${isAdmin() ? `
+                    <button class="btn btn-outline" onclick="editCompany(${c.id})">Edit</button>
+                    <button class="btn btn-danger"  onclick="deleteCompany(${c.id})">Delete</button>` : ''}
+                </div>
+            </div>`).join('');
     }
 
     async function openCompanyDetail(companyId) {
-      currentCompanyId = companyId;
-      await loadCompanyDetail(companyId);
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('tab-jobs').classList.add('active');
-      document.querySelectorAll('.tab-btn')[0].classList.add('active');
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('page-company-detail').classList.add('active');
-      document.getElementById('nav-companies').classList.add('active');
+        currentCompanyId = companyId;
+        await loadCompanyDetail(companyId);
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-jobs').classList.add('active');
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('page-company-detail').classList.add('active');
+        document.getElementById('nav-companies').classList.add('active');
     }
 
     async function loadCompanyDetail(companyId) {
-      const company = await api('GET', `/companies/${companyId}`);
-      if (!company) return;
-      document.getElementById('cd-name').textContent = company.name;
-      document.getElementById('cd-desc').textContent = company.description || 'No description.';
-      const allJobs = await api('GET', '/jobs');
-      const companyJobs = allJobs ? allJobs.filter(j => j.company && j.company.id === companyId) : [];
-      renderJobCards(companyJobs, 'cd-jobs-grid');
-      const reviews = await api('GET', `/companies/${companyId}/reviews`);
-      renderReviewCards(reviews || [], 'cd-reviews-grid', companyId);
+        const company = await api('GET', `/companies/${companyId}`);
+        if (!company) return;
+        document.getElementById('cd-name').textContent = company.name;
+        document.getElementById('cd-desc').textContent = company.description || '';
+        const addJobBtn = document.getElementById('cd-add-job-btn');
+        if (addJobBtn) addJobBtn.style.display = isAdmin() ? 'inline-flex' : 'none';
+        const addRevBtn = document.getElementById('cd-add-rev-btn');
+        if (addRevBtn) addRevBtn.style.display = 'inline-flex';
+        const allJobs = await api('GET', '/jobs');
+        const companyJobs = allJobs ? allJobs.filter(j => j.company && j.company.id === companyId) : [];
+        renderJobCards(companyJobs, 'cd-jobs-grid');
+        const reviews = await api('GET', `/companies/${companyId}/reviews`);
+        renderReviewCards(reviews || [], 'cd-reviews-grid', companyId);
     }
 
     async function saveCompany() {
-      const id = document.getElementById('company-id').value;
-      const body = { name: document.getElementById('company-name').value, description: document.getElementById('company-description').value };
-      if (id) { await api('PUT', `/companies/${id}`, body); toast('Company updated'); }
-      else { await api('POST', '/companies', body); toast('Company created'); }
-      closeModal('company-modal');
-      loadCompanies();
+        const id = document.getElementById('company-id').value;
+        const body = { name: document.getElementById('company-name').value, description: document.getElementById('company-description').value };
+        if (id) { await api('PUT', `/companies/${id}`, body); toast('Company updated'); }
+        else    { await api('POST', '/companies', body);       toast('Company created'); }
+        closeModal('company-modal');
+        loadCompanies();
     }
 
     async function editCompany(id) {
-      const c = await api('GET', `/companies/${id}`);
-      if (!c) return;
-      document.getElementById('company-id').value = id;
-      document.getElementById('company-modal-title').textContent = 'Edit Company';
-      document.getElementById('company-name').value = c.name || '';
-      document.getElementById('company-description').value = c.description || '';
-      openModal('company-modal');
+        const c = await api('GET', `/companies/${id}`);
+        if (!c) return;
+        document.getElementById('company-id').value = id;
+        document.getElementById('company-modal-title').textContent = 'Edit Company';
+        document.getElementById('company-name').value = c.name || '';
+        document.getElementById('company-description').value = c.description || '';
+        openModal('company-modal');
     }
 
     async function deleteCompany(id) {
-      if (!confirm('Delete this company?')) return;
-      await api('DELETE', `/companies/${id}`);
-      toast('Company deleted');
-      loadCompanies();
+        if (!confirm('Delete this company?')) return;
+        await api('DELETE', `/companies/${id}`);
+        toast('Company deleted');
+        loadCompanies();
     }
 
     document.getElementById('company-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('company-modal'); });
 
-    // ── REVIEWS ──
     function renderReviewCards(reviews, containerId, companyId) {
-      const el = document.getElementById(containerId);
-      if (!reviews || !reviews.length) { el.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`; return; }
-      el.innerHTML = reviews.map(r => `
-        <div class="review-card">
-          <div class="review-header"><span class="review-title">${r.title || 'Review'}</span><span class="review-rating">★ ${r.rating || '—'}</span></div>
-          <div class="review-desc">${r.description || ''}</div>
-          <div class="card-actions" style="margin-top:12px;">
-            <button class="btn btn-outline" onclick="editReview(${companyId},${r.id})">Edit</button>
-            <button class="btn btn-danger" onclick="deleteReview(${companyId},${r.id})">Delete</button>
-          </div>
-        </div>`).join('');
+        const el = document.getElementById(containerId);
+        if (!reviews || !reviews.length) { el.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`; return; }
+        el.innerHTML = reviews.map(r => `
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-title">${r.title || 'Review'}</span>
+                    <span class="review-rating">★ ${r.rating || '—'}</span>
+                </div>
+                <div class="review-desc">${r.description || ''}</div>
+                <div class="card-actions" style="margin-top:12px;">
+                    <button class="btn btn-outline" onclick="editReview(${companyId},${r.id})">Edit</button>
+                    <button class="btn btn-danger"  onclick="deleteReview(${companyId},${r.id})">Delete</button>
+                </div>
+            </div>`).join('');
     }
 
     async function loadAllReviews() {
-      const companies = await api('GET', '/companies');
-      const container = document.getElementById('reviews-list');
-      container.innerHTML = '';
-      if (!companies || !companies.length) { container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No companies yet.</p></div>`; return; }
-      let any = false;
-      for (const c of companies) {
-        try {
-          const reviews = await api('GET', `/companies/${c.id}/reviews`);
-          if (reviews && reviews.length) {
-            any = true;
-            const section = document.createElement('div');
-            section.style.cssText = 'grid-column:1/-1;margin-bottom:16px;';
-            const grid = document.createElement('div');
-            grid.className = 'cards-grid'; grid.style.margin = '0'; grid.id = `rg-${c.id}`;
-            section.innerHTML = `<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">${c.name}</div>`;
-            section.appendChild(grid); container.appendChild(section);
-            renderReviewCards(reviews, `rg-${c.id}`, c.id);
-          }
-        } catch (_) {}
-      }
-      if (!any) container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`;
+        const companies = await api('GET', '/companies');
+        const container = document.getElementById('reviews-list');
+        container.innerHTML = '';
+        if (!companies || !companies.length) { container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No companies yet.</p></div>`; return; }
+        let any = false;
+        for (const c of companies) {
+            try {
+                const reviews = await api('GET', `/companies/${c.id}/reviews`);
+                if (reviews && reviews.length) {
+                    any = true;
+                    const section = document.createElement('div');
+                    section.style.cssText = 'grid-column:1/-1;margin-bottom:16px;';
+                    const grid = document.createElement('div');
+                    grid.className = 'cards-grid'; grid.style.margin = '0'; grid.id = `rg-${c.id}`;
+                    section.innerHTML = `<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">${c.name}</div>`;
+                    section.appendChild(grid); container.appendChild(section);
+                    renderReviewCards(reviews, `rg-${c.id}`, c.id);
+                }
+            } catch (_) {}
+        }
+        if (!any) container.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`;
     }
 
     async function openAddReviewFlow() {
-      const companies = await api('GET', '/companies');
-      if (!companies) return;
-      const sel = document.getElementById('review-company-select');
-      sel.innerHTML = companies.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      sel.disabled = false;
-      document.getElementById('review-id').value = '';
-      document.getElementById('review-modal-title').textContent = 'New Review';
-      ['review-title', 'review-description', 'review-rating'].forEach(id => document.getElementById(id).value = '');
-      openModal('review-modal');
+        const companies = await api('GET', '/companies');
+        if (!companies) return;
+        const sel = document.getElementById('review-company-select');
+        sel.innerHTML = companies.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        sel.disabled = false;
+        document.getElementById('review-id').value = '';
+        document.getElementById('review-modal-title').textContent = 'New Review';
+        ['review-title','review-description','review-rating'].forEach(id => document.getElementById(id).value = '');
+        openModal('review-modal');
     }
 
     async function openAddReviewForCurrentCompany() {
-      const companies = await api('GET', '/companies');
-      if (!companies) return;
-      const sel = document.getElementById('review-company-select');
-      sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id == currentCompanyId ? 'selected' : ''}>${c.name}</option>`).join('');
-      sel.disabled = true;
-      document.getElementById('review-id').value = '';
-      document.getElementById('review-company-id').value = currentCompanyId;
-      document.getElementById('review-modal-title').textContent = 'New Review';
-      ['review-title', 'review-description', 'review-rating'].forEach(id => document.getElementById(id).value = '');
-      openModal('review-modal');
+        const companies = await api('GET', '/companies');
+        if (!companies) return;
+        const sel = document.getElementById('review-company-select');
+        sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id == currentCompanyId ? 'selected' : ''}>${c.name}</option>`).join('');
+        sel.disabled = true;
+        document.getElementById('review-id').value = '';
+        document.getElementById('review-company-id').value = currentCompanyId;
+        document.getElementById('review-modal-title').textContent = 'New Review';
+        ['review-title','review-description','review-rating'].forEach(id => document.getElementById(id).value = '');
+        openModal('review-modal');
     }
 
     async function editReview(companyId, reviewId) {
-      const r = await api('GET', `/companies/${companyId}/reviews/${reviewId}`);
-      const companies = await api('GET', '/companies');
-      if (!r || !companies) return;
-      const sel = document.getElementById('review-company-select');
-      sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id == companyId ? 'selected' : ''}>${c.name}</option>`).join('');
-      sel.disabled = true;
-      document.getElementById('review-id').value = reviewId;
-      document.getElementById('review-company-id').value = companyId;
-      document.getElementById('review-modal-title').textContent = 'Edit Review';
-      document.getElementById('review-title').value = r.title || '';
-      document.getElementById('review-description').value = r.description || '';
-      document.getElementById('review-rating').value = r.rating || '';
-      openModal('review-modal');
+        const r = await api('GET', `/companies/${companyId}/reviews/${reviewId}`);
+        const companies = await api('GET', '/companies');
+        if (!r || !companies) return;
+        const sel = document.getElementById('review-company-select');
+        sel.innerHTML = companies.map(c => `<option value="${c.id}" ${c.id == companyId ? 'selected' : ''}>${c.name}</option>`).join('');
+        sel.disabled = true;
+        document.getElementById('review-id').value = reviewId;
+        document.getElementById('review-company-id').value = companyId;
+        document.getElementById('review-modal-title').textContent = 'Edit Review';
+        document.getElementById('review-title').value = r.title || '';
+        document.getElementById('review-description').value = r.description || '';
+        document.getElementById('review-rating').value = r.rating || '';
+        openModal('review-modal');
     }
 
     async function saveReview() {
-      const id = document.getElementById('review-id').value;
-      const companyId = document.getElementById('review-company-select').disabled
-        ? document.getElementById('review-company-id').value
-        : document.getElementById('review-company-select').value;
-      const body = {
-        title: document.getElementById('review-title').value,
-        description: document.getElementById('review-description').value,
-        rating: document.getElementById('review-rating').value
-      };
-      if (id) { await api('PUT', `/companies/${companyId}/reviews/${id}`, body); toast('Review updated'); }
-      else { await api('POST', `/companies/${companyId}/reviews`, body); toast('Review added'); }
-      document.getElementById('review-company-select').disabled = false;
-      closeModal('review-modal');
-      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-      else loadAllReviews();
+        const id = document.getElementById('review-id').value;
+        const companyId = document.getElementById('review-company-select').disabled
+            ? document.getElementById('review-company-id').value
+            : document.getElementById('review-company-select').value;
+        const body = {
+            title: document.getElementById('review-title').value,
+            description: document.getElementById('review-description').value,
+            rating: document.getElementById('review-rating').value
+        };
+        if (id) { await api('PUT', `/companies/${companyId}/reviews/${id}`, body); toast('Review updated'); }
+        else    { await api('POST', `/companies/${companyId}/reviews`, body);      toast('Review added'); }
+        document.getElementById('review-company-select').disabled = false;
+        closeModal('review-modal');
+        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active'))
+            loadCompanyDetail(currentCompanyId);
+        else loadAllReviews();
     }
 
     async function deleteReview(companyId, reviewId) {
-      if (!confirm('Delete this review?')) return;
-      await api('DELETE', `/companies/${companyId}/reviews/${reviewId}`);
-      toast('Review deleted');
-      if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-      else loadAllReviews();
+        if (!confirm('Delete this review?')) return;
+        await api('DELETE', `/companies/${companyId}/reviews/${reviewId}`);
+        toast('Review deleted');
+        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active'))
+            loadCompanyDetail(currentCompanyId);
+        else loadAllReviews();
     }
 
     document.getElementById('review-modal').addEventListener('click', e => {
-      if (e.target === e.currentTarget) { document.getElementById('review-company-select').disabled = false; closeModal('review-modal'); }
+        if (e.target === e.currentTarget) {
+            document.getElementById('review-company-select').disabled = false;
+            closeModal('review-modal');
+        }
     });
 
-    // Enter key support
     document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-    document.getElementById('register-dob').addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
     document.getElementById('login-username').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
+    document.getElementById('register-dob').addEventListener('keydown',   e => { if (e.key === 'Enter') doRegister(); });
 </script>
 </body>
 </html>

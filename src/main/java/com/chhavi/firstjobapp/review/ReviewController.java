@@ -7,54 +7,55 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/companies/{companyId}")
-//@CrossOrigin(origins = "*")
+@RequestMapping("/companies/{companyId}/reviews")
+@CrossOrigin(origins = "*")
 public class ReviewController {
+
     private ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
-    @GetMapping("/reviews")
-    public ResponseEntity<List<Review>> getAllReviews(@PathVariable Long companyId)
-    {
+
+    @GetMapping
+    public ResponseEntity<List<Review>> getAllReviews(@PathVariable Long companyId) {
         return new ResponseEntity<>(reviewService.getAllReviews(companyId), HttpStatus.OK);
     }
 
-    @PostMapping("/reviews")
-    public ResponseEntity<String> addReview(@PathVariable Long companyId, @RequestBody Review review)
-    {
-        boolean isReviewSaved= reviewService.addReview(companyId,review);
-        if(isReviewSaved)
-        return new ResponseEntity<>("Review Added Successfully",HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Review Not Saved",HttpStatus.NOT_FOUND);
-    }
-    @GetMapping("/reviews/{reviewId}")
-    public ResponseEntity<Review> getReview(@PathVariable Long companyId,@PathVariable Long reviewId)
-    {
-        return new ResponseEntity<>(reviewService.getReview(companyId,reviewId),HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<String> addReview(@PathVariable Long companyId,
+                                            @RequestBody Review review) {
+        boolean saved = reviewService.addReview(companyId, review);
+        if (saved)
+            return new ResponseEntity<>("Review Added Successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Review Not Saved", HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/reviews/{reviewId}")
-    public ResponseEntity<String> updateReview(@PathVariable Long companyId,@PathVariable Long reviewId,@RequestBody Review review)
-    {
-        boolean isReviewUpdated= reviewService.updateReview(companyId,reviewId,review);
-        if(isReviewUpdated)
-        return new ResponseEntity<>("Review Updated Successfully",HttpStatus.OK);
-
-        else
-        return new ResponseEntity<>("Review not Uodated",HttpStatus.NOT_FOUND);
+    @GetMapping("/{reviewId}")
+    public ResponseEntity<Review> getReview(@PathVariable Long companyId,
+                                            @PathVariable Long reviewId) {
+        Review review = reviewService.getReview(companyId, reviewId);
+        if (review != null)
+            return new ResponseEntity<>(review, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("/reviews/{reviewId}")
-    public ResponseEntity<String> deleteReview(@PathVariable Long companyId,@PathVariable Long reviewId )
-    {
-        boolean isDeleted=reviewService.deleteReview(companyId,reviewId);
-        if(isDeleted)
-        return new ResponseEntity<>("Review Deleted Successfully",HttpStatus.OK);
+    @PutMapping("/{reviewId}")
+    public ResponseEntity<String> updateReview(@PathVariable Long companyId,
+                                               @PathVariable Long reviewId,
+                                               @RequestBody Review review) {
+        boolean updated = reviewService.updateReview(companyId, reviewId, review);
+        if (updated)
+            return new ResponseEntity<>("Review Updated Successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Review not Updated", HttpStatus.NOT_FOUND);
+    }
 
-        else
-            return new ResponseEntity<>("Review not Deleted",HttpStatus.NOT_FOUND);
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<String> deleteReview(@PathVariable Long companyId,
+                                               @PathVariable Long reviewId) {
+        boolean deleted = reviewService.deleteReview(companyId, reviewId);
+        if (deleted)
+            return new ResponseEntity<>("Review Deleted Successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Review not Deleted", HttpStatus.NOT_FOUND);
     }
 }

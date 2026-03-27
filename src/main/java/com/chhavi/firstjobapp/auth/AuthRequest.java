@@ -6,6 +6,7 @@ public class AuthRequest {
     private String username;
     private String password;
     private LocalDate dateOfBirth;
+    private String role; // optional, defaults to ROLE_USER
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
@@ -13,4 +14,6 @@ public class AuthRequest {
     public void setPassword(String password) { this.password = password; }
     public LocalDate getDateOfBirth() { return dateOfBirth; }
     public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

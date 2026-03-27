@@ -21,6 +21,9 @@ public class User {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
+    @Column(nullable = false)
+    private String role; // "ROLE_USER" or "ROLE_ADMIN"
+
     public User() {}
 
     public int getAge() {
@@ -35,4 +38,6 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public LocalDate getDateOfBirth() { return dateOfBirth; }
     public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }

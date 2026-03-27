@@ -2,6 +2,7 @@ package com.chhavi.firstjobapp.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,19 +32,40 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(s ->
-                        s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ Allow static frontend files
+
+                        // ── 1. Public ──
                         .requestMatchers("/", "/index.html", "/*.html", "/*.js", "/*.css", "/*.ico").permitAll()
-                        // ✅ Allow auth endpoints
-                        .requestMatchers("/auth/**").permitAll()
-                        // ✅ Allow preflight OPTIONS requests
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                        // ✅ Allow actuator
+                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
-                        // 🔒 Everything else needs JWT
-                        .anyRequest().authenticated()
+
+                        // ── 2. REVIEWS (most specific — must come before company rules) ──
+                        // GET reviews — both roles can view
+                        .requestMatchers(HttpMethod.GET,    "/companies/*/reviews").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/companies/*/reviews/*").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        // POST / PUT / DELETE reviews — USER only, admin cannot write reviews
+                        .requestMatchers(HttpMethod.POST,   "/companies/*/reviews").hasAuthority("ROLE_USER")
+                        .requestMatchers(HttpMethod.PUT,    "/companies/*/reviews/*").hasAuthority("ROLE_USER")
+                        .requestMatchers(HttpMethod.DELETE, "/companies/*/reviews/*").hasAuthority("ROLE_USER")
+
+                        // ── 3. JOBS ──
+                        .requestMatchers(HttpMethod.GET,    "/jobs").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/jobs/*").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/jobs").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/jobs/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/jobs/*").hasAuthority("ROLE_ADMIN")
+
+                        // ── 4. COMPANIES (/* not /** so review URLs never match here) ──
+                        .requestMatchers(HttpMethod.GET,    "/companies").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/companies/*").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/companies").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/companies/*").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/companies/*").hasAuthority("ROLE_ADMIN")
+
+                        // ── 5. Everything else requires login ──
+                        .anyRequest().hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

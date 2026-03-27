@@ -24,39 +24,43 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody AuthRequest request) {
-        if (request.getDateOfBirth() == null) {
+        if (request.getDateOfBirth() == null)
             return ResponseEntity.badRequest()
-                    .body(new AuthResponse(null, "Date of birth is required."));
-        }
+                    .body(new AuthResponse(null, "Date of birth is required.", null));
+
         User temp = new User();
         temp.setDateOfBirth(request.getDateOfBirth());
-        if (temp.getAge() < 18) {
+        if (temp.getAge() < 18)
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new AuthResponse(null, "You must be 18 or older to register."));
-        }
-        if (userRepository.existsByUsername(request.getUsername())) {
+                    .body(new AuthResponse(null, "You must be 18 or older to register.", null));
+
+        if (userRepository.existsByUsername(request.getUsername()))
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new AuthResponse(null, "Username already taken."));
-        }
+                    .body(new AuthResponse(null, "Username already taken.", null));
+
+        // Default role is ROLE_USER unless ROLE_ADMIN explicitly passed
+        String role = "ROLE_ADMIN".equals(request.getRole()) ? "ROLE_ADMIN" : "ROLE_USER";
+
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setDateOfBirth(request.getDateOfBirth());
+        user.setRole(role);
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getUsername());
+        String token = jwtUtil.generateToken(user.getUsername(), role);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new AuthResponse(token, "Account created successfully."));
+                .body(new AuthResponse(token, "Account created successfully.", role));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new AuthResponse(null, "Invalid username or password."));
-        }
-        String token = jwtUtil.generateToken(user.getUsername());
-        return ResponseEntity.ok(new AuthResponse(token, "Login successful."));
+                    .body(new AuthResponse(null, "Invalid username or password.", null));
+
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        return ResponseEntity.ok(new AuthResponse(token, "Login successful.", user.getRole()));
     }
 }
