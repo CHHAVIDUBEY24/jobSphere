@@ -63,7 +63,7 @@
         .btn-auth:hover { background: #f0d080; transform: translateY(-1px); }
         .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
         .app.hidden { display: none; }
-        .sidebar { width: 240px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 32px 0; position: sticky; top: 0; height: 100vh; }
+        .sidebar { width: 240px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 32px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
         .logo { padding: 0 24px 28px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
         .logo h1 { font-family: var(--font-display); font-size: 1.55rem; font-weight: 900; letter-spacing: -0.02em; }
         .logo h1 span { color: var(--accent); }
@@ -134,13 +134,11 @@
         .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
         textarea.form-input { resize: vertical; min-height: 80px; }
         select.form-input { appearance: none; cursor: pointer; }
-        /* File input */
         .file-input-wrapper { position: relative; }
         .file-input-wrapper input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
         .file-input-label { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: var(--surface2); border: 1px dashed var(--border); border-radius: 10px; color: var(--muted); font-size: .85rem; cursor: pointer; transition: border-color .2s; }
         .file-input-label:hover { border-color: var(--accent); color: var(--text); }
         .file-input-label.has-file { border-color: var(--success); color: var(--success); }
-        /* Applicant card */
         .applicant-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color .2s; }
         .applicant-card:hover { border-color: rgba(56,189,248,.3); }
         .applicant-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
@@ -187,13 +185,13 @@
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn">
+<button class="theme-toggle" onclick="toggleTheme()">
     <span id="theme-icon">🌙</span>
     <div class="toggle-track"><div class="toggle-thumb"></div></div>
     <span id="theme-label">Dark</span>
 </button>
 
-<!-- ══ AUTH SCREEN ══ -->
+<!-- AUTH -->
 <div class="auth-screen" id="auth-screen">
     <div class="auth-box">
         <div class="auth-logo"><h1>Job<span>Sphere</span></h1><p>Career Platform</p></div>
@@ -225,7 +223,7 @@
     </div>
 </div>
 
-<!-- ══ MAIN APP ══ -->
+<!-- MAIN APP -->
 <div class="app hidden" id="main-app">
     <aside class="sidebar">
         <div class="logo"><h1>Job<span>Sphere</span></h1><p>Career Platform</p></div>
@@ -317,13 +315,13 @@
             <div id="reviews-list" class="cards-grid"></div>
         </div>
 
-        <!-- MY APPLICATIONS (User) -->
+        <!-- MY APPLICATIONS -->
         <div class="page" id="page-my-applications">
             <div class="page-header"><div><h2>My <span>Applications</span></h2><p>Track your job applications</p></div></div>
             <div class="cards-grid" id="my-applications-grid"></div>
         </div>
 
-        <!-- ALL APPLICATIONS (Admin) -->
+        <!-- ALL APPLICATIONS -->
         <div class="page" id="page-all-applications">
             <div class="page-header"><div><h2>All <span>Applications</span></h2><p>Review candidates who applied</p></div></div>
             <div id="all-applications-container"></div>
@@ -476,13 +474,13 @@
         const password = document.getElementById('login-password').value;
         if (!username || !password) { showAuthError('login-error', 'Please fill in all fields.'); return; }
         try {
-            const res = await fetch('/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+            const res = await fetch('/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username, password}) });
             const data = await res.json();
             if (!res.ok) { showAuthError('login-error', data.message || 'Login failed.'); return; }
             setToken(data.token); setUsername(username); setRole(data.role);
             showApp();
             toast('Welcome back, ' + username + '! (' + (data.role==='ROLE_ADMIN'?'👑 Admin':'👤 User') + ')');
-        } catch (e) { showAuthError('login-error', 'Could not connect to server.'); }
+        } catch(e) { showAuthError('login-error', 'Could not connect to server.'); }
     }
 
     async function doRegister() {
@@ -494,13 +492,13 @@
         const age = Math.floor((new Date() - new Date(dob)) / (365.25*24*60*60*1000));
         if (age < 18) { showAuthError('register-error', '🔞 You must be 18 or older to register.'); return; }
         try {
-            const res = await fetch('/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password, dateOfBirth: dob, role }) });
+            const res = await fetch('/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username, password, dateOfBirth:dob, role}) });
             const data = await res.json();
             if (!res.ok) { showAuthError('register-error', data.message || 'Registration failed.'); return; }
             setToken(data.token); setUsername(username); setRole(data.role);
             showApp();
             toast('Welcome, ' + username + '!');
-        } catch (e) { showAuthError('register-error', 'Could not connect to server.'); }
+        } catch(e) { showAuthError('register-error', 'Could not connect to server.'); }
     }
 
     function doLogout() {
@@ -511,27 +509,25 @@
         toast('Signed out successfully.');
     }
 
-    // ── API ──
     async function api(method, path, body) {
         try {
             const r = await fetch(path, {
                 method,
-                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+                headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + getToken() },
                 body: body ? JSON.stringify(body) : undefined
             });
             if (r.status === 401) { clearAuth(); showAuthScreen(); toast('Session expired.', 'error'); return null; }
             if (r.status === 403) {
                 if (method !== 'GET') toast('Access denied. Admin permission required.', 'error');
-                else toast('Access denied fetching data.', 'error');
+                else toast('Access denied fetching data. Check server config.', 'error');
                 return null;
             }
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            if (!r.ok) throw new Error('HTTP ' + r.status);
             const ct = r.headers.get('content-type') || '';
             return ct.includes('json') ? r.json() : r.text();
-        } catch (e) { toast('Request failed: ' + e.message, 'error'); return null; }
+        } catch(e) { toast('Request failed: ' + e.message, 'error'); return null; }
     }
 
-    // ── API with FormData (for file upload) ──
     async function apiForm(path, formData) {
         try {
             const r = await fetch(path, {
@@ -541,16 +537,37 @@
             });
             if (r.status === 401) { clearAuth(); showAuthScreen(); toast('Session expired.', 'error'); return null; }
             if (r.status === 409) { toast('You have already applied for this job.', 'error'); return null; }
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            if (!r.ok) throw new Error('HTTP ' + r.status);
             const ct = r.headers.get('content-type') || '';
             return ct.includes('json') ? r.json() : r.text();
-        } catch (e) { toast('Request failed: ' + e.message, 'error'); return null; }
+        } catch(e) { toast('Request failed: ' + e.message, 'error'); return null; }
     }
 
-    function toast(msg, type = 'success') {
+    // ── RESUME DOWNLOAD (with JWT) ──
+    async function downloadResume(applicationId, filename) {
+        try {
+            const response = await fetch('/applications/resume/' + applicationId, {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + getToken() }
+            });
+            if (!response.ok) { toast('Failed to download resume.', 'error'); return; }
+            const blob = await response.blob();
+            const url  = window.URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = filename || 'resume';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            toast('Resume downloaded!');
+        } catch(e) { toast('Download failed: ' + e.message, 'error'); }
+    }
+
+    function toast(msg, type='success') {
         const el = document.createElement('div');
         el.className = 'toast ' + type;
-        el.innerHTML = `<div class="dot"></div>${msg}`;
+        el.innerHTML = '<div class="dot"></div>' + msg;
         document.getElementById('toasts').appendChild(el);
         setTimeout(() => el.remove(), 3500);
     }
@@ -564,12 +581,12 @@
         document.getElementById('page-' + page).classList.add('active');
         const nb = document.getElementById('nav-' + page);
         if (nb) nb.classList.add('active');
-        if (page==='dashboard')        loadDashboard();
-        if (page==='jobs')             loadJobs();
-        if (page==='companies')        loadCompanies();
-        if (page==='reviews')          loadAllReviews();
-        if (page==='my-applications')  loadMyApplications();
-        if (page==='all-applications') loadAllApplications();
+        if (page === 'dashboard')        loadDashboard();
+        if (page === 'jobs')             loadJobs();
+        if (page === 'companies')        loadCompanies();
+        if (page === 'reviews')          loadAllReviews();
+        if (page === 'my-applications')  loadMyApplications();
+        if (page === 'all-applications') loadAllApplications();
     }
 
     function switchTab(e, tabId) {
@@ -579,7 +596,6 @@
         e.target.classList.add('active');
     }
 
-    // ── Load applied job IDs for current user ──
     async function loadMyAppliedJobs() {
         const apps = await api('GET', '/applications/my');
         if (apps) apps.forEach(a => { if (a.job) appliedJobIds.add(a.job.id); });
@@ -592,7 +608,9 @@
         document.getElementById('stat-jobs').textContent = jobs.length;
         document.getElementById('stat-companies').textContent = companies.length;
         let rc = 0;
-        for (const c of companies) { try { const r = await api('GET',`/companies/${c.id}/reviews`); if(r) rc+=r.length; } catch(_){} }
+        for (const c of companies) {
+            try { const r = await api('GET', '/companies/' + c.id + '/reviews'); if (r) rc += r.length; } catch(_) {}
+        }
         document.getElementById('stat-reviews').textContent = rc;
         renderJobCards(jobs.slice(0,3), 'dashboard-jobs');
         renderCompanyCards(companies.slice(0,3), 'dashboard-companies', false);
@@ -606,33 +624,38 @@
 
     function renderJobCards(jobs, containerId) {
         const el = document.getElementById(containerId);
-        if (!jobs || !jobs.length) { el.innerHTML = `<div class="empty"><div class="icon">💼</div><p>No jobs found.</p></div>`; return; }
-        el.innerHTML = jobs.map(j => {
+        if (!jobs || !jobs.length) { el.innerHTML = '<div class="empty"><div class="icon">💼</div><p>No jobs found.</p></div>'; return; }
+        el.innerHTML = jobs.map(function(j) {
             const hasApplied = appliedJobIds.has(j.id);
-            return `
-            <div class="card">
-                <div class="card-top">
-                    <div class="card-title">${j.title || 'Untitled'}</div>
-                    <span class="card-badge ${hasApplied ? 'applied' : ''}">${hasApplied ? '✓ Applied' : 'Open'}</span>
-                </div>
-                ${j.company ? `<div class="card-company">🏢 ${j.company.name}</div>` : ''}
-                <div class="card-desc">${j.description || 'No description.'}</div>
-                <div class="card-meta">
-                    ${j.minSalary ? `<span class="meta-tag salary">₹ ${j.minSalary} – ${j.maxSalary}</span>` : ''}
-                    ${j.location  ? `<span class="meta-tag location">📍 ${j.location}</span>` : ''}
-                </div>
-                <div class="card-actions">
-                    ${!isAdmin() ? `<button class="btn ${hasApplied ? 'btn-outline' : 'btn-success'}" ${hasApplied ? 'disabled style="cursor:default;opacity:.6;"' : `onclick="openApplyModal(${j.id}, '${(j.title||'').replace(/'/g,"\\'")}')"`}>${hasApplied ? '✓ Applied' : 'Apply Now'}</button>` : ''}
-                    ${isAdmin() ? `
-                    <button class="btn btn-outline" onclick="viewApplicants(${j.id}, '${(j.title||'').replace(/'/g,"\\'")}')">View Applicants</button>
-                    <button class="btn btn-outline" onclick="editJob(${j.id})">Edit</button>
-                    <button class="btn btn-danger"  onclick="deleteJob(${j.id})">Delete</button>` : ''}
-                </div>
-            </div>`;
+            const titleSafe = (j.title || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            let actions = '';
+            if (!isAdmin()) {
+                if (hasApplied) {
+                    actions = '<button class="btn btn-outline" disabled style="cursor:default;opacity:.6;">✓ Applied</button>';
+                } else {
+                    actions = '<button class="btn btn-success" onclick="openApplyModal(' + j.id + ', \'' + titleSafe + '\')">Apply Now</button>';
+                }
+            } else {
+                actions = '<button class="btn btn-outline" onclick="viewApplicants(' + j.id + ', \'' + titleSafe + '\')">View Applicants</button>' +
+                          '<button class="btn btn-outline" onclick="editJob(' + j.id + ')">Edit</button>' +
+                          '<button class="btn btn-danger" onclick="deleteJob(' + j.id + ')">Delete</button>';
+            }
+            return '<div class="card">' +
+                '<div class="card-top">' +
+                    '<div class="card-title">' + (j.title || 'Untitled') + '</div>' +
+                    '<span class="card-badge ' + (hasApplied ? 'applied' : '') + '">' + (hasApplied ? '✓ Applied' : 'Open') + '</span>' +
+                '</div>' +
+                (j.company ? '<div class="card-company">🏢 ' + j.company.name + '</div>' : '') +
+                '<div class="card-desc">' + (j.description || 'No description.') + '</div>' +
+                '<div class="card-meta">' +
+                    (j.minSalary ? '<span class="meta-tag salary">₹ ' + j.minSalary + ' – ' + j.maxSalary + '</span>' : '') +
+                    (j.location  ? '<span class="meta-tag location">📍 ' + j.location + '</span>' : '') +
+                '</div>' +
+                '<div class="card-actions">' + actions + '</div>' +
+                '</div>';
         }).join('');
     }
 
-    // ── APPLY FOR JOB ──
     function openApplyModal(jobId, jobTitle) {
         document.getElementById('apply-job-id').value = jobId;
         document.getElementById('apply-modal-title').textContent = 'Apply — ' + jobTitle;
@@ -664,17 +687,14 @@
         const phone  = document.getElementById('apply-phone').value.trim();
         const cover  = document.getElementById('apply-cover').value.trim();
         const resume = document.getElementById('apply-resume').files[0];
-
         if (!name || !email || !phone || !resume) { toast('Please fill all required fields and upload your resume.', 'error'); return; }
-
         const fd = new FormData();
         fd.append('applicantName',  name);
         fd.append('applicantEmail', email);
         fd.append('applicantPhone', phone);
         fd.append('coverLetter',    cover);
         fd.append('resume',         resume);
-
-        const result = await apiForm(`/applications/apply/${jobId}`, fd);
+        const result = await apiForm('/applications/apply/' + jobId, fd);
         if (result !== null) {
             toast('🎉 Application submitted successfully!');
             appliedJobIds.add(parseInt(jobId));
@@ -683,115 +703,100 @@
         }
     }
 
-    document.getElementById('apply-modal').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('apply-modal'); });
+    document.getElementById('apply-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('apply-modal'); });
 
     // ── MY APPLICATIONS ──
     async function loadMyApplications() {
         const apps = await api('GET', '/applications/my');
         const el = document.getElementById('my-applications-grid');
-        if (!apps || !apps.length) { el.innerHTML = `<div class="empty"><div class="icon">📋</div><p>You haven't applied for any jobs yet.</p></div>`; return; }
-        el.innerHTML = apps.map(a => `
-            <div class="card">
-                <div class="card-top">
-                    <div class="card-title">${a.job ? a.job.title : 'Unknown Job'}</div>
-                    <span class="card-badge applied">Applied</span>
-                </div>
-                ${a.job && a.job.company ? `<div class="card-company">🏢 ${a.job.company.name}</div>` : ''}
-                <div class="card-meta">
-                    ${a.job && a.job.location ? `<span class="meta-tag location">📍 ${a.job.location}</span>` : ''}
-                    <span class="meta-tag">📅 ${a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—'}</span>
-                </div>
-                <div class="card-desc">${a.coverLetter ? a.coverLetter.substring(0,120) + (a.coverLetter.length>120?'...':'') : 'No cover letter.'}</div>
-                <div class="card-meta">
-                    <span class="meta-tag">📧 ${a.applicantEmail}</span>
-                    <span class="meta-tag">📞 ${a.applicantPhone}</span>
-                </div>
-                <div class="card-actions">
-                    <span class="meta-tag" style="color:var(--success);border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.08);">📎 ${a.resumeFileName || 'Resume uploaded'}</span>
-                </div>
-            </div>`).join('');
+        if (!apps || !apps.length) { el.innerHTML = '<div class="empty"><div class="icon">📋</div><p>You haven\'t applied for any jobs yet.</p></div>'; return; }
+        el.innerHTML = apps.map(function(a) {
+            const dateStr = a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) : '—';
+            return '<div class="card">' +
+                '<div class="card-top">' +
+                    '<div class="card-title">' + (a.job ? a.job.title : 'Unknown Job') + '</div>' +
+                    '<span class="card-badge applied">Applied</span>' +
+                '</div>' +
+                (a.job && a.job.company ? '<div class="card-company">🏢 ' + a.job.company.name + '</div>' : '') +
+                '<div class="card-meta">' +
+                    (a.job && a.job.location ? '<span class="meta-tag location">📍 ' + a.job.location + '</span>' : '') +
+                    '<span class="meta-tag">📅 ' + dateStr + '</span>' +
+                '</div>' +
+                '<div class="card-desc">' + (a.coverLetter ? a.coverLetter.substring(0,120) + (a.coverLetter.length > 120 ? '...' : '') : 'No cover letter.') + '</div>' +
+                '<div class="card-meta">' +
+                    '<span class="meta-tag">📧 ' + a.applicantEmail + '</span>' +
+                    '<span class="meta-tag">📞 ' + a.applicantPhone + '</span>' +
+                '</div>' +
+                '<div class="card-actions">' +
+                    '<span class="meta-tag" style="color:var(--success);border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.08);">📎 ' + (a.resumeFileName || 'Resume uploaded') + '</span>' +
+                '</div>' +
+                '</div>';
+        }).join('');
     }
 
     // ── ALL APPLICATIONS (Admin) ──
+    function buildApplicantCard(a) {
+        const dateStr = a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) : '—';
+        const filenameSafe = (a.resumeFileName || 'resume').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        return '<div class="applicant-card">' +
+            '<div class="applicant-name">' + a.applicantName + '</div>' +
+            '<div class="applicant-meta">' +
+                '<span class="applicant-tag">📧 ' + a.applicantEmail + '</span>' +
+                '<span class="applicant-tag">📞 ' + a.applicantPhone + '</span>' +
+                '<span class="applicant-tag">👤 ' + a.appliedByUsername + '</span>' +
+                '<span class="applicant-tag">📅 ' + dateStr + '</span>' +
+            '</div>' +
+            (a.coverLetter ? '<div class="applicant-cover"><strong>Cover Letter:</strong><br>' + a.coverLetter + '</div>' : '') +
+            '<div class="card-actions" style="margin-top:12px;">' +
+                (a.resumeFileName
+                    ? '<button class="btn btn-success" onclick="downloadResume(' + a.id + ', \'' + filenameSafe + '\')">📥 Download Resume</button>'
+                    : '<span style="color:var(--muted);font-size:.8rem;">No resume</span>') +
+                '<button class="btn btn-danger" onclick="deleteApplication(' + a.id + ')">Remove</button>' +
+            '</div>' +
+            '</div>';
+    }
+
     async function loadAllApplications() {
         const apps = await api('GET', '/applications');
         const container = document.getElementById('all-applications-container');
-        if (!apps || !apps.length) {
-            container.innerHTML = `<div class="empty"><div class="icon">👥</div><p>No applications yet.</p></div>`;
-            return;
-        }
-        // Group by job
+        if (!apps || !apps.length) { container.innerHTML = '<div class="empty"><div class="icon">👥</div><p>No applications yet.</p></div>'; return; }
         const byJob = {};
-        apps.forEach(a => {
+        apps.forEach(function(a) {
             const key = a.job ? a.job.id : 'unknown';
             const title = a.job ? a.job.title : 'Unknown Job';
-            if (!byJob[key]) byJob[key] = { title, apps: [] };
+            if (!byJob[key]) byJob[key] = { title: title, apps: [] };
             byJob[key].apps.push(a);
         });
-        container.innerHTML = Object.values(byJob).map(group => `
-            <div style="margin-bottom:32px;">
-                <div class="section-header">
-                    <h3>💼 ${group.title} <span style="font-size:.8rem;color:var(--muted);font-family:var(--font-body);font-weight:400;">(${group.apps.length} applicant${group.apps.length!==1?'s':''})</span></h3>
-                </div>
-                <div class="cards-grid">
-                    ${group.apps.map(a => `
-                    <div class="applicant-card">
-                        <div class="applicant-name">${a.applicantName}</div>
-                        <div class="applicant-meta">
-                            <span class="applicant-tag">📧 ${a.applicantEmail}</span>
-                            <span class="applicant-tag">📞 ${a.applicantPhone}</span>
-                            <span class="applicant-tag">👤 ${a.appliedByUsername}</span>
-                            <span class="applicant-tag">📅 ${a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—'}</span>
-                        </div>
-                        ${a.coverLetter ? `<div class="applicant-cover"><strong>Cover Letter:</strong><br>${a.coverLetter}</div>` : ''}
-                        <div class="card-actions" style="margin-top:12px;">
-                            ${a.resumeFileName ? `<a href="/applications/resume/${a.id}" target="_blank" class="btn btn-success" style="text-decoration:none;">📥 Download Resume</a>` : '<span style="color:var(--muted);font-size:.8rem;">No resume</span>'}
-                            <button class="btn btn-danger" onclick="deleteApplication(${a.id})">Remove</button>
-                        </div>
-                    </div>`).join('')}
-                </div>
-            </div>`).join('');
+        container.innerHTML = Object.values(byJob).map(function(group) {
+            return '<div style="margin-bottom:32px;">' +
+                '<div class="section-header">' +
+                    '<h3>💼 ' + group.title + ' <span style="font-size:.8rem;color:var(--muted);font-family:var(--font-body);font-weight:400;">(' + group.apps.length + ' applicant' + (group.apps.length !== 1 ? 's' : '') + ')</span></h3>' +
+                '</div>' +
+                '<div class="cards-grid">' + group.apps.map(buildApplicantCard).join('') + '</div>' +
+                '</div>';
+        }).join('');
     }
 
     async function deleteApplication(id) {
         if (!confirm('Remove this application?')) return;
-        await api('DELETE', `/applications/${id}`);
+        await api('DELETE', '/applications/' + id);
         toast('Application removed.');
         loadAllApplications();
     }
 
-    // ── View Applicants for a specific job (from job card) ──
     async function viewApplicants(jobId, jobTitle) {
         showPage('all-applications');
-        // Small delay to let page render, then filter
-        setTimeout(async () => {
-            const apps = await api('GET', `/applications/job/${jobId}`);
+        setTimeout(async function() {
+            const apps = await api('GET', '/applications/job/' + jobId);
             const container = document.getElementById('all-applications-container');
             if (!apps || !apps.length) {
-                container.innerHTML = `<div class="empty"><div class="icon">👥</div><p>No applications for "${jobTitle}" yet.</p></div>`;
+                container.innerHTML = '<div class="empty"><div class="icon">👥</div><p>No applications for "' + jobTitle + '" yet.</p></div>';
                 return;
             }
-            container.innerHTML = `
-                <div style="margin-bottom:32px;">
-                    <div class="section-header"><h3>💼 ${jobTitle} <span style="font-size:.8rem;color:var(--muted);font-family:var(--font-body);font-weight:400;">(${apps.length} applicant${apps.length!==1?'s':''})</span></h3></div>
-                    <div class="cards-grid">
-                        ${apps.map(a => `
-                        <div class="applicant-card">
-                            <div class="applicant-name">${a.applicantName}</div>
-                            <div class="applicant-meta">
-                                <span class="applicant-tag">📧 ${a.applicantEmail}</span>
-                                <span class="applicant-tag">📞 ${a.applicantPhone}</span>
-                                <span class="applicant-tag">👤 ${a.appliedByUsername}</span>
-                                <span class="applicant-tag">📅 ${a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—'}</span>
-                            </div>
-                            ${a.coverLetter ? `<div class="applicant-cover"><strong>Cover Letter:</strong><br>${a.coverLetter}</div>` : ''}
-                            <div class="card-actions" style="margin-top:12px;">
-                                ${a.resumeFileName ? `<a href="/applications/resume/${a.id}" target="_blank" class="btn btn-success" style="text-decoration:none;">📥 Download Resume</a>` : '<span style="color:var(--muted);font-size:.8rem;">No resume</span>'}
-                                <button class="btn btn-danger" onclick="deleteApplication(${a.id})">Remove</button>
-                            </div>
-                        </div>`).join('')}
-                    </div>
-                </div>`;
+            container.innerHTML = '<div style="margin-bottom:32px;">' +
+                '<div class="section-header"><h3>💼 ' + jobTitle + ' <span style="font-size:.8rem;color:var(--muted);font-family:var(--font-body);font-weight:400;">(' + apps.length + ' applicant' + (apps.length !== 1 ? 's' : '') + ')</span></h3></div>' +
+                '<div class="cards-grid">' + apps.map(buildApplicantCard).join('') + '</div>' +
+                '</div>';
         }, 100);
     }
 
@@ -800,7 +805,7 @@
         await populateCompanySelect('job-company-select');
         document.getElementById('job-id').value = '';
         document.getElementById('job-modal-title').textContent = 'New Job';
-        ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(id => document.getElementById(id).value = '');
+        ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(function(id) { document.getElementById(id).value = ''; });
         document.getElementById('job-company-select').disabled = false;
         openModal('job-modal');
     }
@@ -808,205 +813,202 @@
         await populateCompanySelect('job-company-select', currentCompanyId);
         document.getElementById('job-id').value = '';
         document.getElementById('job-modal-title').textContent = 'New Job';
-        ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(id => document.getElementById(id).value = '');
+        ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(function(id) { document.getElementById(id).value = ''; });
         document.getElementById('job-company-select').disabled = true;
         openModal('job-modal');
     }
-    async function populateCompanySelect(selectId, selectedId = null) {
+    async function populateCompanySelect(selectId, selectedId) {
         const companies = await api('GET', '/companies');
         if (!companies) return;
         document.getElementById(selectId).innerHTML =
-            `<option value="">— Select a company —</option>` +
-            companies.map(c => `<option value="${c.id}" ${c.id==selectedId?'selected':''}>${c.name}</option>`).join('');
+            '<option value="">— Select a company —</option>' +
+            companies.map(function(c) { return '<option value="' + c.id + '"' + (c.id == selectedId ? ' selected' : '') + '>' + c.name + '</option>'; }).join('');
     }
     async function saveJob() {
         const id = document.getElementById('job-id').value;
         const companyId = document.getElementById('job-company-select').value;
         const body = {
-            title: document.getElementById('job-title').value,
+            title:       document.getElementById('job-title').value,
             description: document.getElementById('job-description').value,
-            minSalary: document.getElementById('job-minSalary').value,
-            maxSalary: document.getElementById('job-maxSalary').value,
-            location: document.getElementById('job-location').value,
-            company: companyId ? { id: parseInt(companyId) } : null
+            minSalary:   document.getElementById('job-minSalary').value,
+            maxSalary:   document.getElementById('job-maxSalary').value,
+            location:    document.getElementById('job-location').value,
+            company:     companyId ? { id: parseInt(companyId) } : null
         };
-        if (id) { await api('PUT',`/jobs/${id}`,body); toast('Job updated'); }
-        else    { await api('POST','/jobs',body);       toast('Job created'); }
+        if (id) { await api('PUT', '/jobs/' + id, body); toast('Job updated'); }
+        else    { await api('POST', '/jobs', body);       toast('Job created'); }
         closeModal('job-modal');
         if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
         else loadJobs();
     }
     async function editJob(id) {
-        const job = await api('GET',`/jobs/${id}`);
+        const job = await api('GET', '/jobs/' + id);
         if (!job) return;
-        await populateCompanySelect('job-company-select', job.company?.id);
+        await populateCompanySelect('job-company-select', job.company ? job.company.id : null);
         document.getElementById('job-id').value = id;
         document.getElementById('job-modal-title').textContent = 'Edit Job';
-        document.getElementById('job-title').value = job.title||'';
-        document.getElementById('job-description').value = job.description||'';
-        document.getElementById('job-minSalary').value = job.minSalary||'';
-        document.getElementById('job-maxSalary').value = job.maxSalary||'';
-        document.getElementById('job-location').value = job.location||'';
+        document.getElementById('job-title').value       = job.title       || '';
+        document.getElementById('job-description').value = job.description || '';
+        document.getElementById('job-minSalary').value   = job.minSalary   || '';
+        document.getElementById('job-maxSalary').value   = job.maxSalary   || '';
+        document.getElementById('job-location').value    = job.location    || '';
         document.getElementById('job-company-select').disabled = false;
         openModal('job-modal');
     }
     async function deleteJob(id) {
         if (!confirm('Delete this job?')) return;
-        await api('DELETE',`/jobs/${id}`); toast('Job deleted');
+        await api('DELETE', '/jobs/' + id); toast('Job deleted');
         if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
         else loadJobs();
     }
-    document.getElementById('job-modal').addEventListener('click', e => { if (e.target===e.currentTarget) closeModal('job-modal'); });
+    document.getElementById('job-modal').addEventListener('click', function(e) { if (e.target === e.currentTarget) closeModal('job-modal'); });
 
     // ── COMPANIES ──
     async function loadCompanies() {
-        const companies = await api('GET','/companies');
+        const companies = await api('GET', '/companies');
         if (companies) renderCompanyCards(companies, 'companies-grid', true);
     }
-    function renderCompanyCards(companies, containerId, showDetail=true) {
+    function renderCompanyCards(companies, containerId, showDetail) {
         const el = document.getElementById(containerId);
-        if (!companies||!companies.length) { el.innerHTML=`<div class="empty"><div class="icon">🏢</div><p>No companies yet.</p></div>`; return; }
-        el.innerHTML = companies.map(c=>`
-            <div class="card">
-                <div class="card-top">
-                    <div class="card-title">${c.name||'Unnamed'}</div>
-                    <span class="card-badge" style="background:rgba(192,132,252,.12);color:var(--accent2);border-color:rgba(192,132,252,.3);">Company</span>
-                </div>
-                <div class="card-desc">${c.description||'No description.'}</div>
-                <div class="card-actions">
-                    ${showDetail?`<button class="btn btn-primary" onclick="openCompanyDetail(${c.id})">View Details</button>`:''}
-                    ${isAdmin()?`
-                    <button class="btn btn-outline" onclick="editCompany(${c.id})">Edit</button>
-                    <button class="btn btn-danger"  onclick="deleteCompany(${c.id})">Delete</button>`:''}
-                </div>
-            </div>`).join('');
+        if (!companies || !companies.length) { el.innerHTML = '<div class="empty"><div class="icon">🏢</div><p>No companies yet.</p></div>'; return; }
+        el.innerHTML = companies.map(function(c) {
+            return '<div class="card">' +
+                '<div class="card-top">' +
+                    '<div class="card-title">' + (c.name || 'Unnamed') + '</div>' +
+                    '<span class="card-badge" style="background:rgba(192,132,252,.12);color:var(--accent2);border-color:rgba(192,132,252,.3);">Company</span>' +
+                '</div>' +
+                '<div class="card-desc">' + (c.description || 'No description.') + '</div>' +
+                '<div class="card-actions">' +
+                    (showDetail ? '<button class="btn btn-primary" onclick="openCompanyDetail(' + c.id + ')">View Details</button>' : '') +
+                    (isAdmin() ? '<button class="btn btn-outline" onclick="editCompany(' + c.id + ')">Edit</button><button class="btn btn-danger" onclick="deleteCompany(' + c.id + ')">Delete</button>' : '') +
+                '</div>' +
+                '</div>';
+        }).join('');
     }
     async function openCompanyDetail(companyId) {
         currentCompanyId = companyId;
         await loadCompanyDetail(companyId);
-        document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById('tab-jobs').classList.add('active');
         document.querySelectorAll('.tab-btn')[0].classList.add('active');
-        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+        document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById('page-company-detail').classList.add('active');
         document.getElementById('nav-companies').classList.add('active');
     }
     async function loadCompanyDetail(companyId) {
-        const company = await api('GET',`/companies/${companyId}`);
+        const company = await api('GET', '/companies/' + companyId);
         if (!company) return;
         document.getElementById('cd-name').textContent = company.name;
-        document.getElementById('cd-desc').textContent = company.description||'';
+        document.getElementById('cd-desc').textContent = company.description || '';
         const addJobBtn = document.getElementById('cd-add-job-btn');
-        if (addJobBtn) addJobBtn.style.display = isAdmin()?'inline-flex':'none';
+        if (addJobBtn) addJobBtn.style.display = isAdmin() ? 'inline-flex' : 'none';
         const addRevBtn = document.getElementById('cd-add-rev-btn');
-        if (addRevBtn) addRevBtn.style.display = isAdmin()?'none':'inline-flex';
-        const allJobs = await api('GET','/jobs');
-        const companyJobs = allJobs ? allJobs.filter(j=>j.company&&j.company.id===companyId) : [];
+        if (addRevBtn) addRevBtn.style.display = isAdmin() ? 'none' : 'inline-flex';
+        const allJobs = await api('GET', '/jobs');
+        const companyJobs = allJobs ? allJobs.filter(function(j) { return j.company && j.company.id === companyId; }) : [];
         renderJobCards(companyJobs, 'cd-jobs-grid');
-        const reviews = await api('GET',`/companies/${companyId}/reviews`);
-        renderReviewCards(reviews||[], 'cd-reviews-grid', companyId);
+        const reviews = await api('GET', '/companies/' + companyId + '/reviews');
+        renderReviewCards(reviews || [], 'cd-reviews-grid', companyId);
     }
     async function saveCompany() {
         const id = document.getElementById('company-id').value;
         const body = { name: document.getElementById('company-name').value, description: document.getElementById('company-description').value };
-        if (id) { await api('PUT',`/companies/${id}`,body); toast('Company updated'); }
-        else    { await api('POST','/companies',body);       toast('Company created'); }
+        if (id) { await api('PUT', '/companies/' + id, body); toast('Company updated'); }
+        else    { await api('POST', '/companies', body);       toast('Company created'); }
         closeModal('company-modal'); loadCompanies();
     }
     async function editCompany(id) {
-        const c = await api('GET',`/companies/${id}`);
+        const c = await api('GET', '/companies/' + id);
         if (!c) return;
         document.getElementById('company-id').value = id;
         document.getElementById('company-modal-title').textContent = 'Edit Company';
-        document.getElementById('company-name').value = c.name||'';
-        document.getElementById('company-description').value = c.description||'';
+        document.getElementById('company-name').value = c.name || '';
+        document.getElementById('company-description').value = c.description || '';
         openModal('company-modal');
     }
     async function deleteCompany(id) {
         if (!confirm('Delete this company?')) return;
-        await api('DELETE',`/companies/${id}`); toast('Company deleted'); loadCompanies();
+        await api('DELETE', '/companies/' + id); toast('Company deleted'); loadCompanies();
     }
-    document.getElementById('company-modal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeModal('company-modal'); });
+    document.getElementById('company-modal').addEventListener('click', function(e) { if (e.target === e.currentTarget) closeModal('company-modal'); });
 
     // ── REVIEWS ──
     function renderReviewCards(reviews, containerId, companyId) {
         const el = document.getElementById(containerId);
-        if (!reviews||!reviews.length) { el.innerHTML=`<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`; return; }
-        el.innerHTML = reviews.map(r=>`
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-title">${r.title||'Review'}</span>
-                    <span class="review-rating">★ ${r.rating||'—'}</span>
-                </div>
-                <div class="review-desc">${r.description||''}</div>
-                ${!isAdmin()?`
-                <div class="card-actions" style="margin-top:12px;">
-                    <button class="btn btn-outline" onclick="editReview(${companyId},${r.id})">Edit</button>
-                    <button class="btn btn-danger"  onclick="deleteReview(${companyId},${r.id})">Delete</button>
-                </div>`:''}
-            </div>`).join('');
+        if (!reviews || !reviews.length) { el.innerHTML = '<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>'; return; }
+        el.innerHTML = reviews.map(function(r) {
+            return '<div class="review-card">' +
+                '<div class="review-header">' +
+                    '<span class="review-title">' + (r.title || 'Review') + '</span>' +
+                    '<span class="review-rating">★ ' + (r.rating || '—') + '</span>' +
+                '</div>' +
+                '<div class="review-desc">' + (r.description || '') + '</div>' +
+                (!isAdmin() ? '<div class="card-actions" style="margin-top:12px;"><button class="btn btn-outline" onclick="editReview(' + companyId + ',' + r.id + ')">Edit</button><button class="btn btn-danger" onclick="deleteReview(' + companyId + ',' + r.id + ')">Delete</button></div>' : '') +
+                '</div>';
+        }).join('');
     }
     async function loadAllReviews() {
-        const companies = await api('GET','/companies');
+        const companies = await api('GET', '/companies');
         const container = document.getElementById('reviews-list');
         container.innerHTML = '';
-        if (!companies||!companies.length) { container.innerHTML=`<div class="empty"><div class="icon">★</div><p>No companies yet.</p></div>`; return; }
+        if (!companies || !companies.length) { container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No companies yet.</p></div>'; return; }
         let any = false;
-        for (const c of companies) {
+        for (let i = 0; i < companies.length; i++) {
+            const c = companies[i];
             try {
-                const reviews = await api('GET',`/companies/${c.id}/reviews`);
-                if (reviews&&reviews.length) {
+                const reviews = await api('GET', '/companies/' + c.id + '/reviews');
+                if (reviews && reviews.length) {
                     any = true;
                     const section = document.createElement('div');
                     section.style.cssText = 'grid-column:1/-1;margin-bottom:16px;';
                     const grid = document.createElement('div');
-                    grid.className='cards-grid'; grid.style.margin='0'; grid.id=`rg-${c.id}`;
-                    section.innerHTML=`<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">${c.name}</div>`;
+                    grid.className = 'cards-grid'; grid.style.margin = '0'; grid.id = 'rg-' + c.id;
+                    section.innerHTML = '<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">' + c.name + '</div>';
                     section.appendChild(grid); container.appendChild(section);
-                    renderReviewCards(reviews,`rg-${c.id}`,c.id);
+                    renderReviewCards(reviews, 'rg-' + c.id, c.id);
                 }
             } catch(_) {}
         }
-        if (!any) container.innerHTML=`<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`;
+        if (!any) container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>';
     }
     async function openAddReviewFlow() {
-        const companies = await api('GET','/companies');
+        const companies = await api('GET', '/companies');
         if (!companies) return;
         const sel = document.getElementById('review-company-select');
-        sel.innerHTML = companies.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+        sel.innerHTML = companies.map(function(c) { return '<option value="' + c.id + '">' + c.name + '</option>'; }).join('');
         sel.disabled = false;
         document.getElementById('review-id').value = '';
         document.getElementById('review-modal-title').textContent = 'New Review';
-        ['review-title','review-description','review-rating'].forEach(id=>document.getElementById(id).value='');
+        ['review-title','review-description','review-rating'].forEach(function(id) { document.getElementById(id).value = ''; });
         openModal('review-modal');
     }
     async function openAddReviewForCurrentCompany() {
-        const companies = await api('GET','/companies');
+        const companies = await api('GET', '/companies');
         if (!companies) return;
         const sel = document.getElementById('review-company-select');
-        sel.innerHTML = companies.map(c=>`<option value="${c.id}" ${c.id==currentCompanyId?'selected':''}>${c.name}</option>`).join('');
+        sel.innerHTML = companies.map(function(c) { return '<option value="' + c.id + '"' + (c.id == currentCompanyId ? ' selected' : '') + '>' + c.name + '</option>'; }).join('');
         sel.disabled = true;
         document.getElementById('review-id').value = '';
         document.getElementById('review-company-id').value = currentCompanyId;
         document.getElementById('review-modal-title').textContent = 'New Review';
-        ['review-title','review-description','review-rating'].forEach(id=>document.getElementById(id).value='');
+        ['review-title','review-description','review-rating'].forEach(function(id) { document.getElementById(id).value = ''; });
         openModal('review-modal');
     }
     async function editReview(companyId, reviewId) {
-        const r = await api('GET',`/companies/${companyId}/reviews/${reviewId}`);
-        const companies = await api('GET','/companies');
-        if (!r||!companies) return;
+        const r = await api('GET', '/companies/' + companyId + '/reviews/' + reviewId);
+        const companies = await api('GET', '/companies');
+        if (!r || !companies) return;
         const sel = document.getElementById('review-company-select');
-        sel.innerHTML = companies.map(c=>`<option value="${c.id}" ${c.id==companyId?'selected':''}>${c.name}</option>`).join('');
+        sel.innerHTML = companies.map(function(c) { return '<option value="' + c.id + '"' + (c.id == companyId ? ' selected' : '') + '>' + c.name + '</option>'; }).join('');
         sel.disabled = true;
         document.getElementById('review-id').value = reviewId;
         document.getElementById('review-company-id').value = companyId;
         document.getElementById('review-modal-title').textContent = 'Edit Review';
-        document.getElementById('review-title').value = r.title||'';
-        document.getElementById('review-description').value = r.description||'';
-        document.getElementById('review-rating').value = r.rating||'';
+        document.getElementById('review-title').value       = r.title       || '';
+        document.getElementById('review-description').value = r.description || '';
+        document.getElementById('review-rating').value      = r.rating      || '';
         openModal('review-modal');
     }
     async function saveReview() {
@@ -1014,9 +1016,13 @@
         const companyId = document.getElementById('review-company-select').disabled
             ? document.getElementById('review-company-id').value
             : document.getElementById('review-company-select').value;
-        const body = { title: document.getElementById('review-title').value, description: document.getElementById('review-description').value, rating: document.getElementById('review-rating').value };
-        if (id) { await api('PUT',`/companies/${companyId}/reviews/${id}`,body); toast('Review updated'); }
-        else    { await api('POST',`/companies/${companyId}/reviews`,body);      toast('Review added'); }
+        const body = {
+            title:       document.getElementById('review-title').value,
+            description: document.getElementById('review-description').value,
+            rating:      document.getElementById('review-rating').value
+        };
+        if (id) { await api('PUT', '/companies/' + companyId + '/reviews/' + id, body); toast('Review updated'); }
+        else    { await api('POST', '/companies/' + companyId + '/reviews', body);      toast('Review added'); }
         document.getElementById('review-company-select').disabled = false;
         closeModal('review-modal');
         if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
@@ -1024,17 +1030,17 @@
     }
     async function deleteReview(companyId, reviewId) {
         if (!confirm('Delete this review?')) return;
-        await api('DELETE',`/companies/${companyId}/reviews/${reviewId}`); toast('Review deleted');
+        await api('DELETE', '/companies/' + companyId + '/reviews/' + reviewId); toast('Review deleted');
         if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
         else loadAllReviews();
     }
-    document.getElementById('review-modal').addEventListener('click', e=>{
-        if (e.target===e.currentTarget) { document.getElementById('review-company-select').disabled=false; closeModal('review-modal'); }
+    document.getElementById('review-modal').addEventListener('click', function(e) {
+        if (e.target === e.currentTarget) { document.getElementById('review-company-select').disabled = false; closeModal('review-modal'); }
     });
 
-    document.getElementById('login-password').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
-    document.getElementById('login-username').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('login-password').focus(); });
-    document.getElementById('register-dob').addEventListener('keydown',   e=>{ if(e.key==='Enter') doRegister(); });
+    document.getElementById('login-password').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+    document.getElementById('login-username').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
+    document.getElementById('register-dob').addEventListener('keydown',   function(e) { if (e.key === 'Enter') doRegister(); });
 </script>
 </body>
 </html>

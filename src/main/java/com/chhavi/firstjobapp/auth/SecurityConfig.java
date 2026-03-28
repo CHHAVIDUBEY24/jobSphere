@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
+
                         // ── 1. Public ──
                         .requestMatchers("/", "/index.html", "/*.html", "/*.js", "/*.css", "/*.ico").permitAll()
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
@@ -49,6 +50,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,   "/companies/*/reviews").hasAuthority("ROLE_USER")
                         .requestMatchers(HttpMethod.PUT,    "/companies/*/reviews/*").hasAuthority("ROLE_USER")
                         .requestMatchers(HttpMethod.DELETE, "/companies/*/reviews/*").hasAuthority("ROLE_USER")
+
+                        // ── APPLICATIONS ──
+                        .requestMatchers(HttpMethod.POST,   "/applications/apply/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/my").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/check/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/job/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/resume/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/applications/**").hasAuthority("ROLE_ADMIN")
 
                         // ── APPLICATIONS ──
                         .requestMatchers(HttpMethod.POST,   "/applications/apply/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")

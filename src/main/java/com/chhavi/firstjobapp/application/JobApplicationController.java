@@ -25,7 +25,8 @@ public class JobApplicationController {
     private final JobApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
 
-    private static final String UPLOAD_DIR = "uploads/resumes/";
+    // ✅ Use absolute path based on user home or project root
+    private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/resumes/";
 
     public JobApplicationController(JobApplicationRepository applicationRepository,
                                     JobRepository jobRepository) {
@@ -46,7 +47,6 @@ public class JobApplicationController {
 
         String username = authentication.getName();
 
-        // Check already applied
         if (applicationRepository.existsByJobIdAndAppliedByUsername(jobId, username)) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("You have already applied for this job.");
@@ -55,21 +55,33 @@ public class JobApplicationController {
         Job job = jobRepository.findById(jobId).orElse(null);
         if (job == null) return ResponseEntity.notFound().build();
 
-        // Save resume file
         String resumeFileName = null;
         String resumeFilePath = null;
+
         if (!resume.isEmpty()) {
             try {
                 Path uploadPath = Paths.get(UPLOAD_DIR);
-                if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
-                String uniqueName = System.currentTimeMillis() + "_" + resume.getOriginalFilename();
-                Path filePath = uploadPath.resolve(uniqueName);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                // ✅ Sanitize filename to avoid path traversal
+                String original = resume.getOriginalFilename();
+                String sanitized = original != null ? original.replaceAll("[^a-zA-Z0-9._-]", "_") : "resume";
+                String uniqueName = System.currentTimeMillis() + "_" + sanitized;
+                Path filePath = uploadPath.resolve(uniqueName).normalize();
+
+                // ✅ Security check — ensure file stays within upload dir
+                if (!filePath.startsWith(uploadPath)) {
+                    return ResponseEntity.badRequest().body("Invalid file path.");
+                }
+
                 Files.copy(resume.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                resumeFileName = resume.getOriginalFilename();
-                resumeFilePath = filePath.toString();
+                resumeFileName = original;
+                resumeFilePath = filePath.toAbsolutePath().toString();
+
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Failed to upload resume.");
+                        .body("Failed to upload resume: " + e.getMessage());
             }
         }
 
@@ -120,17 +132,40 @@ public class JobApplicationController {
     @GetMapping("/resume/{applicationId}")
     public ResponseEntity<Resource> downloadResume(@PathVariable Long applicationId) {
         JobApplication app = applicationRepository.findById(applicationId).orElse(null);
-        if (app == null || app.getResumeFilePath() == null)
+
+        if (app == null) {
             return ResponseEntity.notFound().build();
+        }
+        if (app.getResumeFilePath() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         try {
-            Path filePath = Paths.get(app.getResumeFilePath());
+            Path filePath = Paths.get(app.getResumeFilePath()).normalize();
             Resource resource = new UrlResource(filePath.toUri());
-            if (!resource.exists()) return ResponseEntity.notFound().build();
+
+            if (!resource.exists() || !resource.isReadable()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            // ✅ Detect content type
+            String contentType = "application/octet-stream";
+            String filename = app.getResumeFileName() != null
+                    ? app.getResumeFileName() : "resume";
+            if (filename.endsWith(".pdf")) {
+                contentType = "application/pdf";
+            } else if (filename.endsWith(".doc")) {
+                contentType = "application/msword";
+            } else if (filename.endsWith(".docx")) {
+                contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            }
+
             return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .contentType(MediaType.parseMediaType(contentType))
                     .header(HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=\"" + app.getResumeFileName() + "\"")
+                            "attachment; filename=\"" + filename + "\"")
                     .body(resource);
+
         } catch (MalformedURLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -139,6 +174,13 @@ public class JobApplicationController {
     // ── ADMIN: Delete application ──
     @DeleteMapping("/{applicationId}")
     public ResponseEntity<String> deleteApplication(@PathVariable Long applicationId) {
+        // Also delete the file from disk
+        JobApplication app = applicationRepository.findById(applicationId).orElse(null);
+        if (app != null && app.getResumeFilePath() != null) {
+            try {
+                Files.deleteIfExists(Paths.get(app.getResumeFilePath()));
+            } catch (IOException ignored) {}
+        }
         applicationRepository.deleteById(applicationId);
         return ResponseEntity.ok("Application deleted.");
     }
