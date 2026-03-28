@@ -50,6 +50,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,    "/companies/*/reviews/*").hasAuthority("ROLE_USER")
                         .requestMatchers(HttpMethod.DELETE, "/companies/*/reviews/*").hasAuthority("ROLE_USER")
 
+                        // ── APPLICATIONS ──
+                        .requestMatchers(HttpMethod.POST,   "/applications/apply/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/my").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/check/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/job/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/applications/resume/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/applications/**").hasAuthority("ROLE_ADMIN")
+
                         // ── 3. JOBS ──
                         .requestMatchers(HttpMethod.GET,    "/jobs").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET,    "/jobs/*").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
