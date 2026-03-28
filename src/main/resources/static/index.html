@@ -7,12 +7,87 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <style>
         .user-only { display: none; }
-        :root {
-          --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28; --border: #2a2a3d;
-          --accent: #e8c468; --accent2: #c084fc; --accent3: #38bdf8;
-          --text: #f0eff6; --muted: #7c7a99; --danger: #f87171; --success: #4ade80;
-          --radius: 14px; --font-display: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif;
-        }
+       :root {
+  --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28; --border: #2a2a3d;
+  --accent: #e8c468; --accent2: #c084fc; --accent3: #38bdf8;
+  --text: #f0eff6; --muted: #7c7a99; --danger: #f87171; --success: #4ade80;
+  --radius: 14px; --font-display: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif;
+}
+
+/* ── LIGHT MODE ── */
+body.light {
+  --bg: #f4f3ff;
+  --surface: #ffffff;
+  --surface2: #ede9fe;
+  --border: #d4caff;
+  --text: #1a1730;
+  --muted: #6b6690;
+  --accent: #c49a0a;
+  --accent2: #7c3aed;
+  --accent3: #0284c7;
+  --danger: #dc2626;
+  --success: #16a34a;
+}
+body.light::before {
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(124,58,237,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 10% 80%, rgba(2,132,199,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 50% 50%, rgba(196,154,10,.05) 0%, transparent 70%);
+}
+
+/* ── THEME TOGGLE BUTTON ── */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 500;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: background .2s, border-color .2s, color .2s, box-shadow .2s;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+  user-select: none;
+}
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+}
+.theme-toggle .toggle-track {
+  width: 36px; height: 20px;
+  background: var(--surface2);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: background .3s;
+  flex-shrink: 0;
+}
+body.light .theme-toggle .toggle-track {
+  background: var(--accent2);
+  border-color: var(--accent2);
+}
+.theme-toggle .toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform .3s, background .3s;
+}
+body.light .theme-toggle .toggle-thumb {
+  transform: translateX(16px);
+  background: #fff;
+}
+.theme-toggle .toggle-icon { font-size: 1rem; transition: transform .3s; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
         body::before {
@@ -159,7 +234,11 @@
     </style>
 </head>
 <body>
-
+<button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle-btn">
+    <span class="toggle-icon" id="theme-icon">🌙</span>
+    <div class="toggle-track"><div class="toggle-thumb"></div></div>
+    <span id="theme-label">Dark</span>
+</button>
 <!-- ══ AUTH SCREEN ══ -->
 <div class="auth-screen" id="auth-screen">
     <div class="auth-box">
@@ -345,7 +424,22 @@
 
 <script>
     let currentCompanyId = null;
+    // ── THEME ──
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    document.getElementById('theme-icon').textContent  = isLight ? '☀️' : '🌙';
+    document.getElementById('theme-label').textContent = isLight ? 'Light' : 'Dark';
+}
 
+function initTheme() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('theme-icon').textContent  = '☀️';
+        document.getElementById('theme-label').textContent = 'Light';
+    }
+}
     function getToken()    { return localStorage.getItem('jwtToken'); }
     function setToken(t)   { localStorage.setItem('jwtToken', t); }
     function getUsername() { return localStorage.getItem('jwtUsername'); }
@@ -359,10 +453,11 @@
         localStorage.removeItem('jwtRole');
     }
 
-    window.onload = () => {
-        if (getToken()) showApp();
-        else showAuthScreen();
-    };
+   window.onload = () => {
+    initTheme();
+    if (getToken()) showApp();
+    else showAuthScreen();
+};
 
     function applyRoleUI() {
         document.querySelectorAll('.admin-only').forEach(el => {
