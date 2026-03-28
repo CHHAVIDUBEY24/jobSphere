@@ -6,6 +6,7 @@
     <title>JobSphere</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <style>
+        .user-only { display: none; }
         :root {
           --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28; --border: #2a2a3d;
           --accent: #e8c468; --accent2: #c084fc; --accent3: #38bdf8;
@@ -291,7 +292,7 @@
         <div class="page" id="page-reviews">
             <div class="page-header">
                 <div><h2>Company <span>Reviews</span></h2><p>Explore what employees say</p></div>
-                <button class="btn btn-icon" onclick="openAddReviewFlow()">+ Add Review</button>
+                <button class="btn btn-icon user-only" id="btn-add-review-page" onclick="openAddReviewFlow()">+ Add Review</button>
             </div>
             <div id="reviews-list" class="cards-grid"></div>
         </div>
@@ -379,7 +380,17 @@
         document.getElementById('user-display-name').textContent = uname;
         document.getElementById('user-avatar').textContent = uname[0].toUpperCase();
         document.getElementById('greeting-name').textContent = uname;
-        applyRoleUI();
+        function applyRoleUI() {
+    document.querySelectorAll('.admin-only').forEach(el => {
+        el.style.display = isAdmin() ? 'inline-flex' : 'none';
+    });
+    document.querySelectorAll('.user-only').forEach(el => {
+        el.style.display = isAdmin() ? 'none' : 'inline-flex';
+    });
+    const badge = document.getElementById('role-badge');
+    if (isAdmin()) { badge.textContent = '👑 Admin'; badge.style.color = 'var(--accent)'; }
+    else           { badge.textContent = '👤 User';  badge.style.color = 'var(--muted)'; }
+}
         loadDashboard();
     }
 
@@ -669,20 +680,21 @@
     }
 
     async function loadCompanyDetail(companyId) {
-        const company = await api('GET', `/companies/${companyId}`);
-        if (!company) return;
-        document.getElementById('cd-name').textContent = company.name;
-        document.getElementById('cd-desc').textContent = company.description || '';
-        const addJobBtn = document.getElementById('cd-add-job-btn');
-        if (addJobBtn) addJobBtn.style.display = isAdmin() ? 'inline-flex' : 'none';
-        const addRevBtn = document.getElementById('cd-add-rev-btn');
-        if (addRevBtn) addRevBtn.style.display = 'inline-flex';
-        const allJobs = await api('GET', '/jobs');
-        const companyJobs = allJobs ? allJobs.filter(j => j.company && j.company.id === companyId) : [];
-        renderJobCards(companyJobs, 'cd-jobs-grid');
-        const reviews = await api('GET', `/companies/${companyId}/reviews`);
-        renderReviewCards(reviews || [], 'cd-reviews-grid', companyId);
-    }
+    const company = await api('GET', `/companies/${companyId}`);
+    if (!company) return;
+    document.getElementById('cd-name').textContent = company.name;
+    document.getElementById('cd-desc').textContent = company.description || '';
+    const addJobBtn = document.getElementById('cd-add-job-btn');
+    if (addJobBtn) addJobBtn.style.display = isAdmin() ? 'inline-flex' : 'none';
+    // Add Review button: only for users, not admin
+    const addRevBtn = document.getElementById('cd-add-rev-btn');
+    if (addRevBtn) addRevBtn.style.display = isAdmin() ? 'none' : 'inline-flex';
+    const allJobs = await api('GET', '/jobs');
+    const companyJobs = allJobs ? allJobs.filter(j => j.company && j.company.id === companyId) : [];
+    renderJobCards(companyJobs, 'cd-jobs-grid');
+    const reviews = await api('GET', `/companies/${companyId}/reviews`);
+    renderReviewCards(reviews || [], 'cd-reviews-grid', companyId);
+}
 
     async function saveCompany() {
         const id = document.getElementById('company-id').value;
@@ -712,22 +724,23 @@
 
     document.getElementById('company-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('company-modal'); });
 
-    function renderReviewCards(reviews, containerId, companyId) {
-        const el = document.getElementById(containerId);
-        if (!reviews || !reviews.length) { el.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`; return; }
-        el.innerHTML = reviews.map(r => `
-            <div class="review-card">
-                <div class="review-header">
-                    <span class="review-title">${r.title || 'Review'}</span>
-                    <span class="review-rating">★ ${r.rating || '—'}</span>
-                </div>
-                <div class="review-desc">${r.description || ''}</div>
-                <div class="card-actions" style="margin-top:12px;">
-                    <button class="btn btn-outline" onclick="editReview(${companyId},${r.id})">Edit</button>
-                    <button class="btn btn-danger"  onclick="deleteReview(${companyId},${r.id})">Delete</button>
-                </div>
-            </div>`).join('');
-    }
+   function renderReviewCards(reviews, containerId, companyId) {
+    const el = document.getElementById(containerId);
+    if (!reviews || !reviews.length) { el.innerHTML = `<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>`; return; }
+    el.innerHTML = reviews.map(r => `
+        <div class="review-card">
+            <div class="review-header">
+                <span class="review-title">${r.title || 'Review'}</span>
+                <span class="review-rating">★ ${r.rating || '—'}</span>
+            </div>
+            <div class="review-desc">${r.description || ''}</div>
+            ${!isAdmin() ? `
+            <div class="card-actions" style="margin-top:12px;">
+                <button class="btn btn-outline" onclick="editReview(${companyId},${r.id})">Edit</button>
+                <button class="btn btn-danger"  onclick="deleteReview(${companyId},${r.id})">Delete</button>
+            </div>` : ''}
+        </div>`).join('');
+}
 
     async function loadAllReviews() {
         const companies = await api('GET', '/companies');
