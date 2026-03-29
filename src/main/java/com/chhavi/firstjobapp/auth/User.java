@@ -1,5 +1,7 @@
 package com.chhavi.firstjobapp.auth;
 
+import com.chhavi.firstjobapp.company.Company;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -22,7 +24,13 @@ public class User {
     private LocalDate dateOfBirth;
 
     @Column(nullable = false)
-    private String role; // "ROLE_USER" or "ROLE_ADMIN"
+    private String role;
+
+    // Admin belongs to a company
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    @JsonIgnoreProperties({"jobs", "reviews"})
+    private Company company;
 
     public User() {}
 
@@ -40,4 +48,6 @@ public class User {
     public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public Company getCompany() { return company; }
+    public void setCompany(Company company) { this.company = company; }
 }

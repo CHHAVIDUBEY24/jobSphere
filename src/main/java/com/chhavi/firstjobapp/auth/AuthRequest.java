@@ -6,7 +6,8 @@ public class AuthRequest {
     private String username;
     private String password;
     private LocalDate dateOfBirth;
-    private String role; // optional, defaults to ROLE_USER
+    private String role;
+    private Long companyId; // for admin registration
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
@@ -16,4 +17,6 @@ public class AuthRequest {
     public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public Long getCompanyId() { return companyId; }
+    public void setCompanyId(Long companyId) { this.companyId = companyId; }
 }

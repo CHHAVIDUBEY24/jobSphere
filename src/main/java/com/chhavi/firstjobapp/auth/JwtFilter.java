@@ -26,12 +26,9 @@ public class JwtFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         return path.startsWith("/auth/")
-                || path.equals("/")
-                || path.equals("/index.html")
-                || path.endsWith(".html")
-                || path.endsWith(".js")
-                || path.endsWith(".css")
-                || path.endsWith(".ico");
+                || path.equals("/") || path.equals("/index.html")
+                || path.endsWith(".html") || path.endsWith(".js")
+                || path.endsWith(".css") || path.endsWith(".ico");
     }
 
     @Override
@@ -41,17 +38,24 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             if (jwtUtil.validateToken(token)) {
-                String username = jwtUtil.extractUsername(token);
-                String role = jwtUtil.extractRole(token);
-                // Set authority from role stored in JWT
-                List<SimpleGrantedAuthority> authorities =
-                        List.of(new SimpleGrantedAuthority(role));
+                String username  = jwtUtil.extractUsername(token);
+                String role      = jwtUtil.extractRole(token);
+                Long   companyId = jwtUtil.extractCompanyId(token);
+
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+                        new UsernamePasswordAuthenticationToken(
+                                username, null,
+                                List.of(new SimpleGrantedAuthority(role)));
+
+                // Store companyId so controllers can read it
+                if (companyId != null) {
+                    request.setAttribute("companyId", companyId);
+                }
+                auth.setDetails(companyId); // also store in auth details
+
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -60,7 +64,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

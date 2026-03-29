@@ -14,14 +14,16 @@ public class JwtUtil {
     private static final long EXPIRY = 1000L * 60 * 60 * 24;
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    public String generateToken(String username, String role) {
-        return Jwts.builder()
+    public String generateToken(String username, String role, Long companyId) {
+        var builder = Jwts.builder()
                 .setSubject(username)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRY))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRY));
+        if (companyId != null) {
+            builder.claim("companyId", companyId);
+        }
+        return builder.signWith(key, SignatureAlgorithm.HS256).compact();
     }
 
     public String extractUsername(String token) {
@@ -30,6 +32,12 @@ public class JwtUtil {
 
     public String extractRole(String token) {
         return (String) getClaims(token).get("role");
+    }
+
+    public Long extractCompanyId(String token) {
+        Object val = getClaims(token).get("companyId");
+        if (val == null) return null;
+        return ((Number) val).longValue();
     }
 
     public boolean validateToken(String token) {
