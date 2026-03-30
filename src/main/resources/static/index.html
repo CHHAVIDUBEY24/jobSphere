@@ -191,7 +191,7 @@
     <span id="theme-label">Dark</span>
 </button>
 
-<!-- AUTH -->
+<!-- ══ AUTH SCREEN ══ -->
 <div class="auth-screen" id="auth-screen">
     <div class="auth-box">
         <div class="auth-logo"><h1>Job<span>Sphere</span></h1><p>Career Platform</p></div>
@@ -199,12 +199,16 @@
             <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
             <button class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
         </div>
+
+        <!-- LOGIN -->
         <div class="auth-form active" id="auth-login">
             <div class="auth-error" id="login-error"></div>
             <div class="form-group"><label class="form-label">Username</label><input class="form-input" id="login-username" placeholder="Enter your username"/></div>
             <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" id="login-password" placeholder="Enter your password"/></div>
             <button class="btn-auth" onclick="doLogin()">Sign In →</button>
         </div>
+
+        <!-- REGISTER -->
         <div class="auth-form" id="auth-register">
             <div class="auth-note">🔞 You must be <strong>18 years or older</strong> to create an account.</div>
             <div class="auth-error" id="register-error"></div>
@@ -218,18 +222,33 @@
                     <option value="ROLE_ADMIN">👑 Admin — Manage a company</option>
                 </select>
             </div>
-            <div class="form-group" id="company-select-group" style="display:none;">
-                <label class="form-label">Your Company *</label>
-                <select class="form-input" id="register-company">
-                    <option value="">— Loading companies... —</option>
-                </select>
+            <div id="company-select-group" style="display:none;">
+                <div class="form-group">
+                    <label class="form-label">Your Company</label>
+                    <select class="form-input" id="register-company" onchange="onCompanySelectChange()">
+                        <option value="">— Loading... —</option>
+                    </select>
+                </div>
+                <div id="new-company-group" style="display:none;">
+                    <div class="form-group">
+                        <label class="form-label">Company Name *</label>
+                        <input class="form-input" id="new-company-name" placeholder="e.g. Acme Corp"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company Description</label>
+                        <textarea class="form-input" id="new-company-desc" placeholder="What does your company do?"></textarea>
+                    </div>
+                </div>
             </div>
             <button class="btn-auth" onclick="doRegister()">Create Account →</button>
         </div>
+        <!-- ↑ auth-register closed -->
     </div>
+    <!-- ↑ auth-box closed -->
 </div>
+<!-- ↑ auth-screen closed -->
 
-<!-- MAIN APP -->
+<!-- ══ MAIN APP ══ -->
 <div class="app hidden" id="main-app">
     <aside class="sidebar">
         <div class="logo"><h1>Job<span>Sphere</span></h1><p>Career Platform</p></div>
@@ -268,6 +287,7 @@
             <div class="section-header" style="margin-top:36px;"><h3>Companies</h3><button class="btn btn-outline" onclick="showPage('companies')">View all →</button></div>
             <div class="cards-grid" id="dashboard-companies"></div>
         </div>
+
         <!-- JOBS -->
         <div class="page" id="page-jobs">
             <div class="page-header">
@@ -276,6 +296,7 @@
             </div>
             <div class="cards-grid" id="jobs-grid"></div>
         </div>
+
         <!-- COMPANIES -->
         <div class="page" id="page-companies">
             <div class="page-header">
@@ -284,6 +305,7 @@
             </div>
             <div class="cards-grid" id="companies-grid"></div>
         </div>
+
         <!-- COMPANY DETAIL -->
         <div class="page" id="page-company-detail">
             <button class="btn btn-outline" style="margin-bottom:24px;" onclick="showPage('companies')">← Back</button>
@@ -308,6 +330,7 @@
                 <div class="cards-grid" id="cd-reviews-grid"></div>
             </div>
         </div>
+
         <!-- REVIEWS -->
         <div class="page" id="page-reviews">
             <div class="page-header">
@@ -316,11 +339,13 @@
             </div>
             <div id="reviews-list" class="cards-grid"></div>
         </div>
+
         <!-- MY APPLICATIONS -->
         <div class="page" id="page-my-applications">
             <div class="page-header"><div><h2>My <span>Applications</span></h2><p>Track your job applications</p></div></div>
             <div class="cards-grid" id="my-applications-grid"></div>
         </div>
+
         <!-- ALL APPLICATIONS -->
         <div class="page" id="page-all-applications">
             <div class="page-header"><div><h2>All <span>Applications</span></h2><p>Review candidates who applied</p></div></div>
@@ -328,6 +353,7 @@
         </div>
     </main>
 </div>
+<!-- ↑ main-app closed -->
 
 <!-- Job Modal -->
 <div class="modal-overlay" id="job-modal">
@@ -345,6 +371,7 @@
         <div class="form-actions"><button class="btn btn-outline" onclick="closeModal('job-modal')">Cancel</button><button class="btn btn-primary" onclick="saveJob()">Save Job</button></div>
     </div>
 </div>
+
 <!-- Company Modal -->
 <div class="modal-overlay" id="company-modal">
     <div class="modal">
@@ -355,6 +382,7 @@
         <div class="form-actions"><button class="btn btn-outline" onclick="closeModal('company-modal')">Cancel</button><button class="btn btn-primary" onclick="saveCompany()">Save Company</button></div>
     </div>
 </div>
+
 <!-- Review Modal -->
 <div class="modal-overlay" id="review-modal">
     <div class="modal">
@@ -368,6 +396,7 @@
         <div class="form-actions"><button class="btn btn-outline" onclick="closeModal('review-modal')">Cancel</button><button class="btn btn-primary" onclick="saveReview()">Save Review</button></div>
     </div>
 </div>
+
 <!-- Apply Modal -->
 <div class="modal-overlay" id="apply-modal">
     <div class="modal">
@@ -393,8 +422,8 @@
 <div class="toast-container" id="toasts"></div>
 
 <script>
-    let currentCompanyId = null;
-    let appliedJobIds = new Set();
+    var currentCompanyId = null;
+    var appliedJobIds = new Set();
 
     // ── THEME ──
     function toggleTheme() {
@@ -427,28 +456,44 @@
         ['jwtToken','jwtUsername','jwtRole','companyId','companyName'].forEach(function(k) { localStorage.removeItem(k); });
     }
 
-    // ── ROLE CHANGE (show company dropdown for admin) ──
+    // ── ROLE CHANGE ──
     async function onRoleChange() {
         var role  = document.getElementById('register-role').value;
         var group = document.getElementById('company-select-group');
         if (role === 'ROLE_ADMIN') {
             group.style.display = 'block';
-            try {
-                var res       = await fetch('/auth/companies');
-                var companies = await res.json();
-                var sel       = document.getElementById('register-company');
-                if (!companies || !companies.length) {
-                    sel.innerHTML = '<option value="">— No companies available. Create one first. —</option>';
-                } else {
-                    sel.innerHTML = '<option value="">— Select your company —</option>' +
-                        companies.map(function(c) { return '<option value="' + c.id + '">' + c.name + '</option>'; }).join('');
-                }
-            } catch(e) {
-                document.getElementById('register-company').innerHTML = '<option value="">— Could not load companies —</option>';
-            }
+            await loadCompanyDropdown();
         } else {
             group.style.display = 'none';
+            document.getElementById('new-company-group').style.display = 'none';
         }
+    }
+
+    async function loadCompanyDropdown() {
+        try {
+            var res       = await fetch('/auth/companies');
+            var companies = await res.json();
+            var sel       = document.getElementById('register-company');
+            var createOpt = '<option value="__new__">➕ Create a new company</option>';
+            if (!companies || !companies.length) {
+                sel.innerHTML = createOpt;
+                document.getElementById('new-company-group').style.display = 'block';
+            } else {
+                sel.innerHTML = '<option value="">— Select existing company —</option>' +
+                    companies.map(function(c) {
+                        return '<option value="' + c.id + '">' + c.name + '</option>';
+                    }).join('') + createOpt;
+                document.getElementById('new-company-group').style.display = 'none';
+            }
+        } catch(e) {
+            document.getElementById('register-company').innerHTML = '<option value="__new__">➕ Create a new company</option>';
+            document.getElementById('new-company-group').style.display = 'block';
+        }
+    }
+
+    function onCompanySelectChange() {
+        var val = document.getElementById('register-company').value;
+        document.getElementById('new-company-group').style.display = val === '__new__' ? 'block' : 'none';
     }
 
     window.onload = function() {
@@ -515,26 +560,46 @@
             setToken(data.token); setUsername(username); setRole(data.role);
             setCompanyId(data.companyId); setCompanyName(data.companyName);
             showApp();
-            toast('Welcome back, ' + username + '! (' +
-                  (data.role==='ROLE_ADMIN' ? '👑 Admin' : '👤 User') +
-                  (data.companyName ? ' @ ' + data.companyName : '') + ')');
+            toast('Welcome back, ' + username + '! (' + (data.role==='ROLE_ADMIN' ? '👑 Admin' : '👤 User') + (data.companyName ? ' @ ' + data.companyName : '') + ')');
         } catch(e) { showAuthError('login-error', 'Could not connect to server.'); }
     }
 
     // ── REGISTER ──
     async function doRegister() {
-        var username  = document.getElementById('register-username').value.trim();
-        var password  = document.getElementById('register-password').value;
-        var dob       = document.getElementById('register-dob').value;
-        var role      = document.getElementById('register-role').value;
-        var compSel   = document.getElementById('register-company');
-        var companyId = compSel ? compSel.value : '';
+        var username = document.getElementById('register-username').value.trim();
+        var password = document.getElementById('register-password').value;
+        var dob      = document.getElementById('register-dob').value;
+        var role     = document.getElementById('register-role').value;
         if (!username || !password || !dob) { showAuthError('register-error', 'Please fill in all fields.'); return; }
-        if (role === 'ROLE_ADMIN' && !companyId) { showAuthError('register-error', 'Please select your company.'); return; }
         var age = Math.floor((new Date() - new Date(dob)) / (365.25*24*60*60*1000));
         if (age < 18) { showAuthError('register-error', '🔞 You must be 18 or older to register.'); return; }
-        var payload = { username:username, password:password, dateOfBirth:dob, role:role };
-        if (companyId) payload.companyId = parseInt(companyId);
+
+        var companyId = null;
+        if (role === 'ROLE_ADMIN') {
+            var compSel = document.getElementById('register-company');
+            var selectedVal = compSel ? compSel.value : '__new__';
+            if (selectedVal === '__new__' || selectedVal === '') {
+                var compName = document.getElementById('new-company-name').value.trim();
+                var compDesc = document.getElementById('new-company-desc').value.trim();
+                if (!compName) { showAuthError('register-error', 'Please enter your company name.'); return; }
+                try {
+                    var compRes = await fetch('/auth/companies/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: compName, description: compDesc })
+                    });
+                    if (!compRes.ok) { showAuthError('register-error', 'Failed to create company.'); return; }
+                    var newComp = await compRes.json();
+                    companyId = newComp.id;
+                } catch(e) { showAuthError('register-error', 'Could not connect to server.'); return; }
+            } else {
+                companyId = parseInt(selectedVal);
+            }
+            if (!companyId) { showAuthError('register-error', 'Please select or create a company.'); return; }
+        }
+
+        var payload = { username: username, password: password, dateOfBirth: dob, role: role };
+        if (companyId) payload.companyId = companyId;
         try {
             var res  = await fetch('/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
             var data = await res.json();
@@ -542,8 +607,7 @@
             setToken(data.token); setUsername(username); setRole(data.role);
             setCompanyId(data.companyId); setCompanyName(data.companyName);
             showApp();
-            toast('Welcome, ' + username + '! Registered as ' + (data.role==='ROLE_ADMIN' ? '👑 Admin' : '👤 User') +
-                  (data.companyName ? ' @ ' + data.companyName : ''));
+            toast('Welcome, ' + username + '! (' + (data.role==='ROLE_ADMIN' ? '👑 Admin' : '👤 User') + (data.companyName ? ' @ ' + data.companyName : '') + ')');
         } catch(e) { showAuthError('register-error', 'Could not connect to server.'); }
     }
 
@@ -757,7 +821,7 @@
 
     // ── ALL APPLICATIONS (Admin) ──
     function buildApplicantCard(a) {
-        var d = a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
+        var d  = a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
         var fs = (a.resumeFileName||'resume').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
         return '<div class="applicant-card">' +
             '<div class="applicant-name">' + a.applicantName + '</div>' +
@@ -806,7 +870,6 @@
     // ── JOB CRUD ──
     async function openJobModal() {
         await populateCompanySelect('job-company-select', getCompanyId());
-        // If admin is linked to a company, lock the dropdown
         var sel = document.getElementById('job-company-select');
         sel.disabled = isAdmin() && getCompanyId() != null;
         document.getElementById('job-id').value = '';
@@ -905,7 +968,7 @@
         if (!company) return;
         document.getElementById('cd-name').textContent = company.name;
         document.getElementById('cd-desc').textContent = company.description || '';
-        var adminCid = getCompanyId();
+        var adminCid     = getCompanyId();
         var isOwnCompany = isAdmin() && (adminCid == null || adminCid === companyId);
         var addJobBtn = document.getElementById('cd-add-job-btn');
         if (addJobBtn) addJobBtn.style.display = isOwnCompany ? 'inline-flex' : 'none';

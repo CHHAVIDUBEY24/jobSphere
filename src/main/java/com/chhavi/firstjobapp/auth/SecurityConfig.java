@@ -35,7 +35,6 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-
                         // ── 1. Public ──
                         .requestMatchers("/", "/index.html", "/*.html", "/*.js", "/*.css", "/*.ico").permitAll()
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
@@ -46,6 +45,7 @@ public class SecurityConfig {
                         // GET reviews — both roles can view
                         .requestMatchers(HttpMethod.GET,    "/companies/*/reviews").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET,    "/companies/*/reviews/*").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+
                         // POST / PUT / DELETE reviews — USER only, admin cannot write reviews
                         .requestMatchers(HttpMethod.POST,   "/companies/*/reviews").hasAuthority("ROLE_USER")
                         .requestMatchers(HttpMethod.PUT,    "/companies/*/reviews/*").hasAuthority("ROLE_USER")
@@ -79,6 +79,7 @@ public class SecurityConfig {
                         // ── 4. COMPANIES (/* not /** so review URLs never match here) ──
                         .requestMatchers(HttpMethod.GET,    "/companies").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET,    "/companies/*").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST,   "/companies").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/companies/*").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/companies/*").hasAuthority("ROLE_ADMIN")

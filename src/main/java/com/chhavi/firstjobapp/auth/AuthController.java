@@ -78,6 +78,12 @@ public class AuthController {
                 .body(new AuthResponse(token, "Account created successfully.", role, companyId, companyName));
     }
 
+    // Add this endpoint inside AuthController
+    @PostMapping("/companies/create")
+    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(companyRepository.save(company));
+    }
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         User user = userRepository.findByUsername(request.getUsername()).orElse(null);
