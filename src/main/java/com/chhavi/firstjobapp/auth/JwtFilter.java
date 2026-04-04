@@ -18,9 +18,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
-    public JwtFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+    public JwtFilter(JwtUtil jwtUtil) { this.jwtUtil = jwtUtil; }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -50,11 +48,11 @@ public class JwtFilter extends OncePerRequestFilter {
                                 username, null,
                                 List.of(new SimpleGrantedAuthority(role)));
 
-                // Store companyId so controllers can read it
+                // ✅ Store companyId in BOTH details and request attribute
+                auth.setDetails(companyId);
                 if (companyId != null) {
-                    request.setAttribute("companyId", companyId);
+                    request.setAttribute("adminCompanyId", companyId);
                 }
-                auth.setDetails(companyId); // also store in auth details
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {

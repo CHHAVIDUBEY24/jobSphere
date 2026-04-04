@@ -18,8 +18,7 @@
           --accent3: #0284c7; --danger: #dc2626; --success: #16a34a;
         }
         body.light::before {
-          background:
-            radial-gradient(ellipse 60% 40% at 80% 10%, rgba(124,58,237,.08) 0%, transparent 60%),
+          background: radial-gradient(ellipse 60% 40% at 80% 10%, rgba(124,58,237,.08) 0%, transparent 60%),
             radial-gradient(ellipse 50% 30% at 10% 80%, rgba(2,132,199,.07) 0%, transparent 60%),
             radial-gradient(ellipse 40% 50% at 50% 50%, rgba(196,154,10,.05) 0%, transparent 70%);
         }
@@ -27,13 +26,12 @@
         body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
         body::before {
           content: ''; position: fixed; inset: 0; z-index: 0;
-          background:
-            radial-gradient(ellipse 60% 40% at 80% 10%, rgba(192,132,252,.15) 0%, transparent 60%),
+          background: radial-gradient(ellipse 60% 40% at 80% 10%, rgba(192,132,252,.15) 0%, transparent 60%),
             radial-gradient(ellipse 50% 30% at 10% 80%, rgba(56,189,248,.12) 0%, transparent 60%),
             radial-gradient(ellipse 40% 50% at 50% 50%, rgba(232,196,104,.08) 0%, transparent 70%);
           pointer-events: none;
         }
-        .theme-toggle { position: fixed; top: 20px; right: 24px; z-index: 500; background: var(--surface); border: 1px solid var(--border); border-radius: 50px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: var(--font-body); font-size: .78rem; font-weight: 600; color: var(--muted); transition: background .2s, border-color .2s, color .2s, box-shadow .2s; box-shadow: 0 2px 12px rgba(0,0,0,.15); user-select: none; }
+        .theme-toggle { position: fixed; top: 20px; right: 24px; z-index: 500; background: var(--surface); border: 1px solid var(--border); border-radius: 50px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: var(--font-body); font-size: .78rem; font-weight: 600; color: var(--muted); transition: background .2s, border-color .2s, color .2s; box-shadow: 0 2px 12px rgba(0,0,0,.15); user-select: none; }
         .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
         .toggle-track { width: 36px; height: 20px; background: var(--surface2); border-radius: 20px; border: 1px solid var(--border); position: relative; transition: background .3s; flex-shrink: 0; }
         body.light .toggle-track { background: var(--accent2); border-color: var(--accent2); }
@@ -59,17 +57,17 @@
         .auth-error { background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); color: var(--danger); border-radius: 10px; padding: 11px 14px; font-size: .82rem; margin-bottom: 18px; display: none; line-height: 1.5; }
         .auth-error.show { display: block; animation: fadeUp .2s ease both; }
         .auth-note { font-size: .78rem; color: var(--accent3); margin-bottom: 18px; line-height: 1.6; background: rgba(56,189,248,.07); border: 1px solid rgba(56,189,248,.2); border-radius: 10px; padding: 11px 14px; }
-        .btn-auth { width: 100%; padding: 13px; background: var(--accent); color: #0a0a0f; border: none; border-radius: 12px; font-family: var(--font-body); font-size: .95rem; font-weight: 700; cursor: pointer; transition: background .2s, transform .15s; margin-top: 6px; letter-spacing: .02em; }
+        .btn-auth { width: 100%; padding: 13px; background: var(--accent); color: #0a0a0f; border: none; border-radius: 12px; font-family: var(--font-body); font-size: .95rem; font-weight: 700; cursor: pointer; transition: background .2s, transform .15s; margin-top: 6px; }
         .btn-auth:hover { background: #f0d080; transform: translateY(-1px); }
         .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
         .app.hidden { display: none; }
         .sidebar { width: 240px; min-height: 100vh; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 32px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
         .logo { padding: 0 24px 28px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
-        .logo h1 { font-family: var(--font-display); font-size: 1.55rem; font-weight: 900; letter-spacing: -0.02em; }
+        .logo h1 { font-family: var(--font-display); font-size: 1.55rem; font-weight: 900; }
         .logo h1 span { color: var(--accent); }
         .logo p { font-size: .68rem; color: var(--muted); margin-top: 4px; letter-spacing: .1em; text-transform: uppercase; }
         .nav-section { padding: 0 12px; flex: 1; }
-        .nav-label { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; padding: 0 12px; margin-bottom: 6px; }
+        .nav-label { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; padding: 0 12px; margin-bottom: 6px; margin-top: 16px; }
         .nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border: none; background: transparent; color: var(--muted); font-family: var(--font-body); font-size: .85rem; font-weight: 500; border-radius: 8px; cursor: pointer; transition: background .2s, color .2s; text-align: left; }
         .nav-btn:hover { background: var(--surface2); color: var(--text); }
         .nav-btn.active { background: var(--surface2); color: var(--accent); }
@@ -78,23 +76,30 @@
         .user-pill { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--surface2); margin-bottom: 6px; border: 1px solid var(--border); }
         .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; color: #0a0a0f; flex-shrink: 0; }
         .user-info { flex: 1; min-width: 0; }
-        .user-name { font-size: .82rem; font-weight: 600; display: block; }
-        .role-badge { font-size: .68rem; font-weight: 700; margin-top: 2px; display: block; }
+        .user-name { font-size: .82rem; font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .role-badge { font-size: .65rem; font-weight: 700; margin-top: 2px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .btn-logout { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; border: none; background: transparent; color: var(--danger); font-family: var(--font-body); font-size: .8rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background .2s; }
         .btn-logout:hover { background: rgba(248,113,113,.1); }
-        .main { flex: 1; padding: 40px 48px; max-width: 1100px; }
-        .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 36px; animation: fadeUp .4s ease both; }
+        .main { flex: 1; padding: 40px 48px; overflow-x: hidden; }
+        .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 36px; }
         .page-header h2 { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; letter-spacing: -.03em; line-height: 1.1; }
         .page-header h2 span { color: var(--accent); }
         .page-header p { color: var(--muted); font-size: .9rem; margin-top: 6px; }
-        .stats-bar { display: flex; gap: 16px; margin-bottom: 32px; }
-        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; flex: 1; transition: border-color .2s, transform .2s; }
+        .stats-bar { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; flex: 1; min-width: 140px; transition: border-color .2s, transform .2s; }
         .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .stat-card .label { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 6px; }
-        .stat-card .value { font-family: var(--font-display); font-size: 2rem; font-weight: 700; }
-        .stat-card.jobs .value { color: var(--accent); }
-        .stat-card.companies .value { color: var(--accent2); }
-        .stat-card.reviews .value { color: var(--accent3); }
+        .stat-card .label { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 8px; }
+        .stat-card .value { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; }
+        .stat-card .sub { font-size: .72rem; color: var(--muted); margin-top: 4px; }
+        .stat-card.s-jobs .value { color: var(--accent); }
+        .stat-card.s-apps .value { color: var(--accent2); }
+        .stat-card.s-reviews .value { color: var(--accent3); }
+        .stat-card.s-companies .value { color: var(--success); }
+        /* Company banner for admin */
+        .company-banner { background: linear-gradient(135deg, rgba(232,196,104,.12), rgba(192,132,252,.08)); border: 1px solid rgba(232,196,104,.25); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
+        .company-banner-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(232,196,104,.15); border: 1px solid rgba(232,196,104,.3); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+        .company-banner h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
+        .company-banner p { color: var(--muted); font-size: .8rem; margin-top: 3px; }
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
         .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color .25s, transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
         .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: 0; transition: opacity .25s; }
@@ -121,7 +126,8 @@
         .btn-outline:hover { color: var(--text); border-color: var(--text); }
         .btn-danger { background: rgba(248,113,113,.1); color: var(--danger); border: 1px solid rgba(248,113,113,.2); }
         .btn-danger:hover { background: rgba(248,113,113,.2); }
-        .btn-icon { background: var(--accent); color: #0a0a0f; padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: .85rem; }
+        .btn-icon { background: var(--accent); color: #0a0a0f; padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: .85rem; border: none; cursor: pointer; font-family: var(--font-body); transition: background .2s, transform .15s; }
+        .btn-icon:hover { background: #f0d080; transform: translateY(-1px); }
         .modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .25s; }
         .modal-overlay.open { opacity: 1; pointer-events: all; }
         .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 32px; width: 100%; max-width: 560px; transform: translateY(20px) scale(.97); transition: transform .25s; max-height: 90vh; overflow-y: auto; }
@@ -159,7 +165,7 @@
         .review-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; transition: border-color .2s; }
         .review-card:hover { border-color: rgba(56,189,248,.3); }
         .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .review-title { font-weight: 600; font-size: .95rem; }
+        .review-title-text { font-weight: 600; font-size: .95rem; }
         .review-rating { background: rgba(232,196,104,.12); color: var(--accent); border: 1px solid rgba(232,196,104,.25); padding: 3px 10px; border-radius: 20px; font-size: .78rem; font-weight: 700; }
         .review-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; }
         .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface2); border-radius: 10px; padding: 4px; width: fit-content; }
@@ -191,7 +197,7 @@
     <span id="theme-label">Dark</span>
 </button>
 
-<!-- ══ AUTH SCREEN ══ -->
+<!-- ══ AUTH ══ -->
 <div class="auth-screen" id="auth-screen">
     <div class="auth-box">
         <div class="auth-logo"><h1>Job<span>Sphere</span></h1><p>Career Platform</p></div>
@@ -199,16 +205,12 @@
             <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
             <button class="auth-tab" onclick="switchAuthTab('register')">Create Account</button>
         </div>
-
-        <!-- LOGIN -->
         <div class="auth-form active" id="auth-login">
             <div class="auth-error" id="login-error"></div>
             <div class="form-group"><label class="form-label">Username</label><input class="form-input" id="login-username" placeholder="Enter your username"/></div>
             <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" id="login-password" placeholder="Enter your password"/></div>
             <button class="btn-auth" onclick="doLogin()">Sign In →</button>
         </div>
-
-        <!-- REGISTER -->
         <div class="auth-form" id="auth-register">
             <div class="auth-note">🔞 You must be <strong>18 years or older</strong> to create an account.</div>
             <div class="auth-error" id="register-error"></div>
@@ -230,23 +232,14 @@
                     </select>
                 </div>
                 <div id="new-company-group" style="display:none;">
-                    <div class="form-group">
-                        <label class="form-label">Company Name *</label>
-                        <input class="form-input" id="new-company-name" placeholder="e.g. Acme Corp"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Company Description</label>
-                        <textarea class="form-input" id="new-company-desc" placeholder="What does your company do?"></textarea>
-                    </div>
+                    <div class="form-group"><label class="form-label">Company Name *</label><input class="form-input" id="new-company-name" placeholder="e.g. Acme Corp"/></div>
+                    <div class="form-group"><label class="form-label">Company Description</label><textarea class="form-input" id="new-company-desc" placeholder="What does your company do?"></textarea></div>
                 </div>
             </div>
             <button class="btn-auth" onclick="doRegister()">Create Account →</button>
         </div>
-        <!-- ↑ auth-register closed -->
     </div>
-    <!-- ↑ auth-box closed -->
 </div>
-<!-- ↑ auth-screen closed -->
 
 <!-- ══ MAIN APP ══ -->
 <div class="app hidden" id="main-app">
@@ -256,10 +249,12 @@
             <div class="nav-label">Menu</div>
             <button class="nav-btn active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="icon">⬡</span><span>Dashboard</span></button>
             <button class="nav-btn" onclick="showPage('jobs')" id="nav-jobs"><span class="icon">💼</span><span>Jobs</span></button>
-            <button class="nav-btn" onclick="showPage('companies')" id="nav-companies"><span class="icon">🏢</span><span>Companies</span></button>
+            <!-- Users see all companies; admin sees only theirs -->
+            <button class="nav-btn user-only" onclick="showPage('companies')" id="nav-companies"><span class="icon">🏢</span><span>Companies</span></button>
             <button class="nav-btn" onclick="showPage('reviews')" id="nav-reviews"><span class="icon">★</span><span>Reviews</span></button>
             <button class="nav-btn user-only" onclick="showPage('my-applications')" id="nav-my-applications"><span class="icon">📋</span><span>My Applications</span></button>
-            <button class="nav-btn admin-only" onclick="showPage('all-applications')" id="nav-all-applications"><span class="icon">👥</span><span>Applications</span></button>
+            <button class="nav-btn admin-only" onclick="showPage('all-applications')" id="nav-all-applications"><span class="icon">👥</span><span>Applicants</span></button>
+            <button class="nav-btn admin-only" onclick="showPage('my-company')" id="nav-my-company"><span class="icon">🏢</span><span>My Company</span></button>
         </nav>
         <div class="sidebar-footer">
             <div class="user-pill">
@@ -274,41 +269,75 @@
     </aside>
 
     <main class="main">
-        <!-- DASHBOARD -->
+
+        <!-- ── USER DASHBOARD ── -->
         <div class="page active" id="page-dashboard">
-            <div class="page-header"><div><h2>Welcome, <span id="greeting-name">Explorer</span></h2><p>Here's what's happening on the platform today</p></div></div>
-            <div class="stats-bar">
-                <div class="stat-card jobs"><div class="label">Open Jobs</div><div class="value" id="stat-jobs">—</div></div>
-                <div class="stat-card companies"><div class="label">Companies</div><div class="value" id="stat-companies">—</div></div>
-                <div class="stat-card reviews"><div class="label">Reviews</div><div class="value" id="stat-reviews">—</div></div>
+            <div class="page-header"><div><h2>Welcome, <span id="greeting-name">Explorer</span></h2><p id="dashboard-subtitle">Here's what's happening on the platform today</p></div></div>
+
+            <!-- Admin dashboard content -->
+            <div id="admin-dashboard" style="display:none;">
+                <div id="admin-company-banner" class="company-banner" style="display:none;">
+                    <div class="company-banner-icon">🏢</div>
+                    <div>
+                        <h3 id="admin-company-name-banner">Your Company</h3>
+                        <p id="admin-company-desc-banner">Loading company details...</p>
+                    </div>
+                </div>
+                <div class="stats-bar">
+                    <div class="stat-card s-jobs"><div class="label">My Jobs</div><div class="value" id="admin-stat-jobs">—</div><div class="sub">Posted by your company</div></div>
+                    <div class="stat-card s-apps"><div class="label">Applicants</div><div class="value" id="admin-stat-apps">—</div><div class="sub">Total applications received</div></div>
+                    <div class="stat-card s-reviews"><div class="label">Reviews</div><div class="value" id="admin-stat-reviews">—</div><div class="sub">About your company</div></div>
+                </div>
+                <div class="section-header">
+                    <h3>My Job Listings</h3>
+                    <button class="btn-icon" onclick="openJobModal()">+ Add Job</button>
+                </div>
+                <div class="cards-grid" id="admin-jobs-grid"></div>
+                <div class="section-header" style="margin-top:32px;">
+                    <h3>Recent Applicants</h3>
+                    <button class="btn btn-outline" onclick="showPage('all-applications')">View all →</button>
+                </div>
+                <div id="admin-recent-apps"></div>
+                <div class="section-header" style="margin-top:32px;">
+                    <h3>Company Reviews</h3>
+                </div>
+                <div class="cards-grid" id="admin-reviews-grid"></div>
             </div>
-            <div class="section-header"><h3>Recent Jobs</h3><button class="btn btn-outline" onclick="showPage('jobs')">View all →</button></div>
-            <div class="cards-grid" id="dashboard-jobs"></div>
-            <div class="section-header" style="margin-top:36px;"><h3>Companies</h3><button class="btn btn-outline" onclick="showPage('companies')">View all →</button></div>
-            <div class="cards-grid" id="dashboard-companies"></div>
+
+            <!-- User dashboard content -->
+            <div id="user-dashboard" style="display:none;">
+                <div class="stats-bar">
+                    <div class="stat-card s-jobs"><div class="label">Open Jobs</div><div class="value" id="stat-jobs">—</div></div>
+                    <div class="stat-card s-companies"><div class="label">Companies</div><div class="value" id="stat-companies">—</div></div>
+                    <div class="stat-card s-reviews"><div class="label">Reviews</div><div class="value" id="stat-reviews">—</div></div>
+                </div>
+                <div class="section-header"><h3>Recent Jobs</h3><button class="btn btn-outline" onclick="showPage('jobs')">View all →</button></div>
+                <div class="cards-grid" id="dashboard-jobs"></div>
+                <div class="section-header" style="margin-top:36px;"><h3>Companies</h3><button class="btn btn-outline" onclick="showPage('companies')">View all →</button></div>
+                <div class="cards-grid" id="dashboard-companies"></div>
+            </div>
         </div>
 
         <!-- JOBS -->
         <div class="page" id="page-jobs">
             <div class="page-header">
-                <div><h2>Open <span>Positions</span></h2><p>Browse and manage job listings</p></div>
-                <button class="btn btn-icon admin-only" onclick="openJobModal()">+ Add Job</button>
+                <div><h2>Open <span>Positions</span></h2><p id="jobs-subtitle">Browse job listings</p></div>
+                <button class="btn-icon admin-only" onclick="openJobModal()">+ Add Job</button>
             </div>
             <div class="cards-grid" id="jobs-grid"></div>
         </div>
 
-        <!-- COMPANIES -->
+        <!-- COMPANIES (Users only) -->
         <div class="page" id="page-companies">
             <div class="page-header">
-                <div><h2>All <span>Companies</span></h2><p>Manage company profiles</p></div>
-                <button class="btn btn-icon admin-only" onclick="openModal('company-modal')">+ Add Company</button>
+                <div><h2>All <span>Companies</span></h2><p>Explore company profiles</p></div>
             </div>
             <div class="cards-grid" id="companies-grid"></div>
         </div>
 
         <!-- COMPANY DETAIL -->
         <div class="page" id="page-company-detail">
-            <button class="btn btn-outline" style="margin-bottom:24px;" onclick="showPage('companies')">← Back</button>
+            <button class="btn btn-outline" style="margin-bottom:24px;" onclick="goBackFromCompanyDetail()">← Back</button>
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;">
                 <div style="width:52px;height:52px;border-radius:12px;background:rgba(192,132,252,.15);border:1px solid rgba(192,132,252,.3);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🏢</div>
                 <div><h3 id="cd-name" style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;"></h3><p id="cd-desc" style="color:var(--muted);font-size:.85rem;margin-top:3px;"></p></div>
@@ -318,14 +347,11 @@
                 <button class="tab-btn" onclick="switchTab(event,'tab-reviews')">Reviews</button>
             </div>
             <div class="tab-content active" id="tab-jobs">
-                <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
-                    <button class="btn btn-icon admin-only" id="cd-add-job-btn" onclick="openJobModalForCompany()">+ Add Job</button>
-                </div>
                 <div class="cards-grid" id="cd-jobs-grid"></div>
             </div>
             <div class="tab-content" id="tab-reviews">
                 <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
-                    <button class="btn btn-icon user-only" id="cd-add-rev-btn" onclick="openAddReviewForCurrentCompany()">+ Add Review</button>
+                    <button class="btn-icon" id="cd-add-rev-btn" onclick="openAddReviewForCurrentCompany()" style="display:none;">+ Add Review</button>
                 </div>
                 <div class="cards-grid" id="cd-reviews-grid"></div>
             </div>
@@ -334,33 +360,45 @@
         <!-- REVIEWS -->
         <div class="page" id="page-reviews">
             <div class="page-header">
-                <div><h2>Company <span>Reviews</span></h2><p>Explore what employees say</p></div>
-                <button class="btn btn-icon user-only" onclick="openAddReviewFlow()">+ Add Review</button>
+                <div><h2>Company <span>Reviews</span></h2><p id="reviews-subtitle">Explore what employees say</p></div>
+                <button class="btn-icon user-only" onclick="openAddReviewFlow()">+ Add Review</button>
             </div>
             <div id="reviews-list" class="cards-grid"></div>
         </div>
 
-        <!-- MY APPLICATIONS -->
+        <!-- MY APPLICATIONS (User) -->
         <div class="page" id="page-my-applications">
             <div class="page-header"><div><h2>My <span>Applications</span></h2><p>Track your job applications</p></div></div>
             <div class="cards-grid" id="my-applications-grid"></div>
         </div>
 
-        <!-- ALL APPLICATIONS -->
+        <!-- ALL APPLICATIONS (Admin) -->
         <div class="page" id="page-all-applications">
-            <div class="page-header"><div><h2>All <span>Applications</span></h2><p>Review candidates who applied</p></div></div>
+            <div class="page-header"><div><h2>All <span>Applicants</span></h2><p>Candidates who applied to your company's jobs</p></div></div>
             <div id="all-applications-container"></div>
         </div>
+
+        <!-- MY COMPANY (Admin) -->
+        <div class="page" id="page-my-company">
+            <div class="page-header">
+                <div><h2>My <span>Company</span></h2><p>Manage your company profile</p></div>
+                <button class="btn-icon" onclick="editMyCompany()">Edit Company</button>
+            </div>
+            <div id="my-company-detail"></div>
+        </div>
+
     </main>
 </div>
-<!-- ↑ main-app closed -->
 
 <!-- Job Modal -->
 <div class="modal-overlay" id="job-modal">
     <div class="modal">
         <div class="modal-header"><h3 id="job-modal-title">New Job</h3><button class="modal-close" onclick="closeModal('job-modal')">✕</button></div>
         <input type="hidden" id="job-id"/>
-        <div class="form-group"><label class="form-label">Company *</label><select class="form-input" id="job-company-select"><option value="">— Select a company —</option></select></div>
+        <div class="form-group" id="job-company-group">
+            <label class="form-label">Company *</label>
+            <select class="form-input" id="job-company-select"><option value="">— Select a company —</option></select>
+        </div>
         <div class="form-group"><label class="form-label">Job Title</label><input class="form-input" id="job-title" placeholder="e.g. Senior Backend Engineer"/></div>
         <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="job-description" placeholder="Role responsibilities..."></textarea></div>
         <div class="form-row">
@@ -375,7 +413,7 @@
 <!-- Company Modal -->
 <div class="modal-overlay" id="company-modal">
     <div class="modal">
-        <div class="modal-header"><h3 id="company-modal-title">New Company</h3><button class="modal-close" onclick="closeModal('company-modal')">✕</button></div>
+        <div class="modal-header"><h3 id="company-modal-title">Edit Company</h3><button class="modal-close" onclick="closeModal('company-modal')">✕</button></div>
         <input type="hidden" id="company-id"/>
         <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" id="company-name" placeholder="e.g. Acme Corp"/></div>
         <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="company-description" placeholder="What does this company do?"></textarea></div>
@@ -414,7 +452,7 @@
                 <input type="file" id="apply-resume" accept=".pdf,.doc,.docx" onchange="onResumeChange(this)"/>
             </div>
         </div>
-        <div class="form-group"><label class="form-label">Cover Letter</label><textarea class="form-input" id="apply-cover" placeholder="Why are you a great fit for this role?"></textarea></div>
+        <div class="form-group"><label class="form-label">Cover Letter</label><textarea class="form-input" id="apply-cover" placeholder="Why are you a great fit?"></textarea></div>
         <div class="form-actions"><button class="btn btn-outline" onclick="closeModal('apply-modal')">Cancel</button><button class="btn btn-success" onclick="submitApplication()">Submit Application</button></div>
     </div>
 </div>
@@ -423,7 +461,8 @@
 
 <script>
     var currentCompanyId = null;
-    var appliedJobIds = new Set();
+    var appliedJobIds    = new Set();
+    var companyDetailOrigin = 'companies'; // track where to go back from company detail
 
     // ── THEME ──
     function toggleTheme() {
@@ -440,7 +479,7 @@
         }
     }
 
-    // ── TOKEN / ROLE / COMPANY ──
+    // ── AUTH STORAGE ──
     function getToken()      { return localStorage.getItem('jwtToken'); }
     function setToken(t)     { localStorage.setItem('jwtToken', t); }
     function getUsername()   { return localStorage.getItem('jwtUsername'); }
@@ -456,7 +495,7 @@
         ['jwtToken','jwtUsername','jwtRole','companyId','companyName'].forEach(function(k) { localStorage.removeItem(k); });
     }
 
-    // ── ROLE CHANGE ──
+    // ── REGISTER HELPERS ──
     async function onRoleChange() {
         var role  = document.getElementById('register-role').value;
         var group = document.getElementById('company-select-group');
@@ -468,21 +507,19 @@
             document.getElementById('new-company-group').style.display = 'none';
         }
     }
-
     async function loadCompanyDropdown() {
         try {
-            var res       = await fetch('/auth/companies');
+            var res = await fetch('/auth/companies');
             var companies = await res.json();
-            var sel       = document.getElementById('register-company');
+            var sel = document.getElementById('register-company');
             var createOpt = '<option value="__new__">➕ Create a new company</option>';
             if (!companies || !companies.length) {
                 sel.innerHTML = createOpt;
                 document.getElementById('new-company-group').style.display = 'block';
             } else {
                 sel.innerHTML = '<option value="">— Select existing company —</option>' +
-                    companies.map(function(c) {
-                        return '<option value="' + c.id + '">' + c.name + '</option>';
-                    }).join('') + createOpt;
+                    companies.map(function(c) { return '<option value="'+c.id+'">'+c.name+'</option>'; }).join('') +
+                    createOpt;
                 document.getElementById('new-company-group').style.display = 'none';
             }
         } catch(e) {
@@ -490,12 +527,12 @@
             document.getElementById('new-company-group').style.display = 'block';
         }
     }
-
     function onCompanySelectChange() {
         var val = document.getElementById('register-company').value;
         document.getElementById('new-company-group').style.display = val === '__new__' ? 'block' : 'none';
     }
 
+    // ── INIT ──
     window.onload = function() {
         initTheme();
         if (getToken()) showApp();
@@ -508,7 +545,7 @@
         var badge = document.getElementById('role-badge');
         var cname = getCompanyName();
         if (isAdmin()) {
-            badge.textContent = '👑 Admin' + (cname ? ' @ ' + cname : '');
+            badge.textContent = '👑 ' + (cname ? cname : 'Admin');
             badge.style.color = 'var(--accent)';
         } else {
             badge.textContent = '👤 User';
@@ -560,7 +597,7 @@
             setToken(data.token); setUsername(username); setRole(data.role);
             setCompanyId(data.companyId); setCompanyName(data.companyName);
             showApp();
-            toast('Welcome back, ' + username + '! (' + (data.role==='ROLE_ADMIN' ? '👑 Admin' : '👤 User') + (data.companyName ? ' @ ' + data.companyName : '') + ')');
+            toast('Welcome back, ' + username + '!' + (data.companyName ? ' (' + data.companyName + ')' : ''));
         } catch(e) { showAuthError('login-error', 'Could not connect to server.'); }
     }
 
@@ -572,8 +609,7 @@
         var role     = document.getElementById('register-role').value;
         if (!username || !password || !dob) { showAuthError('register-error', 'Please fill in all fields.'); return; }
         var age = Math.floor((new Date() - new Date(dob)) / (365.25*24*60*60*1000));
-        if (age < 18) { showAuthError('register-error', '🔞 You must be 18 or older to register.'); return; }
-
+        if (age < 18) { showAuthError('register-error', '🔞 You must be 18 or older.'); return; }
         var companyId = null;
         if (role === 'ROLE_ADMIN') {
             var compSel = document.getElementById('register-company');
@@ -583,11 +619,7 @@
                 var compDesc = document.getElementById('new-company-desc').value.trim();
                 if (!compName) { showAuthError('register-error', 'Please enter your company name.'); return; }
                 try {
-                    var compRes = await fetch('/auth/companies/create', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: compName, description: compDesc })
-                    });
+                    var compRes = await fetch('/auth/companies/create', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name:compName, description:compDesc}) });
                     if (!compRes.ok) { showAuthError('register-error', 'Failed to create company.'); return; }
                     var newComp = await compRes.json();
                     companyId = newComp.id;
@@ -597,8 +629,7 @@
             }
             if (!companyId) { showAuthError('register-error', 'Please select or create a company.'); return; }
         }
-
-        var payload = { username: username, password: password, dateOfBirth: dob, role: role };
+        var payload = { username:username, password:password, dateOfBirth:dob, role:role };
         if (companyId) payload.companyId = companyId;
         try {
             var res  = await fetch('/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
@@ -607,7 +638,7 @@
             setToken(data.token); setUsername(username); setRole(data.role);
             setCompanyId(data.companyId); setCompanyName(data.companyName);
             showApp();
-            toast('Welcome, ' + username + '! (' + (data.role==='ROLE_ADMIN' ? '👑 Admin' : '👤 User') + (data.companyName ? ' @ ' + data.companyName : '') + ')');
+            toast('Welcome, ' + username + '!' + (data.companyName ? ' @ ' + data.companyName : ''));
         } catch(e) { showAuthError('register-error', 'Could not connect to server.'); }
     }
 
@@ -629,11 +660,7 @@
                 body: body ? JSON.stringify(body) : undefined
             });
             if (r.status === 401) { clearAuth(); showAuthScreen(); toast('Session expired.', 'error'); return null; }
-            if (r.status === 403) {
-                if (method !== 'GET') toast('Access denied. Admin permission required.', 'error');
-                else toast('Access denied fetching data.', 'error');
-                return null;
-            }
+            if (r.status === 403) { toast('Access denied.', 'error'); return null; }
             if (!r.ok) throw new Error('HTTP ' + r.status);
             var ct = r.headers.get('content-type') || '';
             return ct.includes('json') ? r.json() : r.text();
@@ -642,11 +669,7 @@
 
     async function apiForm(path, formData) {
         try {
-            var r = await fetch(path, {
-                method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + getToken() },
-                body: formData
-            });
+            var r = await fetch(path, { method:'POST', headers:{'Authorization':'Bearer ' + getToken()}, body:formData });
             if (r.status === 401) { clearAuth(); showAuthScreen(); toast('Session expired.', 'error'); return null; }
             if (r.status === 409) { toast('You have already applied for this job.', 'error'); return null; }
             if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -657,14 +680,11 @@
 
     async function downloadResume(applicationId, filename) {
         try {
-            var response = await fetch('/applications/resume/' + applicationId, {
-                method: 'GET',
-                headers: { 'Authorization': 'Bearer ' + getToken() }
-            });
+            var response = await fetch('/applications/resume/' + applicationId, { method:'GET', headers:{'Authorization':'Bearer ' + getToken()} });
             if (!response.ok) { toast('Failed to download resume.', 'error'); return; }
             var blob = await response.blob();
             var url  = window.URL.createObjectURL(blob);
-            var a    = document.createElement('a');
+            var a = document.createElement('a');
             a.href = url; a.download = filename || 'resume';
             document.body.appendChild(a); a.click();
             document.body.removeChild(a);
@@ -697,6 +717,7 @@
         if (page === 'reviews')          loadAllReviews();
         if (page === 'my-applications')  loadMyApplications();
         if (page === 'all-applications') loadAllApplications();
+        if (page === 'my-company')       loadMyCompanyPage();
     }
 
     function switchTab(e, tabId) {
@@ -706,6 +727,10 @@
         e.target.classList.add('active');
     }
 
+    function goBackFromCompanyDetail() {
+        showPage(companyDetailOrigin);
+    }
+
     async function loadMyAppliedJobs() {
         var apps = await api('GET', '/applications/my');
         if (apps) apps.forEach(function(a) { if (a.job) appliedJobIds.add(a.job.id); });
@@ -713,9 +738,55 @@
 
     // ── DASHBOARD ──
     async function loadDashboard() {
+        if (isAdmin()) {
+            document.getElementById('admin-dashboard').style.display = 'block';
+            document.getElementById('user-dashboard').style.display  = 'none';
+            document.getElementById('dashboard-subtitle').textContent = 'Your company management panel';
+            await loadAdminDashboard();
+        } else {
+            document.getElementById('admin-dashboard').style.display = 'none';
+            document.getElementById('user-dashboard').style.display  = 'block';
+            document.getElementById('dashboard-subtitle').textContent = "Here's what's happening on the platform today";
+            await loadUserDashboard();
+        }
+    }
+
+    async function loadAdminDashboard() {
+        var cid = getCompanyId();
+        // Company banner
+        if (cid) {
+            var company = await api('GET', '/companies/' + cid);
+            if (company) {
+                document.getElementById('admin-company-banner').style.display = 'flex';
+                document.getElementById('admin-company-name-banner').textContent = company.name;
+                document.getElementById('admin-company-desc-banner').textContent = company.description || 'No description.';
+            }
+        }
+        // Jobs
+        var jobs = await api('GET', '/jobs');
+        jobs = jobs || [];
+        document.getElementById('admin-stat-jobs').textContent = jobs.length;
+        renderJobCards(jobs.slice(0,4), 'admin-jobs-grid');
+        // Applications
+        var apps = await api('GET', '/applications');
+        apps = apps || [];
+        document.getElementById('admin-stat-apps').textContent = apps.length;
+        // Recent applicants (last 3)
+        var recentEl = document.getElementById('admin-recent-apps');
+        if (!apps.length) {
+            recentEl.innerHTML = '<div class="empty" style="padding:30px 0;"><div class="icon">👥</div><p>No applications yet.</p></div>';
+        } else {
+            recentEl.innerHTML = '<div class="cards-grid">' + apps.slice(0,3).map(buildApplicantCard).join('') + '</div>';
+        }
+        // Reviews
+        var reviews = cid ? (await api('GET', '/companies/' + cid + '/reviews') || []) : [];
+        document.getElementById('admin-stat-reviews').textContent = reviews.length;
+        renderReviewCards(reviews, 'admin-reviews-grid', cid);
+    }
+
+    async function loadUserDashboard() {
         var results = await Promise.all([api('GET','/jobs'), api('GET','/companies')]);
-        var jobs = results[0]; var companies = results[1];
-        if (!jobs || !companies) return;
+        var jobs = results[0] || []; var companies = results[1] || [];
         document.getElementById('stat-jobs').textContent = jobs.length;
         document.getElementById('stat-companies').textContent = companies.length;
         var rc = 0;
@@ -730,11 +801,17 @@
     // ── JOBS ──
     async function loadJobs() {
         var jobs = await api('GET', '/jobs');
+        if (isAdmin()) {
+            document.getElementById('jobs-subtitle').textContent = 'Your company\'s job listings';
+        } else {
+            document.getElementById('jobs-subtitle').textContent = 'Browse and apply for jobs';
+        }
         if (jobs) renderJobCards(jobs, 'jobs-grid');
     }
 
     function renderJobCards(jobs, containerId) {
         var el = document.getElementById(containerId);
+        if (!el) return;
         if (!jobs || !jobs.length) { el.innerHTML = '<div class="empty"><div class="icon">💼</div><p>No jobs found.</p></div>'; return; }
         el.innerHTML = jobs.map(function(j) {
             var hasApplied = appliedJobIds.has(j.id);
@@ -743,24 +820,25 @@
             if (!isAdmin()) {
                 actions = hasApplied
                     ? '<button class="btn btn-outline" disabled style="cursor:default;opacity:.6;">✓ Applied</button>'
-                    : '<button class="btn btn-success" onclick="openApplyModal(' + j.id + ',\'' + titleSafe + '\')">Apply Now</button>';
+                    : '<button class="btn btn-success" onclick="openApplyModal('+j.id+',\''+titleSafe+'\')">Apply Now</button>';
             } else {
-                actions = '<button class="btn btn-outline" onclick="viewApplicants(' + j.id + ',\'' + titleSafe + '\')">View Applicants</button>' +
-                          '<button class="btn btn-outline" onclick="editJob(' + j.id + ')">Edit</button>' +
-                          '<button class="btn btn-danger" onclick="deleteJob(' + j.id + ')">Delete</button>';
+                actions = '<button class="btn btn-outline" onclick="viewApplicants('+j.id+',\''+titleSafe+'\')">Applicants</button>' +
+                          '<button class="btn btn-outline" onclick="editJob('+j.id+')">Edit</button>' +
+                          '<button class="btn btn-danger" onclick="deleteJob('+j.id+')">Delete</button>';
             }
             return '<div class="card">' +
-                '<div class="card-top"><div class="card-title">' + (j.title||'Untitled') + '</div>' +
-                '<span class="card-badge' + (hasApplied?' applied':'') + '">' + (hasApplied?'✓ Applied':'Open') + '</span></div>' +
-                (j.company ? '<div class="card-company">🏢 ' + j.company.name + '</div>' : '') +
-                '<div class="card-desc">' + (j.description||'No description.') + '</div>' +
+                '<div class="card-top"><div class="card-title">'+(j.title||'Untitled')+'</div>' +
+                '<span class="card-badge'+(hasApplied?' applied':'')+'">'+( hasApplied?'✓ Applied':'Open')+'</span></div>' +
+                (j.company?'<div class="card-company">🏢 '+j.company.name+'</div>':'') +
+                '<div class="card-desc">'+(j.description||'No description.')+'</div>' +
                 '<div class="card-meta">' +
-                (j.minSalary ? '<span class="meta-tag salary">₹ ' + j.minSalary + ' – ' + j.maxSalary + '</span>' : '') +
-                (j.location  ? '<span class="meta-tag location">📍 ' + j.location + '</span>' : '') +
-                '</div><div class="card-actions">' + actions + '</div></div>';
+                (j.minSalary?'<span class="meta-tag salary">₹ '+j.minSalary+' – '+j.maxSalary+'</span>':'') +
+                (j.location?'<span class="meta-tag location">📍 '+j.location+'</span>':'') +
+                '</div><div class="card-actions">'+actions+'</div></div>';
         }).join('');
     }
 
+    // ── APPLY ──
     function openApplyModal(jobId, jobTitle) {
         document.getElementById('apply-job-id').value = jobId;
         document.getElementById('apply-modal-title').textContent = 'Apply — ' + jobTitle;
@@ -770,18 +848,11 @@
         document.getElementById('resume-label').classList.remove('has-file');
         openModal('apply-modal');
     }
-
     function onResumeChange(input) {
         var label = document.getElementById('resume-label');
-        if (input.files && input.files[0]) {
-            label.textContent = '✅ ' + input.files[0].name;
-            label.classList.add('has-file');
-        } else {
-            label.textContent = '📎 Click to upload resume';
-            label.classList.remove('has-file');
-        }
+        if (input.files && input.files[0]) { label.textContent = '✅ ' + input.files[0].name; label.classList.add('has-file'); }
+        else { label.textContent = '📎 Click to upload resume'; label.classList.remove('has-file'); }
     }
-
     async function submitApplication() {
         var jobId  = document.getElementById('apply-job-id').value;
         var name   = document.getElementById('apply-name').value.trim();
@@ -800,8 +871,7 @@
             closeModal('apply-modal'); loadJobs();
         }
     }
-
-    document.getElementById('apply-modal').addEventListener('click', function(e) { if (e.target === e.currentTarget) closeModal('apply-modal'); });
+    document.getElementById('apply-modal').addEventListener('click', function(e) { if (e.target===e.currentTarget) closeModal('apply-modal'); });
 
     // ── MY APPLICATIONS ──
     async function loadMyApplications() {
@@ -810,10 +880,10 @@
         if (!apps || !apps.length) { el.innerHTML = '<div class="empty"><div class="icon">📋</div><p>You haven\'t applied for any jobs yet.</p></div>'; return; }
         el.innerHTML = apps.map(function(a) {
             var d = a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
-            return '<div class="card"><div class="card-top"><div class="card-title">' + (a.job?a.job.title:'Unknown Job') + '</div><span class="card-badge applied">Applied</span></div>' +
-                (a.job&&a.job.company ? '<div class="card-company">🏢 ' + a.job.company.name + '</div>' : '') +
-                '<div class="card-meta">' + (a.job&&a.job.location?'<span class="meta-tag location">📍 '+a.job.location+'</span>':'') + '<span class="meta-tag">📅 '+d+'</span></div>' +
-                '<div class="card-desc">' + (a.coverLetter?a.coverLetter.substring(0,120)+(a.coverLetter.length>120?'...':''):'No cover letter.') + '</div>' +
+            return '<div class="card"><div class="card-top"><div class="card-title">'+(a.job?a.job.title:'Unknown Job')+'</div><span class="card-badge applied">Applied</span></div>' +
+                (a.job&&a.job.company?'<div class="card-company">🏢 '+a.job.company.name+'</div>':'') +
+                '<div class="card-meta">'+(a.job&&a.job.location?'<span class="meta-tag location">📍 '+a.job.location+'</span>':'')+'<span class="meta-tag">📅 '+d+'</span></div>' +
+                '<div class="card-desc">'+(a.coverLetter?a.coverLetter.substring(0,120)+(a.coverLetter.length>120?'...':''):'No cover letter.')+'</div>' +
                 '<div class="card-meta"><span class="meta-tag">📧 '+a.applicantEmail+'</span><span class="meta-tag">📞 '+a.applicantPhone+'</span></div>' +
                 '<div class="card-actions"><span class="meta-tag" style="color:var(--success);border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.08);">📎 '+(a.resumeFileName||'Resume uploaded')+'</span></div></div>';
         }).join('');
@@ -823,12 +893,14 @@
     function buildApplicantCard(a) {
         var d  = a.appliedAt ? new Date(a.appliedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
         var fs = (a.resumeFileName||'resume').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        var jobTitle = a.job ? a.job.title : 'Unknown Job';
         return '<div class="applicant-card">' +
-            '<div class="applicant-name">' + a.applicantName + '</div>' +
+            '<div class="applicant-name">'+a.applicantName+'</div>' +
+            '<div style="font-size:.75rem;color:var(--accent2);margin-bottom:6px;">💼 '+jobTitle+'</div>' +
             '<div class="applicant-meta"><span class="applicant-tag">📧 '+a.applicantEmail+'</span><span class="applicant-tag">📞 '+a.applicantPhone+'</span><span class="applicant-tag">👤 '+a.appliedByUsername+'</span><span class="applicant-tag">📅 '+d+'</span></div>' +
-            (a.coverLetter ? '<div class="applicant-cover"><strong>Cover Letter:</strong><br>'+a.coverLetter+'</div>' : '') +
+            (a.coverLetter?'<div class="applicant-cover"><strong>Cover Letter:</strong><br>'+a.coverLetter+'</div>':'') +
             '<div class="card-actions" style="margin-top:12px;">' +
-            (a.resumeFileName ? '<button class="btn btn-success" onclick="downloadResume('+a.id+',\''+fs+'\')">📥 Download Resume</button>' : '<span style="color:var(--muted);font-size:.8rem;">No resume</span>') +
+            (a.resumeFileName?'<button class="btn btn-success" onclick="downloadResume('+a.id+',\''+fs+'\')">📥 Resume</button>':'<span style="color:var(--muted);font-size:.8rem;">No resume</span>') +
             '<button class="btn btn-danger" onclick="deleteApplication('+a.id+')">Remove</button></div></div>';
     }
 
@@ -844,9 +916,9 @@
             byJob[key].apps.push(a);
         });
         container.innerHTML = Object.values(byJob).map(function(group) {
-            return '<div style="margin-bottom:32px;"><div class="section-header"><h3>💼 ' + group.title +
-                ' <span style="font-size:.8rem;color:var(--muted);font-family:var(--font-body);font-weight:400;">(' + group.apps.length + ' applicant' + (group.apps.length!==1?'s':'') + ')</span></h3></div>' +
-                '<div class="cards-grid">' + group.apps.map(buildApplicantCard).join('') + '</div></div>';
+            return '<div style="margin-bottom:32px;"><div class="section-header"><h3>💼 '+group.title+
+                ' <span style="font-size:.8rem;color:var(--muted);font-weight:400;">('+group.apps.length+' applicant'+(group.apps.length!==1?'s':'')+')</span></h3></div>' +
+                '<div class="cards-grid">'+group.apps.map(buildApplicantCard).join('')+'</div></div>';
         }).join('');
     }
 
@@ -862,27 +934,25 @@
             var apps = await api('GET', '/applications/job/' + jobId);
             var container = document.getElementById('all-applications-container');
             if (!apps || !apps.length) { container.innerHTML = '<div class="empty"><div class="icon">👥</div><p>No applications for "'+jobTitle+'" yet.</p></div>'; return; }
-            container.innerHTML = '<div style="margin-bottom:32px;"><div class="section-header"><h3>💼 '+jobTitle+' <span style="font-size:.8rem;color:var(--muted);font-family:var(--font-body);font-weight:400;">('+apps.length+' applicant'+(apps.length!==1?'s':'')+')</span></h3></div>' +
-                '<div class="cards-grid">' + apps.map(buildApplicantCard).join('') + '</div></div>';
+            container.innerHTML = '<div style="margin-bottom:32px;"><div class="section-header"><h3>💼 '+jobTitle+
+                ' <span style="font-size:.8rem;color:var(--muted);font-weight:400;">('+apps.length+' applicant'+(apps.length!==1?'s':'')+')</span></h3></div>' +
+                '<div class="cards-grid">'+apps.map(buildApplicantCard).join('')+'</div></div>';
         }, 100);
     }
 
     // ── JOB CRUD ──
     async function openJobModal() {
-        await populateCompanySelect('job-company-select', getCompanyId());
-        var sel = document.getElementById('job-company-select');
-        sel.disabled = isAdmin() && getCompanyId() != null;
         document.getElementById('job-id').value = '';
         document.getElementById('job-modal-title').textContent = 'New Job';
         ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(function(id) { document.getElementById(id).value = ''; });
-        openModal('job-modal');
-    }
-    async function openJobModalForCompany() {
-        await populateCompanySelect('job-company-select', currentCompanyId);
-        document.getElementById('job-id').value = '';
-        document.getElementById('job-modal-title').textContent = 'New Job';
-        ['job-title','job-description','job-minSalary','job-maxSalary','job-location'].forEach(function(id) { document.getElementById(id).value = ''; });
-        document.getElementById('job-company-select').disabled = true;
+        // Admin: hide company select (backend forces it)
+        var cid = getCompanyId();
+        if (isAdmin() && cid) {
+            document.getElementById('job-company-group').style.display = 'none';
+        } else {
+            document.getElementById('job-company-group').style.display = 'block';
+            await populateCompanySelect('job-company-select', cid);
+        }
         openModal('job-modal');
     }
     async function populateCompanySelect(selectId, selectedId) {
@@ -894,25 +964,26 @@
     }
     async function saveJob() {
         var id = document.getElementById('job-id').value;
-        var companyId = document.getElementById('job-company-select').value;
+        var companyId = isAdmin() && getCompanyId()
+            ? getCompanyId()
+            : (document.getElementById('job-company-select').value ? parseInt(document.getElementById('job-company-select').value) : null);
         var body = {
             title:       document.getElementById('job-title').value,
             description: document.getElementById('job-description').value,
             minSalary:   document.getElementById('job-minSalary').value,
             maxSalary:   document.getElementById('job-maxSalary').value,
             location:    document.getElementById('job-location').value,
-            company:     companyId ? { id: parseInt(companyId) } : null
+            company:     companyId ? { id: companyId } : null
         };
         if (id) { await api('PUT', '/jobs/'+id, body); toast('Job updated'); }
         else    { await api('POST', '/jobs', body);     toast('Job created'); }
         closeModal('job-modal');
-        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-        else loadJobs();
+        loadDashboard();
+        if (document.getElementById('page-jobs').classList.contains('active')) loadJobs();
     }
     async function editJob(id) {
         var job = await api('GET', '/jobs/'+id);
         if (!job) return;
-        await populateCompanySelect('job-company-select', job.company ? job.company.id : null);
         document.getElementById('job-id').value = id;
         document.getElementById('job-modal-title').textContent = 'Edit Job';
         document.getElementById('job-title').value       = job.title       || '';
@@ -920,39 +991,44 @@
         document.getElementById('job-minSalary').value   = job.minSalary   || '';
         document.getElementById('job-maxSalary').value   = job.maxSalary   || '';
         document.getElementById('job-location').value    = job.location    || '';
-        document.getElementById('job-company-select').disabled = isAdmin() && getCompanyId() != null;
+        if (isAdmin() && getCompanyId()) {
+            document.getElementById('job-company-group').style.display = 'none';
+        } else {
+            document.getElementById('job-company-group').style.display = 'block';
+            await populateCompanySelect('job-company-select', job.company ? job.company.id : null);
+        }
         openModal('job-modal');
     }
     async function deleteJob(id) {
         if (!confirm('Delete this job?')) return;
         await api('DELETE', '/jobs/'+id); toast('Job deleted');
-        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-        else loadJobs();
+        loadDashboard();
+        if (document.getElementById('page-jobs').classList.contains('active')) loadJobs();
     }
     document.getElementById('job-modal').addEventListener('click', function(e) { if (e.target===e.currentTarget) closeModal('job-modal'); });
 
-    // ── COMPANIES ──
+    // ── COMPANIES (Users only) ──
     async function loadCompanies() {
         var companies = await api('GET', '/companies');
         if (companies) renderCompanyCards(companies, 'companies-grid', true);
     }
     function renderCompanyCards(companies, containerId, showDetail) {
         var el = document.getElementById(containerId);
+        if (!el) return;
         if (!companies||!companies.length) { el.innerHTML = '<div class="empty"><div class="icon">🏢</div><p>No companies yet.</p></div>'; return; }
         el.innerHTML = companies.map(function(c) {
-            var adminCid = getCompanyId();
-            var canEdit  = isAdmin() && (adminCid == null || adminCid === c.id);
             return '<div class="card"><div class="card-top"><div class="card-title">'+(c.name||'Unnamed')+'</div>' +
                 '<span class="card-badge" style="background:rgba(192,132,252,.12);color:var(--accent2);border-color:rgba(192,132,252,.3);">Company</span></div>' +
                 '<div class="card-desc">'+(c.description||'No description.')+'</div>' +
                 '<div class="card-actions">' +
-                (showDetail ? '<button class="btn btn-primary" onclick="openCompanyDetail('+c.id+')">View Details</button>' : '') +
-                (canEdit ? '<button class="btn btn-outline" onclick="editCompany('+c.id+')">Edit</button><button class="btn btn-danger" onclick="deleteCompany('+c.id+')">Delete</button>' : '') +
+                (showDetail ? '<button class="btn btn-primary" onclick="openCompanyDetail('+c.id+',\'companies\')">View Details</button>' : '') +
                 '</div></div>';
         }).join('');
     }
-    async function openCompanyDetail(companyId) {
+
+    async function openCompanyDetail(companyId, origin) {
         currentCompanyId = companyId;
+        companyDetailOrigin = origin || 'companies';
         await loadCompanyDetail(companyId);
         document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
         document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -961,81 +1037,122 @@
         document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
         document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById('page-company-detail').classList.add('active');
-        document.getElementById('nav-companies').classList.add('active');
+        var navId = 'nav-' + (origin || 'companies');
+        var nb = document.getElementById(navId);
+        if (nb) nb.classList.add('active');
     }
     async function loadCompanyDetail(companyId) {
-        var company = await api('GET', '/companies/'+companyId);
+        var company = await api('GET', '/companies/' + companyId);
         if (!company) return;
         document.getElementById('cd-name').textContent = company.name;
         document.getElementById('cd-desc').textContent = company.description || '';
-        var adminCid     = getCompanyId();
-        var isOwnCompany = isAdmin() && (adminCid == null || adminCid === companyId);
-        var addJobBtn = document.getElementById('cd-add-job-btn');
-        if (addJobBtn) addJobBtn.style.display = isOwnCompany ? 'inline-flex' : 'none';
         var addRevBtn = document.getElementById('cd-add-rev-btn');
         if (addRevBtn) addRevBtn.style.display = isAdmin() ? 'none' : 'inline-flex';
         var allJobs = await api('GET', '/jobs');
+        // For users, filter by company; for admin /jobs already returns only their company's
         var companyJobs = allJobs ? allJobs.filter(function(j) { return j.company && j.company.id === companyId; }) : [];
         renderJobCards(companyJobs, 'cd-jobs-grid');
-        var reviews = await api('GET', '/companies/'+companyId+'/reviews');
-        renderReviewCards(reviews||[], 'cd-reviews-grid', companyId);
+        var reviews = await api('GET', '/companies/' + companyId + '/reviews');
+        renderReviewCards(reviews || [], 'cd-reviews-grid', companyId);
     }
-    async function saveCompany() {
-        var id   = document.getElementById('company-id').value;
-        var body = { name: document.getElementById('company-name').value, description: document.getElementById('company-description').value };
-        if (id) { await api('PUT', '/companies/'+id, body); toast('Company updated'); }
-        else    { await api('POST', '/companies', body);     toast('Company created'); }
-        closeModal('company-modal'); loadCompanies();
+
+    // ── MY COMPANY PAGE (Admin) ──
+    async function loadMyCompanyPage() {
+        var cid = getCompanyId();
+        if (!cid) { document.getElementById('my-company-detail').innerHTML = '<div class="empty"><div class="icon">🏢</div><p>No company linked to your account.</p></div>'; return; }
+        var company = await api('GET', '/companies/' + cid);
+        if (!company) return;
+        var jobs    = await api('GET', '/jobs') || [];
+        var reviews = await api('GET', '/companies/' + cid + '/reviews') || [];
+        document.getElementById('my-company-detail').innerHTML =
+            '<div class="company-banner" style="margin-bottom:28px;">' +
+            '<div class="company-banner-icon">🏢</div>' +
+            '<div><h3>'+company.name+'</h3><p>'+(company.description||'No description.')+'</p></div></div>' +
+            '<div class="section-header"><h3>Jobs ('+jobs.length+')</h3><button class="btn-icon" onclick="openJobModal()">+ Add Job</button></div>' +
+            '<div class="cards-grid" id="myco-jobs-grid" style="margin-bottom:32px;"></div>' +
+            '<div class="section-header"><h3>Reviews ('+reviews.length+')</h3></div>' +
+            '<div class="cards-grid" id="myco-reviews-grid"></div>';
+        renderJobCards(jobs, 'myco-jobs-grid');
+        renderReviewCards(reviews, 'myco-reviews-grid', cid);
     }
-    async function editCompany(id) {
-        var c = await api('GET', '/companies/'+id);
+
+    async function editMyCompany() {
+        var cid = getCompanyId();
+        if (!cid) return;
+        var c = await api('GET', '/companies/' + cid);
         if (!c) return;
-        document.getElementById('company-id').value = id;
-        document.getElementById('company-modal-title').textContent = 'Edit Company';
+        document.getElementById('company-id').value = cid;
+        document.getElementById('company-modal-title').textContent = 'Edit My Company';
         document.getElementById('company-name').value = c.name || '';
         document.getElementById('company-description').value = c.description || '';
         openModal('company-modal');
     }
-    async function deleteCompany(id) {
-        if (!confirm('Delete this company?')) return;
-        await api('DELETE', '/companies/'+id); toast('Company deleted'); loadCompanies();
+
+    async function saveCompany() {
+        var id   = document.getElementById('company-id').value;
+        var body = { name: document.getElementById('company-name').value, description: document.getElementById('company-description').value };
+        if (id) {
+            await api('PUT', '/companies/'+id, body); toast('Company updated');
+            // Update stored company name
+            setCompanyName(body.name);
+            applyRoleUI();
+        } else {
+            await api('POST', '/companies', body); toast('Company created');
+        }
+        closeModal('company-modal');
+        loadMyCompanyPage();
+        loadDashboard();
     }
     document.getElementById('company-modal').addEventListener('click', function(e) { if (e.target===e.currentTarget) closeModal('company-modal'); });
 
     // ── REVIEWS ──
     function renderReviewCards(reviews, containerId, companyId) {
         var el = document.getElementById(containerId);
+        if (!el) return;
         if (!reviews||!reviews.length) { el.innerHTML = '<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>'; return; }
         el.innerHTML = reviews.map(function(r) {
-            return '<div class="review-card"><div class="review-header"><span class="review-title">'+(r.title||'Review')+'</span><span class="review-rating">★ '+(r.rating||'—')+'</span></div>' +
+            return '<div class="review-card"><div class="review-header"><span class="review-title-text">'+(r.title||'Review')+'</span><span class="review-rating">★ '+(r.rating||'—')+'</span></div>' +
                 '<div class="review-desc">'+(r.description||'')+'</div>' +
                 (!isAdmin() ? '<div class="card-actions" style="margin-top:12px;"><button class="btn btn-outline" onclick="editReview('+companyId+','+r.id+')">Edit</button><button class="btn btn-danger" onclick="deleteReview('+companyId+','+r.id+')">Delete</button></div>' : '') +
                 '</div>';
         }).join('');
     }
+
     async function loadAllReviews() {
-        var companies = await api('GET', '/companies');
         var container = document.getElementById('reviews-list');
         container.innerHTML = '';
-        if (!companies||!companies.length) { container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No companies yet.</p></div>'; return; }
-        var any = false;
-        for (var i = 0; i < companies.length; i++) {
-            try {
-                var reviews = await api('GET', '/companies/'+companies[i].id+'/reviews');
-                if (reviews && reviews.length) {
-                    any = true;
-                    var section = document.createElement('div');
-                    section.style.cssText = 'grid-column:1/-1;margin-bottom:16px;';
-                    var grid = document.createElement('div');
-                    grid.className = 'cards-grid'; grid.style.margin = '0'; grid.id = 'rg-'+companies[i].id;
-                    section.innerHTML = '<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">'+companies[i].name+'</div>';
-                    section.appendChild(grid); container.appendChild(section);
-                    renderReviewCards(reviews, 'rg-'+companies[i].id, companies[i].id);
-                }
-            } catch(e) {}
+        if (isAdmin()) {
+            // Admin: show only their company's reviews
+            document.getElementById('reviews-subtitle').textContent = 'Reviews about your company';
+            var cid = getCompanyId();
+            if (!cid) { container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No company linked.</p></div>'; return; }
+            var reviews = await api('GET', '/companies/' + cid + '/reviews') || [];
+            if (!reviews.length) { container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No reviews yet for your company.</p></div>'; return; }
+            renderReviewCards(reviews, 'reviews-list', cid);
+        } else {
+            document.getElementById('reviews-subtitle').textContent = 'Explore what employees say';
+            var companies = await api('GET', '/companies') || [];
+            if (!companies.length) { container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No companies yet.</p></div>'; return; }
+            var any = false;
+            for (var i = 0; i < companies.length; i++) {
+                try {
+                    var reviews = await api('GET', '/companies/'+companies[i].id+'/reviews');
+                    if (reviews && reviews.length) {
+                        any = true;
+                        var section = document.createElement('div');
+                        section.style.cssText = 'grid-column:1/-1;margin-bottom:16px;';
+                        var grid = document.createElement('div');
+                        grid.className = 'cards-grid'; grid.style.margin = '0'; grid.id = 'rg-'+companies[i].id;
+                        section.innerHTML = '<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent2);margin-bottom:12px;">'+companies[i].name+'</div>';
+                        section.appendChild(grid); container.appendChild(section);
+                        renderReviewCards(reviews, 'rg-'+companies[i].id, companies[i].id);
+                    }
+                } catch(e) {}
+            }
+            if (!any) container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>';
         }
-        if (!any) container.innerHTML = '<div class="empty"><div class="icon">★</div><p>No reviews yet.</p></div>';
     }
+
     async function openAddReviewFlow() {
         var companies = await api('GET', '/companies');
         if (!companies) return;
@@ -1079,23 +1196,18 @@
         var companyId = document.getElementById('review-company-select').disabled
             ? document.getElementById('review-company-id').value
             : document.getElementById('review-company-select').value;
-        var body = {
-            title:       document.getElementById('review-title').value,
-            description: document.getElementById('review-description').value,
-            rating:      document.getElementById('review-rating').value
-        };
+        var body = { title: document.getElementById('review-title').value, description: document.getElementById('review-description').value, rating: document.getElementById('review-rating').value };
         if (id) { await api('PUT', '/companies/'+companyId+'/reviews/'+id, body); toast('Review updated'); }
         else    { await api('POST', '/companies/'+companyId+'/reviews', body);    toast('Review added'); }
         document.getElementById('review-company-select').disabled = false;
         closeModal('review-modal');
-        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-        else loadAllReviews();
+        loadAllReviews();
     }
     async function deleteReview(companyId, reviewId) {
         if (!confirm('Delete this review?')) return;
         await api('DELETE', '/companies/'+companyId+'/reviews/'+reviewId); toast('Review deleted');
-        if (currentCompanyId && document.getElementById('page-company-detail').classList.contains('active')) loadCompanyDetail(currentCompanyId);
-        else loadAllReviews();
+        loadAllReviews();
+        if (document.getElementById('page-my-company').classList.contains('active')) loadMyCompanyPage();
     }
     document.getElementById('review-modal').addEventListener('click', function(e) {
         if (e.target===e.currentTarget) { document.getElementById('review-company-select').disabled=false; closeModal('review-modal'); }
