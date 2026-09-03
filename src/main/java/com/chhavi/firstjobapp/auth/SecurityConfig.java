@@ -63,11 +63,8 @@ public class SecurityConfig {
                         // ── APPLICATIONS ──
                         .requestMatchers(HttpMethod.POST,   "/applications/apply/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET,    "/applications/my").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,    "/applications/check/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,    "/applications/job/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,    "/applications").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,    "/applications/resume/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/applications/**").hasAuthority("ROLE_ADMIN")
+                        // ── 2. AI Assistant Endpoints ──
+                        .requestMatchers("/api/v1/ai/**").authenticated()
 
                         // ── 3. JOBS ──
                         .requestMatchers(HttpMethod.GET,    "/jobs").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
