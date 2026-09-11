@@ -37,7 +37,7 @@ public class SecurityConfig {
 
                         // ── 1. Public ──
                         .requestMatchers("/", "/index.html", "/*.html", "/*.js", "/*.css", "/*.ico").permitAll()
-                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
 
@@ -60,10 +60,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,    "/applications/resume/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/applications/**").hasAuthority("ROLE_ADMIN")
 
-                        // ── APPLICATIONS ──
-                        .requestMatchers(HttpMethod.POST,   "/applications/apply/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,    "/applications/my").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        // ── 2. AI Assistant Endpoints ──
+                        // ── AI Assistant Endpoints (if added) ──
                         .requestMatchers("/api/v1/ai/**").authenticated()
 
                         // ── 3. JOBS ──
@@ -76,7 +73,6 @@ public class SecurityConfig {
                         // ── 4. COMPANIES (/* not /** so review URLs never match here) ──
                         .requestMatchers(HttpMethod.GET,    "/companies").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET,    "/companies/*").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST,   "/companies").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/companies/*").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/companies/*").hasAuthority("ROLE_ADMIN")
